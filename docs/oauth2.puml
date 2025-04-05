@@ -1,0 +1,60 @@
+@startuml
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+box "Born-to-run" #ABDADB
+actor       User        as u
+participant Browser     as fe
+participant api         as be
+database    MariaDB    as db
+end box
+
+u -> fe: 로그인 페이지 요청
+fe -> be
+note right
+  GET /oauth2/authorization/{provider}
+end note
+fe <-- be: Provider별 로그인 페이지 리다이렉트
+
+box "Social" #BEC4F5
+create control 인증서버 as auth
+fe -> auth: 소셜 로그인 (인가코드 요청)
+
+be <-- auth: 인가코드 리다이렉트
+note left
+  {base-url}/login/oauth2/code/{provider}
+end note
+
+be -> auth: 인증 토큰 요청
+be <- auth
+
+alt#Gold #Pink oidc case
+    create control jwk서버 as jwk
+    be -> jwk: 토큰 유효성 검증(oidc)
+    be <- jwk
+end
+
+create control 리소스서버 as resource
+be -> resource: 유저 정보 요청
+be <- resource
+
+be --> db: 본투런 유저 생성
+be --> be: access token, refresh token 생성
+be --> db: 유저의 토큰 맵핑
+be --> fe: 로그인 후 접근할 페이지 리다이렉트
+
+note left
+  {base-url}/home?isMember={isMember}&accessToken={jwt}
+end note
+
+'vue.js에서는 보통 mutations로 jwt를 관리함
+fe --> fe: ????에 jwt 저장
+alt#Gold #Pink isMember=false case
+    fe -> be: 회원가입(성명, 인스타그램 등)
+    be --> db: 회원 정보 수정
+    fe <- be
+end
+u <- fe: 로그인 완료
+
+end box
+@enduml
