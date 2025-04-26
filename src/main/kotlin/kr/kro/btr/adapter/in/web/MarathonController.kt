@@ -1,0 +1,52 @@
+package kr.kro.btr.adapter.`in`.web
+
+import jakarta.validation.Valid
+import kr.kro.btr.adapter.`in`.web.payload.BookmarkMarathonResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchAllMarathonRequest
+import kr.kro.btr.adapter.`in`.web.payload.SearchAllMarathonResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonDetailResponse
+import kr.kro.btr.adapter.`in`.web.proxy.MarathonProxy
+import kr.kro.btr.core.converter.MarathonConverter
+import kr.kro.btr.domain.port.model.Marathon
+import kr.kro.btr.domain.port.model.MarathonDetail
+import kr.kro.btr.support.TokenDetail
+import kr.kro.btr.support.annotation.AuthUser
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
+
+@RestController
+@RequestMapping("/api/v1/marathons")
+class MarathonController(
+    private val marathonConverter: MarathonConverter,
+    private val marathonProxy: MarathonProxy
+) {
+
+    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun searchAll(@AuthUser my: TokenDetail, @Valid @ModelAttribute request: SearchAllMarathonRequest): ResponseEntity<SearchAllMarathonResponse> {
+        val marathons: List<Marathon> = marathonProxy.search(request, my)
+        val response = marathonConverter.map(marathons)
+        return ResponseEntity.ok(response)
+    }
+
+    @GetMapping("/{marathonId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun search(@AuthUser my: TokenDetail, @PathVariable marathonId: Long): ResponseEntity<SearchMarathonDetailResponse> {
+        val marathonDetail: MarathonDetail = marathonProxy.detail(marathonId, my)
+        val response: SearchMarathonDetailResponse = marathonConverter.map(marathonDetail)
+        return ResponseEntity.ok(response)
+    }
+
+    @PostMapping("/bookmark/{marathonId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun bookmark(@AuthUser my: TokenDetail, @PathVariable marathonId: Long): ResponseEntity<BookmarkMarathonResponse> {
+        val bookmarkedMarathonId: Long = marathonProxy.bookmark(marathonId, my)
+        val response = BookmarkMarathonResponse(bookmarkedMarathonId)
+        return ResponseEntity.ok(response)
+    }
+
+    @DeleteMapping("/bookmark/{marathonId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun cancelBookmark(@AuthUser my: TokenDetail, @PathVariable marathonId: Long): ResponseEntity<BookmarkMarathonResponse> {
+        val bookmarkCanceledMarathonId: Long = marathonProxy.cancelBookmark(marathonId, my)
+        val response = BookmarkMarathonResponse(bookmarkCanceledMarathonId)
+        return ResponseEntity.ok(response)
+    }
+}

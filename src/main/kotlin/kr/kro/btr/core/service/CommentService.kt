@@ -1,0 +1,77 @@
+package kr.kro.btr.core.service
+
+import kr.kro.btr.core.converter.CommentConverter
+import kr.kro.btr.domain.entity.CommentEntity
+import kr.kro.btr.domain.port.CommentPort
+import kr.kro.btr.domain.port.model.CommentDetail
+import kr.kro.btr.domain.port.model.CommentResult
+import kr.kro.btr.domain.port.model.CreateCommentCommand
+import kr.kro.btr.domain.port.model.DetailCommentCommand
+import kr.kro.btr.domain.port.model.ModifyCommentCommand
+import kr.kro.btr.domain.port.model.SearchAllCommentCommand
+import kr.kro.btr.infrastructure.CommentGateway
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
+@Service
+class CommentService(
+    private val commentConverter: CommentConverter,
+    private val commentGateway: CommentGateway
+) : CommentPort {
+
+    @Transactional(readOnly = true)
+    override fun searchAll(command: SearchAllCommentCommand): List<CommentResult> {
+        val commentEntities = commentGateway.searchAll(command.feedId).toList()
+
+        // 댓글/대댓글 정렬
+        commentEntities.sortedWith(
+            compareBy<CommentEntity>(
+                { if (it.isRootComment()) it.id else it.parentId },
+                { if (it.isRootComment()) 0L else -1L },
+                { it.id }
+            ).reversed()
+        )
+
+        return commentConverter.map(commentEntities, command.myUserId)
+    }
+
+    @Transactional(readOnly = true)
+    override fun detail(command: DetailCommentCommand): CommentDetail {
+        val parentComment = commentGateway.search(command.commentId)
+        val reCommentEntities = commentGateway.searchReComments(command.commentId)
+
+        val reCommentResults = reCommentEntities
+            .map { commentConverter.map(it, command.myUserId) }
+            .sortedByDescending { it.id }
+
+        return commentConverter.map(parentComment, reCommentResults)
+    }
+
+    @Transactional
+    override fun create(command: CreateCommentCommand) {
+        val query = commentConverter.map(command)
+        commentGateway.create(query)
+    }
+
+    @Transactional(readOnly = true)
+    override fun qty(feedId: Long): Int {
+        return commentGateway.qty(feedId)
+    }
+
+    @Transactional
+    override fun remove(commentId: Long) {
+        commentGateway.remove(commentId)
+    }
+
+    @Transactional
+    override fun modify(command: ModifyCommentCommand): CommentResult {
+        val query = commentConverter.map(command)
+        val modified = commentGateway.modify(query)
+        return commentConverter.map(modified)
+    }
+
+    @Transactional(readOnly = true)
+    override fun search(commentId: Long): CommentEntity {
+        return commentGateway.search(commentId)
+    }
+}

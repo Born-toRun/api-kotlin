@@ -1,9 +1,24 @@
 plugins {
-    kotlin("jvm") version "1.9.25"
-    kotlin("plugin.spring") version "1.9.25"
+    kotlin("jvm")
+    kotlin("plugin.spring")
+//    kotlin("plugin.allopen")
+    kotlin("plugin.jpa")
+    kotlin("kapt")
+    kotlin("plugin.allopen")
     id("org.springframework.boot") version "3.4.4"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
+}
+
+noArg {
+    annotation("javax.persistence.Entity")
+    invokeInitializers = true
+}
+
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.Embeddable")
+    annotation("jakarta.persistence.MappedSuperclass")
 }
 
 group = "kr.kro.btr"
@@ -22,10 +37,16 @@ repositories {
 val snippetsDir = file("build/generated-snippets")
 
 configurations {
+    all {
+        exclude(module = "commons-logging")
+    }
+
     create("asciidoctorExt") {
         extendsFrom(configurations["testImplementation"])
     }
 }
+
+val querydslVersion = dependencyManagement.importedProperties["querydsl.version"]
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
@@ -45,33 +66,33 @@ dependencies {
     implementation("io.minio:minio:8.5.17")
 
     implementation("org.hibernate.validator:hibernate-validator")
-    implementation("org.mapstruct:mapstruct:1.6.3.Final")
+    implementation("org.mapstruct:mapstruct:1.6.3")
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
     implementation("io.jsonwebtoken:jjwt-jackson:0.12.6")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.0")
-    implementation("com.querydsl:querydsl-jpa:5.1.0:jakarta")
+    implementation("com.querydsl:querydsl-jpa:$querydslVersion:jakarta")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.6")
+    implementation("org.slf4j:slf4j-api:2.0.17")
+    implementation("ch.qos.logback:logback-classic:1.5.18")
 
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 
-    annotationProcessor("com.querydsl:querydsl-apt:5.1.0:jakarta")
+    annotationProcessor("com.querydsl:querydsl-apt:$querydslVersion:jakarta")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
     annotationProcessor("jakarta.annotation:jakarta.annotation-api")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3.Final")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    kapt("com.querydsl:querydsl-apt:$querydslVersion:jakarta")
+    kapt("org.mapstruct:mapstruct-processor:1.6.3")
+    kaptTest("org.mapstruct:mapstruct-processor:1.6.3")
     "asciidoctorExt"("org.springframework.restdocs:spring-restdocs-asciidoctor")
-}
-
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll("-Xjsr305=strict")
-    }
 }
 
 tasks.withType<Test> {
