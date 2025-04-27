@@ -1,7 +1,5 @@
 package kr.kro.btr.support.oauth.handler
 
-import java.net.URI
-import java.util.Date
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import kr.kro.btr.config.properties.AppProperties
@@ -26,6 +24,8 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
+import java.net.URI
+import java.util.Date
 
 @Component
 class OAuth2AuthenticationSuccessHandler(

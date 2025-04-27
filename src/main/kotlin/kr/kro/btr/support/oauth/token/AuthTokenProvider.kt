@@ -1,8 +1,8 @@
 package kr.kro.btr.support.oauth.token
 
-import java.util.Date
-import javax.crypto.KeyGenerator
-import javax.crypto.SecretKey
+import io.jsonwebtoken.Claims
+import kr.kro.btr.support.oauth.exception.TokenValidFailedException
+import org.slf4j.LoggerFactory
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -11,10 +11,9 @@ import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
-import io.jsonwebtoken.Claims
-import kr.kro.btr.support.oauth.exception.TokenValidFailedException
-import kr.kro.btr.support.oauth.token.AuthToken
-import org.slf4j.LoggerFactory
+import java.util.Date
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
 
 class AuthTokenProvider(keyGenerator: KeyGenerator) {
 
@@ -25,7 +24,7 @@ class AuthTokenProvider(keyGenerator: KeyGenerator) {
         return AuthToken(id, expiry, secretKey)
     }
 
-    fun createAuthToken(id: Long, userName: String, crewId: Long?, role: String, expiry: Date): AuthToken {
+    fun createAuthToken(id: Long, userName: String?, crewId: Long?, role: String, expiry: Date): AuthToken {
         return AuthToken(id, userName, crewId, role, expiry, secretKey)
     }
 

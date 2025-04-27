@@ -17,32 +17,32 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "activity")
 @DynamicInsert
-class ActivityEntity {
+class ActivityEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0L
-    var title: String = ""
-    var contents: String = ""
-    var startDate: LocalDateTime? = null
-    var venue: String = ""
-    var venueUrl: String = ""
-    var participantsLimit: Int = 0
-    var participationFee: Int = 0
-    var course: String = ""
-    var courseDetail: String = ""
-    var path: String = ""
-    var userId: Long? = null
-    var isOpen: Boolean = false
-    var updatedAt: LocalDateTime? = null
-    var registeredAt: LocalDateTime? = null
+    val id: Long = 0L,
+    var title: String,
+    var contents: String,
+    var startAt: LocalDateTime,
+    var venue: String? = null,
+    var venueUrl: String,
+    var participantsLimit: Int = 0,
+    var participationFee: Int = 0,
+    var course: String? = null,
+    var courseDetail: String? = null,
+    var path: String? = null,
+    val userId: Long,
+    var isOpen: Boolean = false,
+    val updatedAt: LocalDateTime = LocalDateTime.now(),
+    val registeredAt: LocalDateTime = LocalDateTime.now(),
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", insertable = false, updatable = false)
-    var userEntity: UserEntity? = null
-
+    val userEntity: UserEntity? = null
+) {
     @OneToMany(mappedBy = "activityEntity", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
-    var activityParticipationEntities: MutableSet<ActivityParticipationEntity> = mutableSetOf()
+    val activityParticipationEntities: MutableSet<ActivityParticipationEntity> = mutableSetOf()
 
     fun open() {
         isOpen = true
@@ -51,7 +51,7 @@ class ActivityEntity {
     fun modify(query: ModifyActivityQuery) {
         query.title.takeIf { it.isNotBlank() }?.let { title = it }
         query.contents.takeIf { it.isNotBlank() }?.let { contents = it }
-        query.startAt.let { startDate = it }
+        query.startAt.let { startAt = it }
         query.venue?.takeIf { it.isNotBlank() }?.let { venue = it }
         query.venueUrl.takeIf { it.isNotBlank() }?.let { venueUrl = it }
         query.participantsLimit.let { participantsLimit = it }

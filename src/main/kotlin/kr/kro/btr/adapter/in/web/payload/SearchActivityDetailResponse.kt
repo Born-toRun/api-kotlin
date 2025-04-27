@@ -11,7 +11,7 @@ data class SearchActivityDetailResponse(
     val startDate: LocalDateTime,
     val venue: String?,
     val venueUrl: String,
-    val participantsLimit: Int,
+    val participantsLimit: Int?,
     val participantsQty: Int,
     val participationFee: Int,
     val course: String?,

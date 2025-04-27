@@ -10,9 +10,9 @@ class FeedImageMappingEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
-    var feedId: Long = 0,
-    var imageId: Long,
+    val id: Long = 0,
+    val feedId: Long = 0,
+    val imageId: Long,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feedId", insertable = false, updatable = false)
@@ -20,5 +20,5 @@ class FeedImageMappingEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "imageId", insertable = false, updatable = false)
-    var objectStorageEntity: ObjectStorageEntity? = null
+    val objectStorageEntity: ObjectStorageEntity? = null
 )

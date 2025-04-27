@@ -34,7 +34,7 @@ class FeedGateway(
         val feedEntity = feedConverter.map(query)
         feedRepository.save(feedEntity)
 
-        val feedImageMappingEntities = query.imageIds.map { imageId ->
+        val feedImageMappingEntities = query.imageIds?.map { imageId ->
             FeedImageMappingEntity(
                 imageId = imageId,
                 feedId = feedEntity.id
@@ -42,7 +42,9 @@ class FeedGateway(
         }
 
         feedEntity.add(feedImageMappingEntities)
-        feedImageMappingRepository.saveAll(feedImageMappingEntities)
+        if (feedImageMappingEntities != null) {
+            feedImageMappingRepository.saveAll(feedImageMappingEntities)
+        }
     }
 
     fun remove(feedId: Long) {
@@ -52,14 +54,16 @@ class FeedGateway(
     fun modify(query: ModifyFeedQuery): FeedEntity {
         val feedEntity = search(query.feedId)
 
-        val feedImageMappingEntities = query.imageIds.map { imageId ->
+        val feedImageMappingEntities = query.imageIds?.map { imageId ->
             FeedImageMappingEntity(imageId = imageId)
         }
 
         feedEntity.modify(query)
         feedEntity.modify(feedImageMappingEntities)
 
-        feedImageMappingRepository.saveAll(feedImageMappingEntities)
+        if (feedImageMappingEntities != null) {
+            feedImageMappingRepository.saveAll(feedImageMappingEntities)
+        }
 
         return feedRepository.save(feedEntity)
     }

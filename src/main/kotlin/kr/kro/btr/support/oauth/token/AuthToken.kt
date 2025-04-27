@@ -27,7 +27,7 @@ class AuthToken(
         key = key
     )
 
-    constructor(id: Long, userName: String, crewId: Long?, role: String, expiry: Date, key: SecretKey) : this(
+    constructor(id: Long, userName: String?, crewId: Long?, role: String, expiry: Date, key: SecretKey) : this(
         token = Jwts.builder()
             .subject(id.toString())
             .claim(AUTHORITIES_KEY, role)

@@ -24,7 +24,7 @@ data class SearchCommentResponse(
         val userName: String?,
         val profileImageUri: String?,
         val crewName: String?,
-        val isAdmin: Boolean = false,
-        val isManager: Boolean = false
+        val isAdmin: Boolean? = false,
+        val isManager: Boolean? = false
     )
 }

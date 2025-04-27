@@ -8,7 +8,6 @@ import kr.kro.btr.domain.constant.RoleType
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.infrastructure.UserGateway
 import kr.kro.btr.infrastructure.model.CreateUserQuery
-import kr.kro.btr.support.oauth.entity.UserPrincipal
 import kr.kro.btr.support.oauth.info.OAuth2UserInfo
 import kr.kro.btr.support.oauth.info.OAuth2UserInfoFactory
 import org.springframework.security.authentication.InternalAuthenticationServiceException

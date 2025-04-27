@@ -15,37 +15,44 @@ class FeedEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
-    var userId: Long = 0,
+    val id: Long = 0,
+    val userId: Long = 0,
     var contents: String,
     @Enumerated(EnumType.STRING)
     var category: FeedCategory,
     @Enumerated(EnumType.STRING)
     var accessLevel: FeedAccessLevel,
     var viewQty: Int = 0,
-    var registeredAt: LocalDateTime = LocalDateTime.now(),
-    var updatedAt: LocalDateTime = LocalDateTime.now(),
+    val registeredAt: LocalDateTime = LocalDateTime.now(),
+    val updatedAt: LocalDateTime = LocalDateTime.now(),
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", insertable = false, updatable = false)
-    var userEntity: UserEntity? = null,
-
-    @OneToMany(mappedBy = "feedEntity", cascade = [CascadeType.REMOVE], orphanRemoval = true)
-    var commentEntities: MutableSet<CommentEntity> = mutableSetOf(),
-
-    @OneToMany(mappedBy = "feedEntity", cascade = [CascadeType.REMOVE], orphanRemoval = true)
-    var feedImageMappingEntities: MutableSet<FeedImageMappingEntity> = mutableSetOf(),
-
-    @OneToMany(mappedBy = "feedEntity", cascade = [CascadeType.REMOVE], orphanRemoval = true)
-    var recommendationEntities: MutableSet<RecommendationEntity> = mutableSetOf()
+    val userEntity: UserEntity? = null
 ) {
+    @OneToMany(mappedBy = "feedEntity", cascade = [CascadeType.REMOVE], orphanRemoval = true)
+    val commentEntities: MutableSet<CommentEntity> = mutableSetOf()
 
-    fun add(feedImageMappingEntities: List<FeedImageMappingEntity>) {
+    @OneToMany(mappedBy = "feedEntity", cascade = [CascadeType.REMOVE], orphanRemoval = true)
+    val feedImageMappingEntities: MutableSet<FeedImageMappingEntity> = mutableSetOf()
+
+    @OneToMany(mappedBy = "feedEntity", cascade = [CascadeType.REMOVE], orphanRemoval = true)
+    val recommendationEntities: MutableSet<RecommendationEntity> = mutableSetOf()
+
+    fun add(feedImageMappingEntities: List<FeedImageMappingEntity>?) {
+        if (feedImageMappingEntities == null) {
+            return
+        }
+
         feedImageMappingEntities.forEach { it.feedEntity = this }
         this.feedImageMappingEntities.addAll(feedImageMappingEntities)
     }
 
-    fun modify(feedImageMappingEntities: List<FeedImageMappingEntity>) {
+    fun modify(feedImageMappingEntities: List<FeedImageMappingEntity>?) {
+        if (feedImageMappingEntities == null) {
+            return
+        }
+
         feedImageMappingEntities.forEach { it.feedEntity = this }
         this.feedImageMappingEntities.clear()
         this.feedImageMappingEntities.addAll(feedImageMappingEntities)
@@ -56,7 +63,7 @@ class FeedEntity(
         this.contents = query.contents
         this.category = query.category
 
-        val entities = query.imageIds.map {
+        val entities = query.imageIds?.map {
             FeedImageMappingEntity(imageId=it).apply { feedEntity = this@FeedEntity }
         }
 
@@ -66,7 +73,7 @@ class FeedEntity(
     fun getRecommendationQty(): Int =
         recommendationEntities.count { it.recommendationType == RecommendationType.FEED }
 
-    fun getCommentQty(): Long = commentEntities.size.toLong()
+    fun getCommentQty(): Int = commentEntities.size.toInt()
 
     fun getImageUris(): List<String> =
         feedImageMappingEntities.mapNotNull { it.objectStorageEntity?.fileUri }

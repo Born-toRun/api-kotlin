@@ -7,8 +7,8 @@ data class SearchFeedResponse(
     val id: Long,
     val imageUris: List<String>,
     val contents: String,
-    val viewQty: Long,
-    val recommendationQty: Long,
+    val viewQty: Int,
+    val recommendationQty: Int,
     val commentQty: Int,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     val registeredAt: LocalDateTime,
@@ -16,11 +16,11 @@ data class SearchFeedResponse(
     val viewer: Viewer
 ) {
     data class Writer(
-        val userName: String,
-        val crewName: String,
-        val profileImageUri: String,
-        val isAdmin: Boolean,
-        val isManager: Boolean
+        val userName: String?,
+        val crewName: String?,
+        val profileImageUri: String?,
+        val isAdmin: Boolean?,
+        val isManager: Boolean?
     )
 
     data class Viewer(

@@ -5,7 +5,6 @@ import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCommentDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCommentResponse
-import kr.kro.btr.domain.constant.RoleType
 import kr.kro.btr.domain.entity.CommentEntity
 import kr.kro.btr.domain.port.model.CommentDetail
 import kr.kro.btr.domain.port.model.CommentResult
@@ -126,10 +125,10 @@ class CommentConverter {
             writer = CommentResult.Writer(
                 userId = source.userEntity?.id,
                 userName = source.userEntity?.name,
-                profileImageUri = source.userEntity?.profileImageEntity?.fileUri,
+                profileImageUri = source.userEntity?.getProfileImageUri(),
                 crewName = source.userEntity?.crewEntity?.name,
-                isAdmin = source.userEntity?.roleType == RoleType.ADMIN,
-                isManager = source.userEntity?.roleType == RoleType.MANAGER
+                isAdmin = source.userEntity?.getIsAdmin(),
+                isManager = source.userEntity?.getIsManager()
             )
         )
     }
@@ -145,10 +144,10 @@ class CommentConverter {
             writer = CommentResult.Writer(
                 userId = source.userEntity?.id,
                 userName = source.userEntity?.name,
-                profileImageUri = source.userEntity?.profileImageEntity?.fileUri,
+                profileImageUri = source.userEntity?.getProfileImageUri(),
                 crewName = source.userEntity?.crewEntity?.name,
-                isAdmin = source.userEntity?.roleType == RoleType.ADMIN,
-                isManager = source.userEntity?.roleType == RoleType.MANAGER
+                isAdmin = source.userEntity?.getIsAdmin(),
+                isManager = source.userEntity?.getIsManager()
             )
         )
     }
@@ -171,10 +170,10 @@ class CommentConverter {
             writer = CommentDetail.Writer(
                 userId = commentEntity.userEntity?.id,
                 userName = commentEntity.userEntity?.name,
-                profileImageUri = commentEntity.userEntity?.profileImageEntity?.fileUri,
+                profileImageUri = commentEntity.userEntity?.getProfileImageUri(),
                 crewName = commentEntity.userEntity?.crewEntity?.name,
-                isAdmin = commentEntity.userEntity?.roleType == RoleType.ADMIN,
-                isManager = commentEntity.userEntity?.roleType == RoleType.MANAGER
+                isAdmin = commentEntity.userEntity?.getIsAdmin(),
+                isManager = commentEntity.userEntity?.getIsManager()
             )
         )
     }

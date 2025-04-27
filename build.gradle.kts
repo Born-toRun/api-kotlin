@@ -1,7 +1,6 @@
 plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
-//    kotlin("plugin.allopen")
     kotlin("plugin.jpa")
     kotlin("kapt")
     kotlin("plugin.allopen")

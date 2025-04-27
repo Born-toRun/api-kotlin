@@ -10,10 +10,8 @@ class UserPrivacyEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
-
-    var userId: Long,
-
+    val id: Long = 0,
+    val userId: Long,
     var isInstagramIdPublic: Boolean = false,
 
     @OneToOne(fetch = FetchType.LAZY)

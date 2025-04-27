@@ -13,24 +13,23 @@ class ObjectStorageEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
+    val id: Long = 0,
 
-    var userId: Long,
-    var bucketName: String,
+    val userId: Long,
+    val bucketName: String,
     var fileUri: String,
-    var uploadAt: LocalDateTime = LocalDateTime.now(),
-
-    @OneToMany(mappedBy = "objectStorageEntity", cascade = [CascadeType.REMOVE])
-    var feedImageMappingEntities: MutableSet<FeedImageMappingEntity> = HashSet(),
+    val uploadAt: LocalDateTime = LocalDateTime.now(),
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", insertable = false, updatable = false)
-    var userEntity: UserEntity? = null,
+    val userEntity: UserEntity? = null,
 
     @OneToOne(mappedBy = "imageEntity", cascade = [CascadeType.REMOVE])
-    var crewImageEntity: CrewEntity? = null,
+    val crewImageEntity: CrewEntity? = null,
 
     @OneToOne(mappedBy = "logoEntity", cascade = [CascadeType.REMOVE])
-    var crewLogoEntity: CrewEntity? = null
-)
-
+    val crewLogoEntity: CrewEntity? = null
+) {
+    @OneToMany(mappedBy = "objectStorageEntity", cascade = [CascadeType.REMOVE])
+    val feedImageMappingEntities: MutableSet<FeedImageMappingEntity> = mutableSetOf()
+}

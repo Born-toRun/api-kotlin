@@ -39,7 +39,7 @@ class ObjectStorageClient(
             val originalFilename = resource.file.originalFilename
             val extension = getFileExtension(originalFilename)
             val uploadedFileName = UUID.randomUUID().toString() + extension
-            log.info("{}에 {}을 저장합니다.", resource.bucket, uploadedFileName)
+            log.info { "$resource.bucket 에 $uploadedFileName 을 저장합니다." }
 
             minioClient.putObject(
                 PutObjectArgs.builder()

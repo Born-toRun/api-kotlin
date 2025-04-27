@@ -5,7 +5,7 @@ import kr.kro.btr.domain.constant.FeedCategory
 
 data class CreateFeedQuery(
     val contents: String,
-    val imageIds: List<Long>,
+    val imageIds: List<Long>?,
     val category: FeedCategory,
     val accessLevel: FeedAccessLevel,
     val userId: Long

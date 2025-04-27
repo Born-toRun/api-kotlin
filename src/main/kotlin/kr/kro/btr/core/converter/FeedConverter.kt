@@ -2,7 +2,6 @@ package kr.kro.btr.core.converter
 
 import kr.kro.btr.adapter.`in`.web.payload.CreateFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailFeedResponse
-import kr.kro.btr.adapter.`in`.web.payload.DetailFeedResponse.Viewer
 import kr.kro.btr.adapter.`in`.web.payload.ModifyFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchFeedResponse
@@ -15,6 +14,8 @@ import kr.kro.btr.domain.port.model.RemoveFeedCommand
 import kr.kro.btr.domain.port.model.SearchAllFeedCommand
 import kr.kro.btr.domain.port.model.SearchFeedDetailCommand
 import kr.kro.btr.infrastructure.model.CreateFeedQuery
+import kr.kro.btr.infrastructure.model.ModifyFeedQuery
+import kr.kro.btr.infrastructure.model.SearchAllFeedQuery
 import kr.kro.btr.support.TokenDetail
 import org.springframework.stereotype.Component
 import kotlin.Long
@@ -42,7 +43,7 @@ class FeedConverter {
                 isAdmin = source.writer.isAdmin,
                 isManager = source.writer.isManager
             ),
-            viewer = Viewer(
+            viewer = DetailFeedResponse.Viewer(
                 hasMyRecommendation = source.hasMyRecommendation,
                 hasMyComment = source.hasMyComment
             )
@@ -132,5 +133,89 @@ class FeedConverter {
                 imageUri = image.imageUri
             )
         }
+    }
+
+    fun map(source: FeedEntity, my: TokenDetail): FeedResult {
+        return FeedResult(
+            id = source.id,
+            contents = source.contents,
+            category = source.category,
+            accessLevel = source.accessLevel,
+            viewQty = source.viewQty,
+            registeredAt = source.registeredAt,
+            updatedAt = source.updatedAt,
+
+            images = source.feedImageMappingEntities.map { image ->
+                FeedResult.Image(
+                    id = image.objectStorageEntity?.id,
+                    imageUri = image.objectStorageEntity?.fileUri
+                )
+            },
+            writer = FeedResult.Writer(
+                userId = source.userEntity?.id,
+                userName = source.userEntity?.name,
+                crewName = source.userEntity?.crewEntity?.name,
+                profileImageUri = source.userEntity?.getProfileImageUri(),
+                isAdmin = source.userEntity?.getIsAdmin(),
+                isManager = source.userEntity?.getIsManager()
+            ),
+            recommendationQty = source.recommendationEntities.size,
+            hasMyRecommendation = source.hasMyRecommendation(my.id),
+            commentQty = source.commentEntities.size,
+            hasMyComment = source.hasMyComment(my.id)
+        )
+    }
+
+    fun map(source: SearchAllFeedCommand, userIds: List<Long>): SearchAllFeedQuery {
+        return SearchAllFeedQuery(
+            category = source.category,
+            searchKeyword = source.searchKeyword,
+            isMyCrew = source.isMyCrew,
+            my = source.my,
+            lastFeedId = source.lastFeedId,
+            searchedUserIds = userIds,
+        )
+    }
+
+    fun map(source: FeedEntity, userId: Long): FeedCard {
+        return FeedCard(
+            id = source.id,
+            imageUris = source.getImageUris(),
+            contents = source.contents,
+            viewQty = source.viewQty,
+            recommendationQty = source.getRecommendationQty(),
+            commentQty = source.getCommentQty(),
+            registeredAt = source.registeredAt,
+            hasRecommendation = source.hasMyRecommendation(userId),
+            hasComment = source.hasMyComment(userId),
+
+            writer = FeedCard.Writer(
+                userName = source.userEntity?.name,
+                crewName = source.userEntity?.crewEntity?.name,
+                profileImageUri = source.userEntity?.getProfileImageUri(),
+                isAdmin = source.userEntity?.getIsAdmin(),
+                isManager = source.userEntity?.getIsManager(),
+            ),
+        )
+    }
+
+    fun map(source: CreateFeedCommand): CreateFeedQuery {
+        return CreateFeedQuery(
+            contents = source.contents,
+            imageIds = source.imageIds,
+            category = source.category,
+            accessLevel = source.accessLevel,
+            userId = source.myUserId
+        )
+    }
+
+    fun map(source: ModifyFeedCommand): ModifyFeedQuery {
+        return ModifyFeedQuery(
+            feedId = source.feedId,
+            imageIds = source.imageIds,
+            contents = source.contents,
+            category = source.category,
+            accessLevel = source.accessLevel
+        )
     }
 }

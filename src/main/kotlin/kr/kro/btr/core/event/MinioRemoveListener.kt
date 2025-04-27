@@ -15,12 +15,8 @@ class MinioRemoveListener(
     @PreRemove
     fun onPreRemove(objectStorageEntity: ObjectStorageEntity) {
         val fileUri = objectStorageEntity.fileUri
-        if (fileUri != null) {
-            val bucketName = Bucket.valueOf(objectStorageEntity.bucketName!!.uppercase())
-            val fileName = fileUri.substring(fileUri.lastIndexOf("/") + 1)
-            eventPublisher.publishEvent(
-                MinioRemoveEventModel(bucketName, fileName)
-            )
-        }
+        val bucketName = Bucket.valueOf(objectStorageEntity.bucketName.uppercase())
+        val fileName = fileUri.substring(fileUri.lastIndexOf("/") + 1)
+        eventPublisher.publishEvent(MinioRemoveEventModel(bucketName, fileName))
     }
 }

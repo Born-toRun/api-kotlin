@@ -14,36 +14,36 @@ class CommentEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
+    val id: Long = 0,
 
-    var parentId: Long? = null,
-    var userId: Long,
-    var feedId: Long? = null,
+    val parentId: Long? = null,
+    val userId: Long,
+    val feedId: Long? = null,
     var contents: String,
-    var registeredAt: LocalDateTime = LocalDateTime.now(),
-    var updatedAt: LocalDateTime = LocalDateTime.now(),
+    val registeredAt: LocalDateTime = LocalDateTime.now(),
+    val updatedAt: LocalDateTime = LocalDateTime.now(),
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", insertable = false, updatable = false)
-    var userEntity: UserEntity? = null,
+    val userEntity: UserEntity? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feedId", insertable = false, updatable = false)
-    var feedEntity: FeedEntity? = null,
-
-    @OneToMany(mappedBy = "commentEntity", cascade = [CascadeType.REMOVE])
-    var recommendationEntities: MutableSet<RecommendationEntity> = HashSet(),
+    val feedEntity: FeedEntity? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parentId", insertable = false, updatable = false)
-    var parent: CommentEntity? = null,
+    var parent: CommentEntity? = null
+) {
+    @OneToMany(mappedBy = "commentEntity", cascade = [CascadeType.REMOVE])
+    val recommendationEntities: MutableSet<RecommendationEntity> = mutableSetOf()
 
     @OneToMany(mappedBy = "parent", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var child: MutableList<CommentEntity> = ArrayList()
-) {
-    fun addParent(parent: CommentEntity?) {
+    val child: MutableSet<CommentEntity> = mutableSetOf()
+
+    fun addParent(parent: CommentEntity) {
         this.parent = parent
-        parent?.child?.add(this)
+        parent.child.add(this)
     }
 
     fun getRecommendationQty(): Long {

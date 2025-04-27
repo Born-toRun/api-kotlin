@@ -20,16 +20,16 @@ data class FeedResult(
     val hasMyComment: Boolean
 ) {
     data class Image(
-        val id: Long,
-        val imageUri: String
+        val id: Long?,
+        val imageUri: String?
     )
 
     data class Writer(
-        val userId: Long,
-        val userName: String,
-        val crewName: String,
-        val profileImageUri: String,
-        val isAdmin: Boolean,
-        val isManager: Boolean
+        val userId: Long?,
+        val userName: String?,
+        val crewName: String?,
+        val profileImageUri: String?,
+        val isAdmin: Boolean?,
+        val isManager: Boolean?
     )
 }

@@ -10,7 +10,6 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityResponse.Host
 import kr.kro.btr.adapter.`in`.web.payload.SearchAllActivityRequest
 import kr.kro.btr.domain.constant.ActivityRecruitmentType
-import kr.kro.btr.domain.constant.RoleType
 import kr.kro.btr.domain.entity.ActivityEntity
 import kr.kro.btr.domain.entity.ActivityParticipationEntity
 import kr.kro.btr.domain.entity.UserEntity
@@ -332,7 +331,7 @@ class ActivityConverter {
             userId = source.id,
             userName = source.name,
             crewName = source.crewEntity?.name,
-            userProfileUri = source.profileImageEntity?.fileUri
+            userProfileUri = source.getProfileImageUri()
         )
     }
 
@@ -340,11 +339,11 @@ class ActivityConverter {
         return ActivityResult.Host(
             userId = source.userEntity?.id,
             crewId = source.userEntity?.crewId,
-            userProfileUri = source.userEntity?.profileImageEntity?.fileUri,
+            userProfileUri = source.userEntity?.getProfileImageUri(),
             userName = source.userEntity?.name,
             crewName = source.userEntity?.crewEntity?.name,
-            isManager = source.userEntity?.roleType == RoleType.MANAGER,
-            isAdmin = source.userEntity?.roleType == RoleType.ADMIN
+            isManager = source.userEntity?.getIsManager(),
+            isAdmin = source.userEntity?.getIsAdmin()
         )
     }
 

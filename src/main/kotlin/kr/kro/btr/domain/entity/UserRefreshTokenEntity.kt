@@ -17,10 +17,8 @@ class UserRefreshTokenEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    var id: Long = 0,
-
-    var userId: Long,
-
+    val id: Long = 0,
+    val userId: Long,
     var refreshToken: String,
 
     @OneToOne(fetch = FetchType.LAZY)

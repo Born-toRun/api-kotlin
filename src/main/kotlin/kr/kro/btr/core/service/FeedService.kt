@@ -30,25 +30,22 @@ class FeedService(
     @Transactional(readOnly = true)
     override fun searchDetail(command: SearchFeedDetailCommand): FeedResult {
         val feedEntity = feedGateway.search(command.feedId)
-        return feedConverter.toFeed(feedEntity, command.my)
+        return feedConverter.map(feedEntity, command.my)
     }
 
     @Transactional(readOnly = true)
     override fun searchAll(command: SearchAllFeedCommand, pageable: Pageable): Page<FeedCard> {
-        val searchedUserIds = command.searchKeyword
-            ?.let { userGateway.searchByUserName(it) }
-            ?.map(UserEntity::getId)
-            ?: emptyList()
+        val searchedUserIds: List<Long> = command.searchKeyword
+            ?.let { keyword ->
+                userGateway.searchByUserName(keyword)
+                    .map { it.id }
+            } ?: emptyList()
 
-        val query = feedConverter.toSearchAllFeedQuery(command, searchedUserIds)
+        val query = feedConverter.map(command, searchedUserIds)
         val feedPage = feedGateway.searchAllByFilter(query, pageable)
 
         return feedPage.map { entity ->
-            feedConverter.toFeedCard(
-                entity,
-                entity.hasMyComment(command.my.id),
-                entity.hasMyRecommendation(command.my.id)
-            )
+            feedConverter.map(entity, command.my.id)
         }
     }
 
@@ -60,7 +57,7 @@ class FeedService(
 
     @Transactional
     override fun create(command: CreateFeedCommand) {
-        val query = feedConverter.toCreateFeedQuery(command)
+        val query = feedConverter.map(command)
         feedGateway.create(query)
     }
 
@@ -71,12 +68,12 @@ class FeedService(
 
     @Transactional
     override fun modify(command: ModifyFeedCommand) {
-        val query = feedConverter.toModifyFeedQuery(command)
+        val query = feedConverter.map(command)
         val modified = feedGateway.modify(query)
 
         val removedImageIds = modified.feedImageMappingEntities
             .map(FeedImageMappingEntity::imageId)
-            .filter { it !in command.imageIds }
+            .filter { command.imageIds?.contains(it) != true  }
 
         feedImageMappingGateway.removeAllByFileId(removedImageIds as List<Long>)
     }

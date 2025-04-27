@@ -1,7 +1,6 @@
 package kr.kro.btr.support.oauth.service
 
 import kr.kro.btr.infrastructure.UserGateway
-import kr.kro.btr.support.oauth.entity.UserPrincipal
 
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService

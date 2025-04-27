@@ -19,8 +19,8 @@ data class SearchCommentDetailResponse(
         val userName: String?,
         val profileImageUri: String?,
         val crewName: String?,
-        val isAdmin: Boolean,
-        val isManager: Boolean
+        val isAdmin: Boolean?,
+        val isManager: Boolean?
     )
 
     data class ReComment(
@@ -36,8 +36,8 @@ data class SearchCommentDetailResponse(
             val userName: String?,
             val profileImageUri: String?,
             val crewName: String?,
-            val isAdmin: Boolean,
-            val isManager: Boolean
+            val isAdmin: Boolean? = false,
+            val isManager: Boolean? = false
         )
     }
 }

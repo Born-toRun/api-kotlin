@@ -83,7 +83,7 @@ class ActivityGateway(
                     }
                 }
                 ENDED -> activityEntities.filter { a ->
-                    a.startAt!!.isBefore(LocalDateTime.now())
+                    a.startAt.isBefore(LocalDateTime.now())
                 }
                 CLOSED -> activityEntities.filter { a ->
                     a.participantsLimit <= a.activityParticipationEntities.size

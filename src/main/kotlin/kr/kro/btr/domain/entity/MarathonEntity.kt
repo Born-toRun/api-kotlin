@@ -9,23 +9,23 @@ class MarathonEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
+    val id: Long = 0,
 
-    var title: String? = null,
-    var owner: String? = null,
-    var email: String? = null,
-    var schedule: String? = null,
-    var contact: String? = null,
-    var course: String? = null,
-    var location: String? = null,
-    var venue: String? = null,
-    var host: String? = null,
-    var duration: String? = null,
-    var homepage: String? = null,
-    var venueDetail: String? = null,
-    var remark: String? = null,
-    var registeredAt: LocalDateTime = LocalDateTime.now(),
-
+    val title: String? = null,
+    val owner: String? = null,
+    val email: String? = null,
+    val schedule: String? = null,
+    val contact: String? = null,
+    val course: String? = null,
+    val location: String? = null,
+    val venue: String? = null,
+    val host: String? = null,
+    val duration: String? = null,
+    val homepage: String? = null,
+    val venueDetail: String? = null,
+    val remark: String? = null,
+    val registeredAt: LocalDateTime = LocalDateTime.now()
+) {
     @OneToMany(mappedBy = "marathonEntity", cascade = [CascadeType.REMOVE])
-    var marathonBookmarkEntities: Set<MarathonBookmarkEntity> = HashSet()
-)
+    val marathonBookmarkEntities: MutableSet<MarathonBookmarkEntity> = mutableSetOf()
+}

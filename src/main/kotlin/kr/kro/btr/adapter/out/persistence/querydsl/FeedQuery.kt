@@ -45,7 +45,7 @@ class FeedQuery(private val queryFactory: JPAQueryFactory) {
             .distinct()
             .where(whereClause)
 
-        val total = feedQuery.fetchCount()
+        val total = feedQuery.fetch().size
 
         val contents = feedQuery
             .orderBy(feed.id.desc())
@@ -53,7 +53,7 @@ class FeedQuery(private val queryFactory: JPAQueryFactory) {
             .limit(pageable.pageSize.toLong())
             .fetch()
 
-        return PageImpl(contents, pageable, total)
+        return PageImpl(contents, pageable, total.toLong())
     }
 
     private fun buildWhereClause(query: SearchAllFeedQuery, feed: QFeedEntity): BooleanExpression {

@@ -6,8 +6,8 @@ data class FeedCard(
     val id: Long,
     val imageUris: List<String>,
     val contents: String,
-    val viewQty: Long,
-    val recommendationQty: Long,
+    val viewQty: Int,
+    val recommendationQty: Int,
     val commentQty: Int,
     val registeredAt: LocalDateTime,
     val writer: Writer,
@@ -15,10 +15,10 @@ data class FeedCard(
     val hasComment: Boolean
 ) {
     data class Writer(
-        val userName: String,
-        val crewName: String,
-        val profileImageUri: String,
-        val isAdmin: Boolean,
-        val isManager: Boolean
+        val userName: String?,
+        val crewName: String?,
+        val profileImageUri: String?,
+        val isAdmin: Boolean?,
+        val isManager: Boolean?
     )
 }

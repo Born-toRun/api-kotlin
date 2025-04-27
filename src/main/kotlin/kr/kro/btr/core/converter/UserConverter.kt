@@ -4,7 +4,6 @@ import kr.kro.btr.adapter.`in`.web.payload.ModifyUserRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyUserResponse
 import kr.kro.btr.adapter.`in`.web.payload.SignUpRequest
 import kr.kro.btr.adapter.`in`.web.payload.UserDetailResponse
-import kr.kro.btr.domain.constant.RoleType
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.port.model.BornToRunUser
 import kr.kro.btr.domain.port.model.CreateUserCommand
@@ -103,10 +102,10 @@ class UserConverter {
             crewName = source.crewEntity?.name,
             instagramId = source.instagramId,
             imageId = source.imageId,
-            profileImageUri = source.profileImageEntity?.fileUri,
+            profileImageUri = source.getProfileImageUri(),
             lastLoginAt = source.lastLoginAt,
-            isAdmin = source.roleType == RoleType.ADMIN,
-            isManager = source.roleType == RoleType.MANAGER,
+            isAdmin = source.getIsAdmin(),
+            isManager = source.getIsManager(),
             yellowCardQty = source.yellowCardQty,
             isInstagramIdPublic = source.userPrivacyEntity?.isInstagramIdPublic,
         )

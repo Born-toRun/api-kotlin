@@ -16,63 +16,53 @@ class UserEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
-
-    var socialId: String,
-
+    val id: Long = 0,
+    val socialId: String,
     @Enumerated(EnumType.STRING)
-    var providerType: ProviderType,
-
+    val providerType: ProviderType,
     @Enumerated(EnumType.STRING)
-    var roleType: RoleType = RoleType.GUEST,
-
+    val roleType: RoleType = RoleType.GUEST,
     var name: String? = null,
-
     var crewId: Long? = null,
-
     var instagramId: String? = null,
-
     var lastLoginAt: LocalDateTime = LocalDateTime.now(),
-
     var imageId: Long? = null,
-
-    var yellowCardQty: Int = 0,
+    val yellowCardQty: Int = 0,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crewId", insertable = false, updatable = false)
-    var crewEntity: CrewEntity? = null,
+    val crewEntity: CrewEntity? = null,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "imageId", insertable = false, updatable = false)
-    var profileImageEntity: ObjectStorageEntity? = null,
-
-    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
-    var objectStorageEntities: MutableSet<ObjectStorageEntity> = mutableSetOf(),
+    val profileImageEntity: ObjectStorageEntity? = null,
 
     @OneToOne(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
     var userRefreshTokenEntity: UserRefreshTokenEntity? = null,
 
-    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
-    var feedEntities: MutableSet<FeedEntity> = mutableSetOf(),
-
-    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
-    var activityEntities: MutableSet<ActivityEntity> = mutableSetOf(),
-
-    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
-    var activityParticipationEntities: MutableSet<ActivityParticipationEntity> = mutableSetOf(),
-
-    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
-    var commentEntities: MutableSet<CommentEntity> = mutableSetOf(),
-
-    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
-    var marathonBookmarkEntities: MutableSet<MarathonBookmarkEntity> = mutableSetOf(),
-
-    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
-    var recommendationEntities: MutableSet<RecommendationEntity> = mutableSetOf(),
-
     @OneToOne(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
     var userPrivacyEntity: UserPrivacyEntity? = null
 ) {
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    val objectStorageEntities: MutableSet<ObjectStorageEntity> = mutableSetOf()
+
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    val feedEntities: MutableSet<FeedEntity> = mutableSetOf()
+
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    val activityEntities: MutableSet<ActivityEntity> = mutableSetOf()
+
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    val activityParticipationEntities: MutableSet<ActivityParticipationEntity> = mutableSetOf()
+
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    val commentEntities: MutableSet<CommentEntity> = mutableSetOf()
+
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    val marathonBookmarkEntities: MutableSet<MarathonBookmarkEntity> = mutableSetOf()
+
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    val recommendationEntities: MutableSet<RecommendationEntity> = mutableSetOf()
 
     fun getProfileImageUri(): String? {
         return if (profileImageEntity == null || profileImageEntity?.id == 0L) {
