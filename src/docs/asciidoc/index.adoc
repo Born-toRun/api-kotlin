@@ -6,7 +6,10 @@
 :source-highlighter:
 
 == 크루
+=== 크루 조회
 operation::search-crews[snippets="http-request,request-fields,http-response,response-headers"]
-
-// 이 부분이 실제 들어갈 내용을 나타낸다. signup 이름의 API 작업을 참조하고, [] 부분에 사용할 스니펫을 지정한다.
-// operation::signup[snippets="http-request,request-fields,http-response,response-headers"]
+=== 크루 등록
+operation::create-crews[snippets="http-request,request-fields,http-response,response-headers"]
+== 신고
+=== 신고하기
+operation::create-yellow-cards[snippets="http-request,request-fields,http-response,response-headers"]

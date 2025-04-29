@@ -2,6 +2,9 @@ package kr.kro.btr.adapter.`in`.web
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import io.mockk.just
+import io.mockk.runs
+import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
@@ -13,6 +16,7 @@ import kr.kro.btr.utils.restdocs.NUMBER
 import kr.kro.btr.utils.restdocs.RestDocsField
 import kr.kro.btr.utils.restdocs.STRING
 import kr.kro.btr.utils.restdocs.andDocument
+import kr.kro.btr.utils.restdocs.requestBody
 import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
 import kr.kro.btr.utils.restdocs.type
 import kr.kro.btr.utils.shouldBe
@@ -30,9 +34,9 @@ import org.springframework.web.context.WebApplicationContext
 @WebMvcTest(CrewController::class)
 class CrewControllerTest (
     @MockkBean
-    private val crewConverter: CrewConverter,
+    private val converter: CrewConverter,
     @MockkBean
-    private val crewProxy: CrewProxy,
+    private val proxy: CrewProxy,
     @Autowired
     private val context: WebApplicationContext
 ): ControllerDescribeSpec ({
@@ -44,7 +48,7 @@ class CrewControllerTest (
     beforeEach { restDocumentation.beforeTest(javaClass, it.name.testName) }
     afterEach { restDocumentation.afterTest() }
 
-    describe("POST : $baseUrl") {
+    describe("GET : $baseUrl") {
         val url = baseUrl
         val crew = Crew(
             id = 0,
@@ -71,8 +75,8 @@ class CrewControllerTest (
                 .contentType(APPLICATION_JSON)
 
             it("200 OK") {
-                every { crewProxy.searchAll() } returns crews
-                every { crewConverter.map(any<List<Crew>>()) } returns response
+                every { proxy.searchAll() } returns crews
+                every { converter.map(any<List<Crew>>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -91,6 +95,39 @@ class CrewControllerTest (
                             "crewDetails" type ARRAY means "등록된 크루 목록"
                         )
                             .andWithPrefix("crewDetails[].", getCrewDetailsResponseSnippet())
+                    )
+            }
+        }
+    }
+
+    describe("POST : $baseUrl") {
+        val url = baseUrl
+        val requestBody = CreateCrewRequest(
+            name = "name",
+            contents = "contents",
+            sns = "sns",
+            region = "region"
+        )
+
+        context("등록을 하면") {
+            every { proxy.create(any()) } just runs
+
+            val requestJson = toJson(requestBody)
+            val request = request(HttpMethod.POST, url)
+                .contentType(APPLICATION_JSON)
+                .content(requestJson)
+
+            it("200 OK") {
+                mockMvc.perform(request)
+                    .andExpect(status().isCreated)
+                    .andDocument(
+                        "create-crews",
+                        requestBody(
+                            "name" type STRING means "크루명",
+                            "contents" type STRING means "크루소개",
+                            "sns" type STRING means "크루 sns uri",
+                            "region" type STRING means "크루 활동 지역"
+                        )
                     )
             }
         }
