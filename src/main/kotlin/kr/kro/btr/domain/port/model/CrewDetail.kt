@@ -1,7 +1,7 @@
 package kr.kro.btr.domain.port.model
 
 data class CrewDetail(
-    val id: String,
+    val id: Long,
     val crewName: String,
     val contents: String,
     val imageUri: String,
