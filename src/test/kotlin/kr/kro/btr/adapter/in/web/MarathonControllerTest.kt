@@ -2,6 +2,7 @@ package kr.kro.btr.adapter.`in`.web
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import kr.kro.btr.adapter.`in`.web.payload.BookmarkMarathonResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchAllMarathonResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonDetailResponse
 import kr.kro.btr.adapter.`in`.web.proxy.MarathonProxy
@@ -187,6 +188,64 @@ class MarathonControllerTest (
                             "remark" type STRING means "기타소개",
                             "registeredAt" type STRING means "등록 일시",
                             "bookmarking" type BOOLEAN means "북마크 여부"
+                        )
+                    )
+            }
+        }
+    }
+
+    describe("POST : $baseUrl/bookmark/{marathonId}") {
+        val marathonId = 0L
+        val url = "$baseUrl/bookmark/$marathonId"
+        val response = BookmarkMarathonResponse(
+            marathonId = marathonId
+        )
+
+        context("조회를 하면") {
+            val request = request(HttpMethod.POST, url)
+                .contentType(APPLICATION_JSON)
+
+            it("200 OK") {
+                every { proxy.bookmark(any(), any()) } returns marathonId
+
+                mockMvc.perform(request)
+                    .andExpect(status().isOk)
+                    .andExpectData(
+                        jsonPath("$.marathonId") shouldBe response.marathonId
+                    )
+                    .andDocument(
+                        "bookmark-marathon",
+                        envelopeResponseBody(
+                            "marathonId" type NUMBER means "북마크한 마라톤 식별자"
+                        )
+                    )
+            }
+        }
+    }
+
+    describe("DELETE : $baseUrl/bookmark/{marathonId}") {
+        val marathonId = 0L
+        val url = "$baseUrl/bookmark/$marathonId"
+        val response = BookmarkMarathonResponse(
+            marathonId = marathonId
+        )
+
+        context("조회를 하면") {
+            val request = request(HttpMethod.DELETE, url)
+                .contentType(APPLICATION_JSON)
+
+            it("200 OK") {
+                every { proxy.cancelBookmark(any(), any()) } returns marathonId
+
+                mockMvc.perform(request)
+                    .andExpect(status().isOk)
+                    .andExpectData(
+                        jsonPath("$.marathonId") shouldBe response.marathonId
+                    )
+                    .andDocument(
+                        "cancel-bookmark-marathon",
+                        envelopeResponseBody(
+                            "marathonId" type NUMBER means "북마크 취소한 마라톤 식별자"
                         )
                     )
             }

@@ -18,3 +18,7 @@ operation::create-yellow-cards[snippets="http-request,request-fields,http-respon
 operation::search-marathons[snippets="http-request,request-fields,http-response,response-headers"]
 === 상세 조회
 operation::search-marathon-detail[snippets="http-request,request-fields,http-response,response-headers"]
+=== 북마크
+operation::bookmark-marathon[snippets="http-request,request-fields,http-response,response-headers"]
+=== 북마크 취소
+operation::cancel-bookmark-marathon[snippets="http-request,request-fields,http-response,response-headers"]
