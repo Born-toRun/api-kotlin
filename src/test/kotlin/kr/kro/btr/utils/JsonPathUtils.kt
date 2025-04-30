@@ -13,5 +13,5 @@ fun ResultActions.andExpectData(
 infix fun JsonPathResultMatchers.shouldBe(
 	expectedValue: Any?
 ): ResultMatcher {
-	return this.value(expectedValue)
+	return this.value(expectedValue.toString())
 }
