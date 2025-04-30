@@ -17,6 +17,9 @@ import kr.kro.btr.utils.restdocs.NUMBER
 import kr.kro.btr.utils.restdocs.RestDocsField
 import kr.kro.btr.utils.restdocs.STRING
 import kr.kro.btr.utils.restdocs.andDocument
+import kr.kro.btr.utils.restdocs.pathMeans
+import kr.kro.btr.utils.restdocs.pathParameters
+import kr.kro.btr.utils.restdocs.responseBody
 import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
 import kr.kro.btr.utils.restdocs.type
 import kr.kro.btr.utils.shouldBe
@@ -88,11 +91,11 @@ class MarathonControllerTest (
                         jsonPath("$.marathons[0].schedule") shouldBe response.marathons[0].schedule,
                         jsonPath("$.marathons[0].venue") shouldBe response.marathons[0].venue,
                         jsonPath("$.marathons[0].course") shouldBe response.marathons[0].course,
-                        jsonPath("$.marathons[0].bookmarking") shouldBe response.marathons[0].isBookmarking,
+                        jsonPath("$.marathons[0].isBookmarking") shouldBe response.marathons[0].isBookmarking,
                     )
                     .andDocument(
                         "search-marathons",
-                        envelopeResponseBody(
+                        responseBody(
                             "marathons" type ARRAY means "대회 목록"
                         )
                             .andWithPrefix("marathons[].", getMarathonsResponseSnippet())
@@ -103,7 +106,7 @@ class MarathonControllerTest (
 
     describe("GET : $baseUrl/{marathonId}") {
         val marathonId = 0
-        val url = "$baseUrl/$marathonId"
+        val url = "$baseUrl/{marathonId}"
         val marathonDetail = MarathonDetail(
             id = 0,
             title = "title",
@@ -142,7 +145,7 @@ class MarathonControllerTest (
         )
 
         context("조회를 하면") {
-            val request = request(HttpMethod.GET, url)
+            val request = request(HttpMethod.GET, url, marathonId)
                 .contentType(APPLICATION_JSON)
 
             it("200 OK") {
@@ -167,11 +170,14 @@ class MarathonControllerTest (
                         jsonPath("$.venueDetail") shouldBe response.venueDetail,
                         jsonPath("$.remark") shouldBe response.remark,
                         jsonPath("$.registeredAt") shouldBe response.registeredAt,
-                        jsonPath("$.bookmarking") shouldBe response.isBookmarking,
+                        jsonPath("$.isBookmarking") shouldBe response.isBookmarking,
                     )
                     .andDocument(
                         "search-marathon-detail",
-                        envelopeResponseBody(
+                        pathParameters(
+                            "marathonId" pathMeans "조회 대상 마라톤 식별자"
+                        ),
+                        responseBody(
                             "id" type NUMBER means "식별자",
                             "title" type STRING means "대회명",
                             "owner" type STRING means "대표자명",
@@ -187,7 +193,7 @@ class MarathonControllerTest (
                             "venueDetail" type STRING means "대회장",
                             "remark" type STRING means "기타소개",
                             "registeredAt" type STRING means "등록 일시",
-                            "bookmarking" type BOOLEAN means "북마크 여부"
+                            "isBookmarking" type BOOLEAN means "북마크 여부"
                         )
                     )
             }
@@ -196,13 +202,13 @@ class MarathonControllerTest (
 
     describe("POST : $baseUrl/bookmark/{marathonId}") {
         val marathonId = 0L
-        val url = "$baseUrl/bookmark/$marathonId"
+        val url = "$baseUrl/bookmark/{marathonId}"
         val response = BookmarkMarathonResponse(
             marathonId = marathonId
         )
 
-        context("조회를 하면") {
-            val request = request(HttpMethod.POST, url)
+        context("북마크를 하면") {
+            val request = request(HttpMethod.POST, url, marathonId)
                 .contentType(APPLICATION_JSON)
 
             it("200 OK") {
@@ -215,7 +221,10 @@ class MarathonControllerTest (
                     )
                     .andDocument(
                         "bookmark-marathon",
-                        envelopeResponseBody(
+                        pathParameters(
+                            "marathonId" pathMeans "북마크 대상 식별자"
+                        ),
+                        responseBody(
                             "marathonId" type NUMBER means "북마크한 마라톤 식별자"
                         )
                     )
@@ -225,13 +234,13 @@ class MarathonControllerTest (
 
     describe("DELETE : $baseUrl/bookmark/{marathonId}") {
         val marathonId = 0L
-        val url = "$baseUrl/bookmark/$marathonId"
+        val url = "$baseUrl/bookmark/{marathonId}"
         val response = BookmarkMarathonResponse(
             marathonId = marathonId
         )
 
-        context("조회를 하면") {
-            val request = request(HttpMethod.DELETE, url)
+        context("북마크 취소를 하면") {
+            val request = request(HttpMethod.DELETE, url, marathonId)
                 .contentType(APPLICATION_JSON)
 
             it("200 OK") {
@@ -244,7 +253,10 @@ class MarathonControllerTest (
                     )
                     .andDocument(
                         "cancel-bookmark-marathon",
-                        envelopeResponseBody(
+                        pathParameters(
+                            "marathonId" pathMeans "북마크 취소 대상 식별자"
+                        ),
+                        responseBody(
                             "marathonId" type NUMBER means "북마크 취소한 마라톤 식별자"
                         )
                     )
@@ -262,7 +274,7 @@ class MarathonControllerTest (
                 "schedule" type STRING means "대회일시",
                 "venue" type STRING means "대회장소",
                 "course" type STRING means "대회종목",
-                "bookmarking" type BOOLEAN means "북마크 여부",
+                "isBookmarking" type BOOLEAN means "북마크 여부",
             )
         }
 

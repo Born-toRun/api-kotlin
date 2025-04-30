@@ -28,6 +28,6 @@ class CrewController(
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun create(@RequestBody @Valid request: CreateCrewRequest): ResponseEntity<Void> {
         crewProxy.create(request)
-        return ResponseEntity.status(CREATED).build<Void>()
+        return ResponseEntity(CREATED)
     }
 }

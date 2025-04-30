@@ -17,6 +17,7 @@ import kr.kro.btr.utils.restdocs.RestDocsField
 import kr.kro.btr.utils.restdocs.STRING
 import kr.kro.btr.utils.restdocs.andDocument
 import kr.kro.btr.utils.restdocs.requestBody
+import kr.kro.btr.utils.restdocs.responseBody
 import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
 import kr.kro.btr.utils.restdocs.type
 import kr.kro.btr.utils.shouldBe
@@ -91,7 +92,7 @@ class CrewControllerTest (
                     )
                     .andDocument(
                         "search-crews",
-                        envelopeResponseBody(
+                        responseBody(
                             "crewDetails" type ARRAY means "등록된 크루 목록"
                         )
                             .andWithPrefix("crewDetails[].", getCrewDetailsResponseSnippet())
@@ -117,7 +118,7 @@ class CrewControllerTest (
                 .contentType(APPLICATION_JSON)
                 .content(requestJson)
 
-            it("200 OK") {
+            it("201 Created") {
                 mockMvc.perform(request)
                     .andExpect(status().isCreated)
                     .andDocument(

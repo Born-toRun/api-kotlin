@@ -36,7 +36,8 @@ class ObjectStorageController(
     }
 
     @DeleteMapping(value = ["/{bucket}/{fileId}"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun removeFile(@AuthUser my: TokenDetail, @PathVariable bucket: Bucket, @PathVariable fileId: Long) {
+    fun removeFile(@AuthUser my: TokenDetail, @PathVariable bucket: Bucket, @PathVariable fileId: Long): ResponseEntity<Void> {
         objectStorageProxy.remove(my, bucket, fileId)
+        return ResponseEntity.ok().build()
     }
 }

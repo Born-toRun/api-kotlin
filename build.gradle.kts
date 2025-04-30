@@ -72,6 +72,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
     implementation("io.jsonwebtoken:jjwt-jackson:0.12.6")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.querydsl:querydsl-jpa:$querydslVersion:jakarta")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.6")

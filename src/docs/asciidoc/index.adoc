@@ -7,18 +7,59 @@
 
 == 크루
 === 목록 조회
-operation::search-crews[snippets="http-request,request-fields,http-response,response-headers"]
-=== 크루 등록
-operation::create-crews[snippets="http-request,request-fields,http-response,response-headers"]
+operation::search-crews[snippets="http-request,http-response,response-fields"]
+=== 등록
+operation::create-crews[snippets="http-request,request-fields,http-response"]
+
 == 신고
 === 신고하기
-operation::create-yellow-cards[snippets="http-request,request-fields,http-response,response-headers"]
+operation::create-yellow-cards[snippets="http-request,request-fields,http-response"]
+
 == 마라톤
 === 목록 조회
-operation::search-marathons[snippets="http-request,request-fields,http-response,response-headers"]
+operation::search-marathons[snippets="http-request,http-response,response-fields"]
 === 상세 조회
-operation::search-marathon-detail[snippets="http-request,request-fields,http-response,response-headers"]
+operation::search-marathon-detail[snippets="http-request,path-parameters,http-response,response-fields"]
 === 북마크
-operation::bookmark-marathon[snippets="http-request,request-fields,http-response,response-headers"]
+operation::bookmark-marathon[snippets="http-request,path-parameters,http-response,response-fields"]
 === 북마크 취소
-operation::cancel-bookmark-marathon[snippets="http-request,request-fields,http-response,response-headers"]
+operation::cancel-bookmark-marathon[snippets="http-request,path-parameters,http-response,response-fields"]
+
+== 좋아요
+=== 등록
+operation::recommended[snippets="http-request,path-parameters,http-response"]
+=== 취소
+operation::cancel-recommendation[snippets="http-request,path-parameters,http-response"]
+
+== 프라이버시
+=== 유저 프라이버시 수정
+operation::modify-user-privacy[snippets="http-request,request-fields,http-response"]
+
+=== 유저 프라이버시 조회
+operation::search-user-privacy[snippets="http-request,http-response,response-fields"]
+
+== 최근 검색어
+=== 등록
+operation::create-recent-search-keywords[snippets="http-request,path-parameters,http-response"]
+=== 일괄 삭제
+operation::remove-all-recent-search-keywords[snippets="http-request,http-response"]
+=== 삭제
+operation::remove-recent-search-keywords[snippets="http-request,path-parameters,http-response"]
+=== 조회
+operation::search-recent-search-keywords[snippets="http-request,http-response,response-fields"]
+
+== 유저
+=== 회원가입
+operation::sign-up[snippets="http-request,request-fields,http-response"]
+=== 회원탈퇴
+operation::remove-users[snippets="http-request,http-response"]
+=== 나의 정보 조회
+operation::my-detail[snippets="http-request,http-response,response-fields"]
+=== 유저 정보 조회
+operation::user-detail[snippets="http-request,path-parameters,http-response,response-fields"]
+=== 정보 수정
+operation::modify-users[snippets="http-request,request-fields,http-response,response-fields"]
+
+== 파일
+=== 업로드
+operation::create-object-storage[snippets="http-request,path-parameters,request-fields,http-response,response-fields"]

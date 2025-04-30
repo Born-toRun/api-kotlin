@@ -20,6 +20,6 @@ class YellowCardController(private val yellowCardProxy: YellowCardProxy) {
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun createYellowCard(@AuthUser my: TokenDetail, @RequestBody @Valid request: CreateYellowCardRequest): ResponseEntity<Void> {
         yellowCardProxy.create(my.id, request)
-        return ResponseEntity.status(CREATED).build<Void>()
+        return ResponseEntity(CREATED)
     }
 }

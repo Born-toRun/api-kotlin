@@ -18,7 +18,7 @@ class UserPrivacyEntity(
     @JoinColumn(name = "userId", insertable = false, updatable = false)
     var userEntity: UserEntity? = null
 ) {
-    fun change(isInstagramIdPublic: Boolean) {
-        this.isInstagramIdPublic = isInstagramIdPublic
+    fun change(instagramIdPublic: Boolean) {
+        this.isInstagramIdPublic = instagramIdPublic
     }
 }

@@ -8,12 +8,9 @@ import kr.kro.btr.adapter.`in`.web.payload.SignUpRequest
 import kr.kro.btr.adapter.`in`.web.payload.SignUpResponse
 import kr.kro.btr.adapter.`in`.web.payload.UserDetailResponse
 import kr.kro.btr.adapter.`in`.web.proxy.UserProxy
-import kr.kro.btr.adapter.out.persistence.UserRefreshTokenRepository
-import kr.kro.btr.config.properties.AppProperties
 import kr.kro.btr.core.converter.UserConverter
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
-import kr.kro.btr.support.oauth.token.AuthTokenProvider
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -23,10 +20,6 @@ import org.springframework.web.bind.annotation.*
 class UserController(
     private val userConverter: UserConverter,
     private val userProxy: UserProxy,
-    // TODO
-    private val authTokenProvider: AuthTokenProvider,
-    private val userRefreshTokenRepository: UserRefreshTokenRepository,
-    private val appProperties: AppProperties
 ) {
 
     @PostMapping("/refresh", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -42,8 +35,9 @@ class UserController(
     }
 
     @DeleteMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun removeAccount(@AuthUser my: TokenDetail) {
+    fun remove(@AuthUser my: TokenDetail): ResponseEntity<Void> {
         userProxy.remove(my.id)
+        return ResponseEntity.ok().build()
     }
 
     @GetMapping("/my", produces = [MediaType.APPLICATION_JSON_VALUE])

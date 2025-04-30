@@ -53,7 +53,7 @@ class YellowCardControllerTest (
                 .contentType(APPLICATION_JSON)
                 .content(requestJson)
 
-            it("200 OK") {
+            it("201 Created") {
                 mockMvc.perform(request)
                     .andExpect(status().isCreated)
                     .andDocument(

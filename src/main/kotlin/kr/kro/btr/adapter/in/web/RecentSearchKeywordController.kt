@@ -4,6 +4,7 @@ import kr.kro.btr.adapter.`in`.web.payload.RecentSearchKeywordResponse
 import kr.kro.btr.adapter.`in`.web.proxy.RecentSearchKeywordProxy
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
+import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -13,20 +14,23 @@ import org.springframework.web.bind.annotation.*
 class RecentSearchKeywordController(private val recentSearchKeywordProxy: RecentSearchKeywordProxy) {
 
     @PostMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun addRecentSearchKeyword(@AuthUser my: TokenDetail, @PathVariable keyword: String) {
+    fun addRecentSearchKeyword(@AuthUser my: TokenDetail, @PathVariable keyword: String): ResponseEntity<Void> {
         if (my.isLogin()) {
             recentSearchKeywordProxy.add(my.id, keyword)
         }
+        return ResponseEntity(CREATED)
     }
 
     @DeleteMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun removeAll(@AuthUser my: TokenDetail) {
+    fun removeAll(@AuthUser my: TokenDetail): ResponseEntity<Void> {
         recentSearchKeywordProxy.removeAll(my.id)
+        return ResponseEntity.ok().build()
     }
 
     @DeleteMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun removeKeyword(@AuthUser my: TokenDetail, @PathVariable keyword: String) {
+    fun removeKeyword(@AuthUser my: TokenDetail, @PathVariable keyword: String): ResponseEntity<Void> {
         recentSearchKeywordProxy.removeKeyword(my.id, keyword)
+        return ResponseEntity.ok().build()
     }
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
