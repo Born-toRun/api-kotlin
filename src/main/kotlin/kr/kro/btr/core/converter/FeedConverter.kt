@@ -126,8 +126,8 @@ class FeedConverter {
         )
     }
 
-    fun map(source: List<FeedResult.Image>): List<DetailFeedResponse.Image> {
-        return source.map { image ->
+    fun map(source: List<FeedResult.Image>?): List<DetailFeedResponse.Image>? {
+        return source?.map { image ->
             DetailFeedResponse.Image(
                 imageId = image.id,
                 imageUri = image.imageUri

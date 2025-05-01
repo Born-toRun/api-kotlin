@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 data class FeedCard(
     val id: Long,
-    val imageUris: List<String>,
+    val imageUris: List<String>? = null,
     val contents: String,
     val viewQty: Int,
     val recommendationQty: Int,

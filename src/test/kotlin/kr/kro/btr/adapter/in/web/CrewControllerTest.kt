@@ -136,7 +136,7 @@ class CrewControllerTest (
 }) {
     companion object {
         fun getCrewDetailsResponseSnippet(): List<FieldDescriptor> {
-            return responseCrewsDetailResponse(
+            return descriptor(
                 "id" type NUMBER means "식별자",
                 "crewName" type STRING means "크루명",
                 "contents" type STRING means "크루 소개",
@@ -147,7 +147,7 @@ class CrewControllerTest (
             )
         }
 
-        private fun responseCrewsDetailResponse(vararg fields: RestDocsField): List<FieldDescriptor> {
+        private fun descriptor(vararg fields: RestDocsField): List<FieldDescriptor> {
             return fields.map { it.descriptor }
         }
     }

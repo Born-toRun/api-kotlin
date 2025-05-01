@@ -13,6 +13,7 @@ import kr.kro.btr.domain.port.model.MarathonDetail
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.ARRAY
 import kr.kro.btr.utils.restdocs.BOOLEAN
+import kr.kro.btr.utils.restdocs.DATETIME
 import kr.kro.btr.utils.restdocs.NUMBER
 import kr.kro.btr.utils.restdocs.RestDocsField
 import kr.kro.btr.utils.restdocs.STRING
@@ -192,7 +193,7 @@ class MarathonControllerTest (
                             "homepage" type STRING means "홈페이지",
                             "venueDetail" type STRING means "대회장",
                             "remark" type STRING means "기타소개",
-                            "registeredAt" type STRING means "등록 일시",
+                            "registeredAt" type DATETIME means "등록 일시",
                             "isBookmarking" type BOOLEAN means "북마크 여부"
                         )
                     )
@@ -268,7 +269,7 @@ class MarathonControllerTest (
         val FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
 
         fun getMarathonsResponseSnippet(): List<FieldDescriptor> {
-            return responseMarathonsResponse(
+            return descriptor(
                 "id" type NUMBER means "식별자",
                 "title" type STRING means "대회명",
                 "schedule" type STRING means "대회일시",
@@ -278,7 +279,7 @@ class MarathonControllerTest (
             )
         }
 
-        private fun responseMarathonsResponse(vararg fields: RestDocsField): List<FieldDescriptor> {
+        private fun descriptor(vararg fields: RestDocsField): List<FieldDescriptor> {
             return fields.map { it.descriptor }
         }
     }
