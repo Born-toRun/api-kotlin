@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 data class CommentResult(
     val id: Long,
-    val parentId: Long?,
+    val parentId: Long? = null,
     val reCommentQty: Int = 0,
     val feedId: Long?,
     val contents: String,
