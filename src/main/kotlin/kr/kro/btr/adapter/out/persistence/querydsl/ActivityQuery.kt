@@ -17,7 +17,7 @@ class ActivityQuery(
         var whereClause: BooleanExpression = activity.userEntity.crewId.eq(query.myCrewId)
         var optionalWhereClause: BooleanExpression? = null
 
-        if (query.courses.isNotEmpty()) {
+        if (query.courses?.isNotEmpty() == false) {
             for (course in query.courses) {
                 optionalWhereClause = optionalWhereClause?.or(activity.course.contains(course))
                     ?: activity.course.contains(course)

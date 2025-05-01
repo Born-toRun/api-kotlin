@@ -23,7 +23,7 @@ data class SearchActivityResponse(
         val title: String,
         val host: Host,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-        val startDate: LocalDateTime,
+        val startAt: LocalDateTime,
         val course: String?,
         val participantsLimit: Int?,
         val participantsQty: Int,
