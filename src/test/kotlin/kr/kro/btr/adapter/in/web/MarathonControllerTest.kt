@@ -35,7 +35,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.context.WebApplicationContext
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @WebMvcTest(MarathonController::class)
 class MarathonControllerTest (
@@ -141,7 +140,7 @@ class MarathonControllerTest (
             homepage = marathonDetail.homepage,
             venueDetail = marathonDetail.venueDetail,
             remark = marathonDetail.remark,
-            registeredAt = LocalDateTime.parse(marathonDetail.registeredAt.format(FORMATTER), FORMATTER),
+            registeredAt = getDateTimeByFormat(marathonDetail.registeredAt),
             isBookmarking = marathonDetail.isBookmarking
         )
 
@@ -266,8 +265,6 @@ class MarathonControllerTest (
     }
 }) {
     companion object {
-        val FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-
         fun getMarathonsResponseSnippet(): List<FieldDescriptor> {
             return descriptor(
                 "id" type NUMBER means "식별자",

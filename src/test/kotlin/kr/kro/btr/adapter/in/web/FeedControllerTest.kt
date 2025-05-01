@@ -104,7 +104,7 @@ class FeedControllerTest (
             viewQty = feedResult.viewQty,
             recommendationQty = feedResult.recommendationQty,
             commentQty = feedResult.commentQty,
-            registeredAt = LocalDateTime.parse(feedResult.registeredAt.format(FORMATTER), FORMATTER),
+            registeredAt = getDateTimeByFormat(feedResult.registeredAt),
             writer = DetailFeedResponse.Writer(
                 userId = feedResult.writer.userId,
                 userName = feedResult.writer.userName,
@@ -304,7 +304,7 @@ class FeedControllerTest (
             viewQty = feedCard.viewQty,
             recommendationQty = feedCard.recommendationQty,
             commentQty = feedCard.commentQty,
-            registeredAt = LocalDateTime.parse(feedCard.registeredAt.format(FORMATTER), FORMATTER),
+            registeredAt = getDateTimeByFormat(feedCard.registeredAt),
             writer = SearchFeedResponse.Writer(
                 userName = feedCard.writer.userName,
                 crewName = feedCard.writer.crewName,
@@ -385,8 +385,6 @@ class FeedControllerTest (
     }
 }) {
     companion object {
-        val FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-
         fun getImageDetailsResponseSnippet(): List<FieldDescriptor> {
             return descriptor(
                 "imageId" type NUMBER means "식별자" isOptional true,

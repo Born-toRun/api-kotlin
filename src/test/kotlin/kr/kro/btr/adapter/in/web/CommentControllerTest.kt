@@ -42,7 +42,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.context.WebApplicationContext
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import kotlin.collections.List
 
 @WebMvcTest(CommentController::class)
@@ -90,7 +89,7 @@ class CommentControllerTest (
                     parentId = commentResults[0].parentId,
                     reCommentQty = commentResults[0].reCommentQty,
                     contents = commentResults[0].contents,
-                    registeredAt = LocalDateTime.parse(commentResults[0].registeredAt.format(FORMATTER), FORMATTER),
+                    registeredAt = getDateTimeByFormat(commentResults[0].registeredAt),
                     isMyComment = commentResults[0].isMyComment,
                     writer = SearchCommentResponse.Writer(
                         userId = commentResults[0].writer.userId,
@@ -189,12 +188,12 @@ class CommentControllerTest (
                 isManager = commentDetail.writer.isManager,
             ),
             contents = commentDetail.contents,
-            registeredAt = LocalDateTime.parse(commentDetail.registeredAt.format(FORMATTER), FORMATTER),
+            registeredAt = getDateTimeByFormat(commentDetail.registeredAt),
             reComments = listOf(
                 SearchCommentDetailResponse.ReComment(
                     id = commentDetail.reCommentResults[0].id,
                     contents = commentDetail.reCommentResults[0].contents,
-                    registeredAt = LocalDateTime.parse(commentDetail.reCommentResults[0].registeredAt.format(FORMATTER), FORMATTER),
+                    registeredAt = getDateTimeByFormat(commentDetail.reCommentResults[0].registeredAt),
                     isMyComment = commentDetail.reCommentResults[0].isMyComment,
                     writer = SearchCommentDetailResponse.ReComment.Writer(
                         userId = commentDetail.reCommentResults[0].writer.userId,
@@ -407,8 +406,6 @@ class CommentControllerTest (
     }
 }) {
     companion object {
-        val FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-
         fun getReCommentsResponseSnippet(): List<FieldDescriptor> {
             return descriptor(
                 "id" type NUMBER means "식별자" isOptional true,

@@ -18,6 +18,8 @@ import org.mockito.Mockito
 import org.springframework.context.annotation.Import
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.payload.ResponseFieldsSnippet
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Import(value = [WebMvcConfig::class])
 @ExtendWith(RestDocumentationExtension::class)
@@ -29,6 +31,12 @@ abstract class ControllerDescribeSpec(
     protected lateinit var notification: Notification
 
     companion object {
+        fun getDateTimeByFormat(at: LocalDateTime): LocalDateTime {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+
+            return LocalDateTime.parse(at.format(formatter), formatter)
+        }
+
         private val mapper: ObjectMapper = jacksonObjectMapper()
             .registerKotlinModule()
             .registerModule(JavaTimeModule())
