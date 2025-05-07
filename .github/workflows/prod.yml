@@ -1,0 +1,57 @@
+name: Kotlin CI with Gradle
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  # 빌드하고 도커허브에 푸시
+  build-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    # build
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      with:
+        arguments: clean build
+
+    # docker image build
+    - name: docker image build
+      run: docker build --platform linux/arm64/v8 -t ${{ secrets.DOCKERHUB_USERNAME }}/born-to-run-api .
+
+    # docker hub login
+    - name: docker login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    # docker hub image push
+    - name: docker Hub push
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/born-to-run-api
+
+    # discord notify
+    - name: discord 알림 전송
+      if: success() || failure()
+      uses: Ilshidur/action-discord@master
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      with:
+        args: |
+          🚀 GitHub Actions 빌드 결과
+          - 📂 리포지토리: `${{ github.repository }}`
+          - 🌿 브랜치: `${{ github.ref }}`
+          - 🔗 커밋: `${{ github.sha }}`
+          - ✅ 상태: `${{ job.status }}`
+          - 🔗 [빌드 로그 보기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
