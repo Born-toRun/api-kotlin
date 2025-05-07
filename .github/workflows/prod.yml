@@ -14,10 +14,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up JDK 17
+    - name: Set up JDK 21
       uses: actions/setup-java@v3
       with:
-        java-version: '17'
+        java-version: '21'
         distribution: 'temurin'
 
     # build
@@ -28,7 +28,7 @@ jobs:
 
     # docker image build
     - name: docker image build
-      run: docker build --platform linux/arm64/v8 -t ${{ secrets.DOCKERHUB_USERNAME }}/born-to-run-api .
+      run: docker build --platform linux/arm64/v8 -t ${{ secrets.DOCKERHUB_USERNAME }}/born-to-run-api -f ./docker/DOCKERFILE .
 
     # docker hub login
     - name: docker login
