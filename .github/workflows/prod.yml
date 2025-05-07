@@ -28,7 +28,7 @@ jobs:
 
     # docker image build
     - name: docker image build
-      run: docker build --platform linux/arm64/v8 -t ${{ secrets.DOCKERHUB_USERNAME }}/born-to-run-api -f ./docker/DOCKERFILE .
+      run: docker build --platform linux/arm64/v8 -t ${{ secrets.DOCKERHUB_USERNAME }}/born-to-run-api -f docker/Dockerfile .
 
     # docker hub login
     - name: docker login
