@@ -1,6 +1,5 @@
 package kr.kro.btr.adapter.`in`.web
 
-import jakarta.validation.Valid
 import kr.kro.btr.adapter.`in`.web.payload.BookmarkMarathonResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchAllMarathonRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchAllMarathonResponse
@@ -23,8 +22,9 @@ class MarathonController(
 ) {
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun searchAll(@AuthUser my: TokenDetail, @Valid @ModelAttribute request: SearchAllMarathonRequest): ResponseEntity<SearchAllMarathonResponse> {
-        val marathons: List<Marathon> = marathonProxy.search(request, my)
+    fun searchAll(@AuthUser my: TokenDetail, @RequestParam(required = false) locations: List<String>?,
+                  @RequestParam(required = false) courses: List<String>?): ResponseEntity<SearchAllMarathonResponse> {
+        val marathons: List<Marathon> = marathonProxy.search(SearchAllMarathonRequest(locations, courses), my)
         val response = marathonConverter.map(marathons)
         return ResponseEntity.ok(response)
     }

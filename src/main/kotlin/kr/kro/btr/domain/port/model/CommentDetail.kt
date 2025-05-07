@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 data class CommentDetail(
     val id: Long,
-    val parentId: Long?,
+    val parentId: Long? = null,
     val feedId: Long?,
     val contents: String,
     val registeredAt: LocalDateTime,

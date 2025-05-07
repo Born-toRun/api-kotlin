@@ -14,6 +14,7 @@ import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -33,18 +34,21 @@ class FeedController(
     }
 
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun create(@AuthUser my: TokenDetail, @RequestBody @Valid request: CreateFeedRequest) {
+    fun create(@AuthUser my: TokenDetail, @RequestBody @Valid request: CreateFeedRequest): ResponseEntity<Void> {
         feedProxy.create(request, my)
+        return ResponseEntity(CREATED)
     }
 
     @DeleteMapping("/{feedId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun remove(@AuthUser my: TokenDetail, @PathVariable feedId: Long) {
+    fun remove(@AuthUser my: TokenDetail, @PathVariable feedId: Long): ResponseEntity<Void> {
         feedProxy.remove(feedId, my)
+        return ResponseEntity.ok().build()
     }
 
     @PutMapping("/{feedId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun modify(@AuthUser my: TokenDetail, @PathVariable feedId: Long, @RequestBody @Valid request: ModifyFeedRequest) {
+    fun modify(@AuthUser my: TokenDetail, @PathVariable feedId: Long, @RequestBody @Valid request: ModifyFeedRequest): ResponseEntity<Void> {
         feedProxy.modify(request, feedId)
+        return ResponseEntity.ok().build()
     }
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])

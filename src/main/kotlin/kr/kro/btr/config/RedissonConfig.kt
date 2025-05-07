@@ -10,15 +10,13 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @EnableConfigurationProperties(RedisProperties::class)
-internal class RedissonConfig {
-
-    private val redisProperties: RedisProperties? = null
+internal class RedissonConfig(private val redisProperties: RedisProperties) {
 
     @org.springframework.context.annotation.Bean
     fun redissonClient(): RedissonClient {
         val config = Config()
         config.useSingleServer()
-            .setAddress((SCHEME + redisProperties!!.host).toString() + ":" + redisProperties.port)
+            .setAddress((SCHEME + redisProperties.host).toString() + ":" + redisProperties.port)
             .setPassword(redisProperties.password).timeout = redisProperties.timeout
 
         return Redisson.create(config)

@@ -1,8 +1,8 @@
 package kr.kro.btr.support.oauth.token
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.jsonwebtoken.Claims
 import kr.kro.btr.support.oauth.exception.TokenValidFailedException
-import org.slf4j.LoggerFactory
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -18,7 +18,6 @@ import javax.crypto.SecretKey
 class AuthTokenProvider(keyGenerator: KeyGenerator) {
 
     private val secretKey: SecretKey = keyGenerator.generateKey()
-    private val logger = LoggerFactory.getLogger(AuthTokenProvider::class.java)
 
     fun createAuthToken(id: Long, expiry: Date): AuthToken {
         return AuthToken(id, expiry, secretKey)
@@ -44,12 +43,16 @@ class AuthTokenProvider(keyGenerator: KeyGenerator) {
                 .split(",")
                 .map { SimpleGrantedAuthority(it) }
 
-            logger.debug("claims subject := [{}]", claims.subject)
+            log.debug { "claims subject := [$claims.subject]" }
 
             val jwt: Jwt = jwtDecoder.decode(authToken.token)
             return JwtAuthenticationToken(jwt, authorities)
         } else {
             throw TokenValidFailedException()
         }
+    }
+
+    companion object {
+        private val log = KotlinLogging.logger {}
     }
 }

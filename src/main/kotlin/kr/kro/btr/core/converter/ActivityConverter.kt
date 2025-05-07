@@ -48,7 +48,7 @@ class ActivityConverter {
                     isManager = activityResult.host.isManager,
                     isAdmin = activityResult.host.isAdmin
                 ),
-                startDate = activityResult.startAt,
+                startAt = activityResult.startAt,
                 course = activityResult.course,
                 participantsLimit = activityResult.participantsLimit,
                 participantsQty = activityResult.participantsQty,
@@ -66,7 +66,7 @@ class ActivityConverter {
             id = source.id,
             title = source.title,
             contents = source.contents,
-            startDate = source.startAt,
+            startAt = source.startAt,
             venue = source.venue,
             venueUrl = source.venueUrl,
             participantsLimit = source.participantsLimit,

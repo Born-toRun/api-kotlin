@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 data class DetailFeedResponse(
     val id: Long,
     val contents: String,
-    val images: List<Image>,
+    val images: List<Image>?,
     val category: FeedCategory,
     val accessLevel: FeedAccessLevel,
     val viewQty: Int,

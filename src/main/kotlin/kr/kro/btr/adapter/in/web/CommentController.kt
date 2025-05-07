@@ -13,6 +13,7 @@ import kr.kro.btr.domain.port.model.CommentDetail
 import kr.kro.btr.domain.port.model.CommentResult
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
+import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -49,13 +50,15 @@ class CommentController(
         @AuthUser my: TokenDetail,
         @PathVariable feedId: Long,
         @RequestBody @Valid request: CreateCommentRequest
-    ) {
+    ): ResponseEntity<Void> {
         commentProxy.create(my, feedId, request)
+        return ResponseEntity(CREATED)
     }
 
     @DeleteMapping("/{commentId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun remove(@AuthUser my: TokenDetail, @PathVariable commentId: Long) {
+    fun remove(@AuthUser my: TokenDetail, @PathVariable commentId: Long): ResponseEntity<Void> {
         commentProxy.remove(commentId)
+        return ResponseEntity.ok().build()
     }
 
     @PutMapping("/{commentId}", produces = [MediaType.APPLICATION_JSON_VALUE])

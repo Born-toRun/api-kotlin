@@ -15,7 +15,7 @@ interface MarathonRepository : JpaRepository<MarathonEntity, Long> {
         """
     )
     fun findAllByLocationInAndCourseIn(
-        locations: List<String>,
-        courses: List<String>
+        locations: List<String>?,
+        courses: List<String>?
     ): List<MarathonEntity>
 }

@@ -6,6 +6,7 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchCrewResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.core.converter.CrewConverter
 import kr.kro.btr.domain.port.model.Crew
+import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -25,7 +26,8 @@ class CrewController(
 
     // TODO: 관리자 권한
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun create(@RequestBody @Valid request: CreateCrewRequest) {
+    fun create(@RequestBody @Valid request: CreateCrewRequest): ResponseEntity<Void> {
         crewProxy.create(request)
+        return ResponseEntity(CREATED)
     }
 }

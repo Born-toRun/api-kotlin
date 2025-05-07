@@ -1,13 +1,9 @@
 package kr.kro.btr.config
 
-import kr.kro.btr.config.jwt.AuthenticationPrincipalArgumentResolver
-import kr.kro.btr.config.jwt.TokenAuthenticationPrincipalArgumentResolver
 import kr.kro.btr.config.properties.AppProperties
-import kr.kro.btr.config.properties.CorsProperties
 import kr.kro.btr.domain.constant.RoleType
 import kr.kro.btr.domain.port.UserPort
 import kr.kro.btr.domain.port.UserRefreshTokenPort
-import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.oauth.RestAuthenticationEntryPoint
 import kr.kro.btr.support.oauth.filter.TokenAuthenticationFilter
 import kr.kro.btr.support.oauth.handler.OAuth2AuthenticationFailureHandler
@@ -20,35 +16,23 @@ import kr.kro.btr.support.oauth.token.AuthTokenProvider
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.convert.converter.Converter
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.web.method.support.HandlerMethodArgumentResolver
-import org.springframework.web.servlet.config.annotation.CorsRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 @EnableWebSecurity
-@EnableConfigurationProperties(CorsProperties::class, AppProperties::class)
+@EnableConfigurationProperties(AppProperties::class)
 class SecurityConfig(
-    private val corsProperties: CorsProperties,
     private val tokenProvider: AuthTokenProvider,
     private val appProperties: AppProperties,
     private val userRefreshTokenPort: UserRefreshTokenPort,
     private val userPort: UserPort,
-    private val jwtToTokenConverter: Converter<JwtAuthenticationToken, TokenDetail>
-) : WebMvcConfigurer {
-
-    override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
-        resolvers.add(TokenAuthenticationPrincipalArgumentResolver(jwtToTokenConverter))
-        resolvers.add(AuthenticationPrincipalArgumentResolver())
-    }
+){
 
     @Bean
     fun filterChain(
@@ -141,7 +125,7 @@ class SecurityConfig(
         return TokenAuthenticationFilter(tokenProvider)
     }
 
-    @Bean
+    @Bean("OAuth2AuthorizationRequestBasedOnCookieRepository")
     fun oAuth2AuthorizationRequestBasedOnCookieRepository(): OAuth2AuthorizationRequestBasedOnCookieRepository {
         return OAuth2AuthorizationRequestBasedOnCookieRepository()
     }
@@ -160,13 +144,5 @@ class SecurityConfig(
     @Bean
     fun oAuth2AuthenticationFailureHandler(): OAuth2AuthenticationFailureHandler {
         return OAuth2AuthenticationFailureHandler(oAuth2AuthorizationRequestBasedOnCookieRepository())
-    }
-
-    override fun addCorsMappings(registry: CorsRegistry) {
-        registry.addMapping("/**")
-            .allowedOrigins(*corsProperties.allowedOrigins.split(",").toTypedArray())
-            .allowedHeaders(*corsProperties.allowedHeaders.split(",").toTypedArray())
-            .allowedMethods(*corsProperties.allowedMethods.split(",").toTypedArray())
-            .allowCredentials(true)
     }
 }

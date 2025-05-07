@@ -7,7 +7,10 @@ import org.springframework.web.reactive.function.client.WebClient
 
 @Configuration
 @EnableConfigurationProperties(DiscordProperties::class)
-class WebClientConfig(private val discordProperties: DiscordProperties, private val webClientBuilder: WebClient.Builder) {
+class WebClientConfig(
+    private val discordProperties: DiscordProperties,
+    private val webClientBuilder: WebClient.Builder
+) {
 
     @org.springframework.context.annotation.Bean
     fun discordConnector(): WebClient {

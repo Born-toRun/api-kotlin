@@ -13,6 +13,7 @@ import kr.kro.btr.adapter.`in`.web.proxy.ActivityProxy
 import kr.kro.btr.core.converter.ActivityConverter
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
+import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -25,8 +26,9 @@ class ActivityController(
 ) {
 
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun create(@AuthUser my: TokenDetail, @Valid @RequestBody request: CreateActivityRequest) {
+    fun create(@AuthUser my: TokenDetail, @Valid @RequestBody request: CreateActivityRequest): ResponseEntity<Void> {
         activityProxy.create(my, request)
+        return ResponseEntity(CREATED)
     }
 
     @PutMapping("/{activityId}", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -34,23 +36,27 @@ class ActivityController(
         @AuthUser my: TokenDetail,
         @PathVariable activityId: Long,
         @Valid @RequestBody request: ModifyActivityRequest
-    ) {
+    ): ResponseEntity<Void> {
         activityProxy.modify(request, activityId)
+        return ResponseEntity.ok().build()
     }
 
     @DeleteMapping("/{activityId}")
-    fun remove(@AuthUser my: TokenDetail, @PathVariable activityId: Long) {
+    fun remove(@AuthUser my: TokenDetail, @PathVariable activityId: Long): ResponseEntity<Void> {
         activityProxy.remove(activityId)
+        return ResponseEntity.ok().build()
     }
 
     @PostMapping("/participation/{activityId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun participate(@AuthUser my: TokenDetail, @PathVariable activityId: Long) {
+    fun participate(@AuthUser my: TokenDetail, @PathVariable activityId: Long): ResponseEntity<Void> {
         activityProxy.participate(activityId, my.id)
+        return ResponseEntity(CREATED)
     }
 
     @PostMapping("/participation-cancel/{participationId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun participateCancel(@AuthUser my: TokenDetail, @PathVariable participationId: Long) {
+    fun participateCancel(@AuthUser my: TokenDetail, @PathVariable participationId: Long): ResponseEntity<Void> {
         activityProxy.participateCancel(participationId)
+        return ResponseEntity(CREATED)
     }
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -95,7 +101,8 @@ class ActivityController(
         @AuthUser my: TokenDetail,
         @PathVariable activityId: Long,
         @Valid @RequestBody request: AttendanceActivityRequest
-    ) {
+    ): ResponseEntity<Void> {
         activityProxy.attendance(request, activityId, my.id)
+        return ResponseEntity.ok().build()
     }
 }

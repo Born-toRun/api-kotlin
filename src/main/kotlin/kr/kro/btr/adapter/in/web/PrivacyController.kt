@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/v1/privacy")
 class PrivacyController(private val privacyConverter: PrivacyConverter, private val privacyProxy: PrivacyProxy) {
 
-    @PutMapping("/user", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun settingUserPrivacy(@AuthUser my: TokenDetail, @RequestBody @Valid request: SettingUserPrivacyRequest) {
+    @PutMapping("/users", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun settingUserPrivacy(@AuthUser my: TokenDetail, @RequestBody @Valid request: SettingUserPrivacyRequest): ResponseEntity<Void> {
         privacyProxy.modifyUserPrivacy(request, my.id)
+        return ResponseEntity.ok().build()
     }
 
-    @GetMapping("/user", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/users", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getUserPrivacy(@AuthUser my: TokenDetail): ResponseEntity<SearchUserPrivacyResponse> {
         val userPrivacy: UserPrivacy = privacyProxy.searchUserPrivacy(my.id)
         val response: SearchUserPrivacyResponse = privacyConverter.map(userPrivacy)
