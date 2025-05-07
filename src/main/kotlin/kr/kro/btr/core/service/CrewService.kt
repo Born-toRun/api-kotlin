@@ -21,6 +21,11 @@ class CrewService(
         return crewConverter.map(crewEntities)
     }
 
+    override fun detail(crewId: Long): Crew {
+        val crewEntity = crewGateway.searchById(crewId)
+        return crewConverter.map(crewEntity)
+    }
+
     @Transactional
     override fun create(command: CreateCrewCommand) {
         val query = crewConverter.map(command)

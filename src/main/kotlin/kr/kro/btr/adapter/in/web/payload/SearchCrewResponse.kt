@@ -1,11 +1,8 @@
 package kr.kro.btr.adapter.`in`.web.payload
 
-import com.fasterxml.jackson.annotation.JsonInclude
-
 data class SearchCrewResponse(
     val crewDetails: List<CrewDetail>
 ) {
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     data class CrewDetail(
         val id: Long,
         val crewName: String,

@@ -9,5 +9,5 @@ data class CreateFeedRequest(
     val imageIds: List<Long>?,
     @NotBlank val contents: String,
     @NotNull val category: FeedCategory,
-    @NotNull val accessLevel: FeedAccessLevel
+    val accessLevel: FeedAccessLevel = FeedAccessLevel.ALL
 )

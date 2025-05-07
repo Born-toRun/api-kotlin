@@ -54,6 +54,8 @@ spring:
     application:
         name: Born-to-run
         version: v1.0.0
+    jackson:
+        default-property-inclusion: non_null
 cors:
     allowed-origins: '${cors.origin}'
     allowed-methods: 'GET,POST,PUT,DELETE,OPTIONS'
