@@ -93,7 +93,7 @@ class CrewControllerTest (
                     .andDocument(
                         "search-crews",
                         responseBody(
-                            "crewDetails" type ARRAY means "등록된 크루 목록"
+                            "crewDetails" type ARRAY means "등록된 크루 목록" isOptional false
                         )
                             .andWithPrefix("crewDetails[].", getCrewDetailsResponseSnippet())
                     )
@@ -124,10 +124,10 @@ class CrewControllerTest (
                     .andDocument(
                         "create-crews",
                         requestBody(
-                            "name" type STRING means "크루명",
-                            "contents" type STRING means "크루소개",
-                            "sns" type STRING means "크루 sns uri",
-                            "region" type STRING means "크루 활동 지역"
+                            "name" type STRING means "크루명" isOptional false,
+                            "contents" type STRING means "크루소개" isOptional false,
+                            "sns" type STRING means "크루 sns uri" isOptional true,
+                            "region" type STRING means "크루 활동 지역" isOptional false
                         )
                     )
             }
@@ -137,13 +137,13 @@ class CrewControllerTest (
     companion object {
         fun getCrewDetailsResponseSnippet(): List<FieldDescriptor> {
             return descriptor(
-                "id" type NUMBER means "식별자",
-                "crewName" type STRING means "크루명",
-                "contents" type STRING means "크루 소개",
-                "region" type STRING means "크루 활동 지역",
-                "imageUri" type STRING means "크루 대표 이미지 uri",
-                "logoUri" type STRING means "크루 로고 uri",
-                "crewSnsUri" type STRING means "크루 sns uri"
+                "id" type NUMBER means "식별자" isOptional false,
+                "crewName" type STRING means "크루명" isOptional false,
+                "contents" type STRING means "크루 소개" isOptional false,
+                "region" type STRING means "크루 활동 지역" isOptional false,
+                "imageUri" type STRING means "크루 대표 이미지 uri" isOptional true,
+                "logoUri" type STRING means "크루 로고 uri" isOptional true,
+                "crewSnsUri" type STRING means "크루 sns uri" isOptional true
             )
         }
 

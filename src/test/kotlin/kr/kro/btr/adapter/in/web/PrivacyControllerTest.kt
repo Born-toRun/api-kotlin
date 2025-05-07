@@ -65,7 +65,7 @@ class PrivacyControllerTest (
                     .andDocument(
                         "modify-user-privacy",
                         requestBody(
-                            "isInstagramIdPublic" type BOOLEAN means "인스타그램 공개 여부",
+                            "isInstagramIdPublic" type BOOLEAN means "인스타그램 공개 여부" isOptional false,
                         )
                     )
             }
@@ -99,7 +99,7 @@ class PrivacyControllerTest (
                     .andDocument(
                         "search-user-privacy",
                         responseBody(
-                            "isInstagramIdPublic" type BOOLEAN means "인스타그램 공개 여부"
+                            "isInstagramIdPublic" type BOOLEAN means "인스타그램 공개 여부" isOptional false
                         )
                     )
             }

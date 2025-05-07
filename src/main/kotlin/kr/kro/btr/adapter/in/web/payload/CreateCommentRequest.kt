@@ -1,9 +1,8 @@
 package kr.kro.btr.adapter.`in`.web.payload
 
-import jakarta.validation.constraints.NotNull
-
+import jakarta.validation.constraints.NotBlank
 
 data class CreateCommentRequest(
     val parentCommentId: Long?,
-    @NotNull val contents: String
+    @NotBlank val contents: String
 )

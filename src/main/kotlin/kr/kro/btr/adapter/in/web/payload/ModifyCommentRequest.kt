@@ -1,8 +1,8 @@
 package kr.kro.btr.adapter.`in`.web.payload
 
-import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.NotBlank
 
 data class ModifyCommentRequest(
-    @NotNull
+    @NotBlank
     val contents: String
 )

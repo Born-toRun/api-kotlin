@@ -133,7 +133,7 @@ class CommentControllerTest (
                             "feedId" pathMeans "조회할 피드 식별자"
                         ),
                         responseBody(
-                            "comments" type ARRAY means "댓글 목록" isOptional true,
+                            "comments" type ARRAY means "댓글 목록" isOptional false,
                         )
                             .andWithPrefix("comments[]", getCommentsResponseSnippet())
                     )
@@ -245,17 +245,17 @@ class CommentControllerTest (
                             "commentId" pathMeans "조회할 댓글 식별자"
                         ),
                         responseBody(
-                            "id" type NUMBER means "식별자" isOptional true,
-                            "contents" type STRING means "내용" isOptional true,
-                            "registeredAt" type DATETIME means "등록일자" isOptional true,
-                            "writer" type OBJECT means "작성자" isOptional true,
+                            "id" type NUMBER means "식별자" isOptional false,
+                            "contents" type STRING means "내용" isOptional false,
+                            "registeredAt" type DATETIME means "등록일자" isOptional false,
+                            "writer" type OBJECT means "작성자" isOptional false,
                             "writer.userId" type NUMBER means "유저 식별자" isOptional true,
                             "writer.userName" type STRING means "유저명" isOptional true,
                             "writer.profileImageUri" type STRING means "프로필 이미지 uri" isOptional true,
                             "writer.crewName" type STRING means "소속 크루 명" isOptional true,
                             "writer.isAdmin" type BOOLEAN means "관리자 여부" isOptional true,
                             "writer.isManager" type BOOLEAN means "크루장 여부" isOptional true,
-                            "reComments" type ARRAY means "대댓글 목록" isOptional true,
+                            "reComments" type ARRAY means "대댓글 목록" isOptional false,
                         )
                             .andWithPrefix("reComments[]", getReCommentsResponseSnippet())
                     )
@@ -288,8 +288,8 @@ class CommentControllerTest (
                             "feedId" pathMeans "피드 식별자"
                         ),
                         requestBody(
-                            "parentCommentId" type NUMBER means "부모 댓글 식별자" isOptional false,
-                            "contents" type STRING means "내용" isOptional true,
+                            "parentCommentId" type NUMBER means "부모 댓글 식별자" isOptional true,
+                            "contents" type STRING means "내용" isOptional false,
                         )
                     )
             }
@@ -363,9 +363,12 @@ class CommentControllerTest (
                         pathParameters(
                             "commentId" pathMeans "식별자"
                         ),
+                        requestBody(
+                            "contents" type STRING means "내용" isOptional false
+                        ),
                         responseBody(
-                            "id" type NUMBER means "식별자" isOptional true,
-                            "contents" type STRING means "내용" isOptional true,
+                            "id" type NUMBER means "식별자" isOptional false,
+                            "contents" type STRING means "내용" isOptional false,
                         )
                     )
             }
@@ -398,7 +401,7 @@ class CommentControllerTest (
                             "feedId" pathMeans "피드 식별자"
                         ),
                         responseBody(
-                            "qty" type NUMBER means "댓글 개수" isOptional true,
+                            "qty" type NUMBER means "댓글 개수" isOptional false,
                         )
                     )
             }
@@ -408,35 +411,35 @@ class CommentControllerTest (
     companion object {
         fun getReCommentsResponseSnippet(): List<FieldDescriptor> {
             return descriptor(
-                "id" type NUMBER means "식별자" isOptional true,
-                "contents" type STRING means "내용" isOptional true,
-                "registeredAt" type DATETIME means "등록일시" isOptional true,
-                "isMyComment" type BOOLEAN means "나의 댓글 여부" isOptional true,
+                "id" type NUMBER means "식별자" isOptional false,
+                "contents" type STRING means "내용" isOptional false,
+                "registeredAt" type DATETIME means "등록일시" isOptional false,
+                "isMyComment" type BOOLEAN means "나의 댓글 여부" isOptional false,
                 "writer.userId" type NUMBER means "식별자" isOptional true,
                 "writer.userName" type STRING means "유저명" isOptional true,
                 "writer.profileImageUri" type STRING means "프로필 이미지 uri" isOptional true,
                 "writer.crewName" type STRING means "소속 크루명" isOptional true,
-                "writer.isAdmin" type BOOLEAN means "관리자 여부" isOptional true,
-                "writer.isManager" type BOOLEAN means "크루장 여부" isOptional true
+                "writer.isAdmin" type BOOLEAN means "관리자 여부" isOptional true withDefaultValue "false",
+                "writer.isManager" type BOOLEAN means "크루장 여부" isOptional true withDefaultValue "false"
             )
         }
 
         fun getCommentsResponseSnippet(): List<FieldDescriptor> {
             return descriptor(
-                "id" type NUMBER means "식별자" isOptional true,
-                "parentId" type NUMBER means "부모 댓글 식별자" isOptional false,
-                "reCommentQty" type NUMBER means "대댓글 개수" isOptional true,
-                "contents" type STRING means "내용" isOptional true,
-                "registeredAt" type DATETIME means "등록일자" isOptional true,
-                "isMyComment" type BOOLEAN means "나의 댓글 여부" isOptional true,
-                "isReComment" type BOOLEAN means "대댓글 여부" isOptional true,
-                "writer" type OBJECT means "식별자" isOptional true,
+                "id" type NUMBER means "식별자" isOptional false,
+                "parentId" type NUMBER means "부모 댓글 식별자" isOptional true,
+                "reCommentQty" type NUMBER means "대댓글 개수" isOptional false,
+                "contents" type STRING means "내용" isOptional false,
+                "registeredAt" type DATETIME means "등록일자" isOptional false,
+                "isMyComment" type BOOLEAN means "나의 댓글 여부" isOptional false,
+                "isReComment" type BOOLEAN means "대댓글 여부" isOptional false,
+                "writer" type OBJECT means "식별자" isOptional false,
                 "writer.userId" type NUMBER means "식별자" isOptional true,
                 "writer.userName" type STRING means "유저명" isOptional true,
                 "writer.profileImageUri" type STRING means "프로필 이미지 uri" isOptional true,
                 "writer.crewName" type STRING means "소속 크루명" isOptional true,
-                "writer.isAdmin" type BOOLEAN means "관리자 여부" isOptional true,
-                "writer.isManager" type BOOLEAN means "크루장 여부" isOptional true,
+                "writer.isAdmin" type BOOLEAN means "관리자 여부" isOptional true withDefaultValue "false",
+                "writer.isManager" type BOOLEAN means "크루장 여부" isOptional true withDefaultValue "false",
             )
         }
 

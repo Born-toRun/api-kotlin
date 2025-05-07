@@ -4,7 +4,6 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
-import kr.kro.btr.adapter.`in`.web.payload.RecentSearchKeywordResponse
 import kr.kro.btr.adapter.`in`.web.proxy.RecentSearchKeywordProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.utils.restdocs.ARRAY
@@ -106,9 +105,6 @@ class RecentSearchKeywordControllerTest (
     describe("GET : $baseUrl") {
         val url = baseUrl
         val recentSearchKeywords = listOf("keyword1", "keyword2")
-        val response = RecentSearchKeywordResponse(
-            searchKeywords = recentSearchKeywords.toSet()
-        )
 
         context("키워드로 검색 하면") {
             val request = request(HttpMethod.GET, url)
@@ -122,7 +118,7 @@ class RecentSearchKeywordControllerTest (
                     .andDocument(
                         "search-recent-search-keywords",
                         responseBody(
-                            "searchKeywords" type ARRAY means "최근 검색어 목록"
+                            "searchKeywords" type ARRAY means "최근 검색어 목록" isOptional false
                         )
                     )
             }

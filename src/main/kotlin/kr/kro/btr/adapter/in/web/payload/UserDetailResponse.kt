@@ -14,6 +14,6 @@ data class UserDetailResponse(
     val instagramId: String?,
     val isInstagramIdPublic: Boolean?
 ) {
-    val instagramUri: String
-        get() = "https://www.instagram.com/$instagramId"
+    val instagramUri: String?
+        get() = instagramId?.let { "https://www.instagram.com/$it" }
 }

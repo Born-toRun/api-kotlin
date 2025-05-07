@@ -46,7 +46,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.context.WebApplicationContext
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import kotlin.collections.List
 
 @WebMvcTest(FeedController::class)
@@ -154,25 +153,25 @@ class FeedControllerTest (
                             "feedId" pathMeans "식별자"
                         ),
                         responseBody(
-                            "id" type NUMBER means "식별자" isOptional true,
-                            "contents" type STRING means "내용" isOptional true,
-                            "images" type ARRAY means "이미지 목록" isOptional false,
-                            "category" type STRING means "카테고리" isOptional true,
-                            "accessLevel" type STRING means "공개 여부" isOptional true,
-                            "viewQty" type NUMBER means "조회수" isOptional true,
-                            "recommendationQty" type NUMBER means "좋아요 수" isOptional true,
-                            "commentQty" type NUMBER means "댓글 수" isOptional true,
-                            "registeredAt" type DATETIME means "등록일자" isOptional true,
-                            "writer" type OBJECT means "작성자" isOptional true,
+                            "id" type NUMBER means "식별자" isOptional false,
+                            "contents" type STRING means "내용" isOptional false,
+                            "images" type ARRAY means "이미지 목록" isOptional true,
+                            "category" type STRING means "카테고리" isOptional false,
+                            "accessLevel" type STRING means "공개 여부" isOptional false,
+                            "viewQty" type NUMBER means "조회수" isOptional false,
+                            "recommendationQty" type NUMBER means "좋아요 수" isOptional false,
+                            "commentQty" type NUMBER means "댓글 수" isOptional false,
+                            "registeredAt" type DATETIME means "등록일자" isOptional false,
+                            "writer" type OBJECT means "작성자" isOptional false,
                             "writer.userId" type NUMBER means "식별자" isOptional true,
                             "writer.userName" type STRING means "유저명" isOptional true,
                             "writer.crewName" type STRING means "소속 크루명" isOptional true,
                             "writer.profileImageUri" type STRING means "프로필 이미지 url" isOptional false,
                             "writer.isAdmin" type BOOLEAN means "관리자 여부" isOptional true,
                             "writer.isManager" type BOOLEAN means "크루장 여부" isOptional true,
-                            "viewer" type OBJECT means "조회자" isOptional true,
-                            "viewer.hasMyRecommendation" type BOOLEAN means "좋아요 여부" isOptional true,
-                            "viewer.hasMyComment" type BOOLEAN means "댓글 여부" isOptional true,
+                            "viewer" type OBJECT means "조회자" isOptional false,
+                            "viewer.hasMyRecommendation" type BOOLEAN means "좋아요 여부" isOptional false,
+                            "viewer.hasMyComment" type BOOLEAN means "댓글 여부" isOptional false,
                         )
                             .andWithPrefix("images[]", getImageDetailsResponseSnippet())
                     )
@@ -203,10 +202,10 @@ class FeedControllerTest (
                     .andDocument(
                         "create-feeds",
                         requestBody(
-                            "imageIds" type ARRAY means "이미지 식별자 목록" isOptional false,
-                            "contents" type STRING means "내용" isOptional true,
-                            "category" type STRING means "카테고리" isOptional true,
-                            "accessLevel" type STRING means "공개 여부" isOptional true,
+                            "imageIds" type ARRAY means "이미지 식별자 목록" isOptional true,
+                            "contents" type STRING means "내용" isOptional false,
+                            "category" type STRING means "카테고리" isOptional false,
+                            "accessLevel" type STRING means "공개 여부" isOptional false,
                         )
                     )
             }
@@ -263,10 +262,10 @@ class FeedControllerTest (
                             "feedId" pathMeans "식별자"
                         ),
                         requestBody(
-                            "imageIds" type ARRAY means "이미지 식별자 목록" isOptional false,
-                            "contents" type STRING means "내용" isOptional true,
-                            "category" type STRING means "카테고리" isOptional true,
-                            "accessLevel" type STRING means "공개 여부" isOptional true,
+                            "imageIds" type ARRAY means "이미지 식별자 목록" isOptional true,
+                            "contents" type STRING means "내용" isOptional false,
+                            "category" type STRING means "카테고리" isOptional false,
+                            "accessLevel" type STRING means "공개 여부" isOptional false,
                         )
                     )
             }
@@ -349,34 +348,34 @@ class FeedControllerTest (
                     .andDocument(
                         "search-feeds",
                         requestBody(
-                            "category" type STRING means "카테고리",
-                            "searchKeyword" type STRING means "검색 키워드",
-                            "isMyCrew" type BOOLEAN means "나의 크루 보기 여부"
+                            "category" type STRING means "카테고리" isOptional true,
+                            "searchKeyword" type STRING means "검색 키워드" isOptional true,
+                            "isMyCrew" type BOOLEAN means "나의 크루 보기 여부" isOptional true withDefaultValue "false"
                         ),
                         responseBody(
-                            "totalPages" type NUMBER means "총 페이지 수" isOptional true,
-                            "totalElements" type NUMBER means "총 피드 개수" isOptional true,
-                            "first" type BOOLEAN means "" isOptional true,
-                            "last" type BOOLEAN means "" isOptional true,
-                            "size" type NUMBER means "" isOptional true,
-                            "number" type NUMBER means "" isOptional true,
-                            "sort" type OBJECT means "" isOptional true,
-                            "sort.empty" type BOOLEAN means "" isOptional true,
-                            "sort.sorted" type BOOLEAN means "" isOptional true,
-                            "sort.unsorted" type BOOLEAN means "" isOptional true,
-                            "pageable" type OBJECT means "" isOptional true,
-                            "pageable.pageNumber" type NUMBER means "" isOptional true,
-                            "pageable.pageSize" type NUMBER means "" isOptional true,
-                            "pageable.sort" type OBJECT means "" isOptional true,
-                            "pageable.sort.empty" type BOOLEAN means "" isOptional true,
-                            "pageable.sort.sorted" type BOOLEAN means "" isOptional true,
-                            "pageable.sort.unsorted" type BOOLEAN means "" isOptional true,
-                            "pageable.offset" type NUMBER means "" isOptional true,
-                            "pageable.paged" type BOOLEAN means "" isOptional true,
-                            "pageable.unpaged" type BOOLEAN means "" isOptional true,
-                            "numberOfElements" type NUMBER means "" isOptional true,
-                            "empty" type BOOLEAN means "" isOptional true,
-                            "content" type ARRAY means "피드 목록" isOptional true,
+                            "totalPages" type NUMBER means "총 페이지 수" isOptional false,
+                            "totalElements" type NUMBER means "총 피드 개수" isOptional false,
+                            "first" type BOOLEAN means "" isOptional false,
+                            "last" type BOOLEAN means "" isOptional false,
+                            "size" type NUMBER means "" isOptional false,
+                            "number" type NUMBER means "" isOptional false,
+                            "sort" type OBJECT means "" isOptional false,
+                            "sort.empty" type BOOLEAN means "" isOptional false,
+                            "sort.sorted" type BOOLEAN means "" isOptional false,
+                            "sort.unsorted" type BOOLEAN means "" isOptional false,
+                            "pageable" type OBJECT means "" isOptional false,
+                            "pageable.pageNumber" type NUMBER means "" isOptional false,
+                            "pageable.pageSize" type NUMBER means "" isOptional false,
+                            "pageable.sort" type OBJECT means "" isOptional false,
+                            "pageable.sort.empty" type BOOLEAN means "" isOptional false,
+                            "pageable.sort.sorted" type BOOLEAN means "" isOptional false,
+                            "pageable.sort.unsorted" type BOOLEAN means "" isOptional false,
+                            "pageable.offset" type NUMBER means "" isOptional false,
+                            "pageable.paged" type BOOLEAN means "" isOptional false,
+                            "pageable.unpaged" type BOOLEAN means "" isOptional false,
+                            "numberOfElements" type NUMBER means "" isOptional false,
+                            "empty" type BOOLEAN means "" isOptional false,
+                            "content" type ARRAY means "피드 목록" isOptional false,
                         )
                             .andWithPrefix("content[]", getContentResponseSnippet())
                     )
@@ -394,23 +393,23 @@ class FeedControllerTest (
 
         fun getContentResponseSnippet(): List<FieldDescriptor> {
             return descriptor(
-                "id" type NUMBER means "식별자" isOptional true,
-                "imageUris" type ARRAY means "이미지 uri 목록" isOptional false,
-                "contents" type STRING means "내용" isOptional true,
-                "viewQty" type NUMBER means "조회수" isOptional true,
-                "recommendationQty" type NUMBER means "좋아요 수" isOptional true,
-                "commentQty" type NUMBER means "댓글 수" isOptional true,
-                "registeredAt" type DATETIME means "등록일자" isOptional true,
-                "writer" type OBJECT means "작성자" isOptional true,
+                "id" type NUMBER means "식별자" isOptional false,
+                "imageUris" type ARRAY means "이미지 uri 목록" isOptional true,
+                "contents" type STRING means "내용" isOptional false,
+                "viewQty" type NUMBER means "조회수" isOptional false,
+                "recommendationQty" type NUMBER means "좋아요 수" isOptional false,
+                "commentQty" type NUMBER means "댓글 수" isOptional false,
+                "registeredAt" type DATETIME means "등록일자" isOptional false,
+                "writer" type OBJECT means "작성자" isOptional false,
                 "writer.userId" type NUMBER means "식별자" isOptional true,
                 "writer.userName" type STRING means "유저명" isOptional true,
                 "writer.crewName" type STRING means "소속 크루명" isOptional true,
                 "writer.profileImageUri" type STRING means "프로필 이미지 url" isOptional false,
                 "writer.isAdmin" type BOOLEAN means "관리자 여부" isOptional true,
                 "writer.isManager" type BOOLEAN means "크루장 여부" isOptional true,
-                "viewer" type OBJECT means "조회자" isOptional true,
-                "viewer.hasMyRecommendation" type BOOLEAN means "좋아요 여부" isOptional true,
-                "viewer.hasMyComment" type BOOLEAN means "댓글 여부" isOptional true,
+                "viewer" type OBJECT means "조회자" isOptional false,
+                "viewer.hasMyRecommendation" type BOOLEAN means "좋아요 여부" isOptional false,
+                "viewer.hasMyComment" type BOOLEAN means "댓글 여부" isOptional false,
             )
         }
 
