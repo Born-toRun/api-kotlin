@@ -35,7 +35,7 @@ class RecentSearchKeywordController(private val recentSearchKeywordProxy: Recent
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getRecentSearchKeyword(@AuthUser my: TokenDetail): ResponseEntity<RecentSearchKeywordResponse> {
-        val response = if (!my.isLogin()) {
+        val response = if (my.isLogin()) {
             val recentSearchKeywords = recentSearchKeywordProxy.search(my.id).toSet()
             RecentSearchKeywordResponse(recentSearchKeywords)
         } else {

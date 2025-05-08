@@ -2,6 +2,7 @@ package kr.kro.btr.core.converter
 
 import kr.kro.btr.adapter.`in`.web.payload.CreateYellowCardRequest
 import kr.kro.btr.domain.constant.RecommendationType
+import kr.kro.btr.domain.entity.RecommendationEntity
 import kr.kro.btr.domain.port.model.CreateRecommendationCommand
 import kr.kro.btr.domain.port.model.CreateYellowCardCommand
 import kr.kro.btr.domain.port.model.RemoveRecommendationCommand
@@ -50,6 +51,14 @@ class RecommendationConverter {
             recommendationType = source.recommendationType,
             contentId = source.contentId,
             myUserId = source.myUserId
+        )
+    }
+
+    fun map(source: CreateRecommendationQuery): RecommendationEntity {
+        return RecommendationEntity(
+            userId = source.myUserId,
+            contentId = source.contentId,
+            recommendationType = source.recommendationType
         )
     }
 }

@@ -21,7 +21,7 @@ class MarathonBookmarkEntity(
     val updatedAt: LocalDateTime = LocalDateTime.now(),
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "marathonId", insertable = false, updatable = false)
     val marathonEntity: MarathonEntity? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)

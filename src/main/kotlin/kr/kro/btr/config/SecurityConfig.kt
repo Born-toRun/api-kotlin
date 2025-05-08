@@ -51,7 +51,7 @@ class SecurityConfig(
         val objectStorageBased = "/api/v1/object-storage"
         val recommendationBased = "/api/v1/recommendations"
         val activityBased = "/api/v1/activities"
-        val recentSearchKeywordBased = "/api/v1/recent-search-keyword"
+        val recentSearchKeywordBased = "/api/v1/recent-search-keywords"
         val privacyBased = "/api/v1/privacy"
         val yellowCardBased = "/api/v1/yellow-cards"
 
@@ -82,10 +82,11 @@ class SecurityConfig(
                         "$recommendationBased/{recommendationType}/{contentId}",
                         "$activityBased/**",
                         "$marathonBookmarkBased/{marathonId}",
-                        yellowCardBased)
+                        yellowCardBased,
+                        feedsBased)
                     .authenticated()
                     .requestMatchers(HttpMethod.GET,
-                        "$privacyBased/user",
+                        "$privacyBased/users",
                         "$usersBased/my")
                     .authenticated()
                     .requestMatchers(HttpMethod.PUT,
@@ -93,7 +94,7 @@ class SecurityConfig(
                         usersBased,
                         "$feedsBased/{feedId}",
                         "$activityBased/**",
-                        "$privacyBased/user",
+                        "$privacyBased/users",
                         "$commentBased/{commentId}")
                     .authenticated()
                     .requestMatchers(HttpMethod.DELETE,

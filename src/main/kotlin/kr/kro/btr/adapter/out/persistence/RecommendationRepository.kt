@@ -10,7 +10,7 @@ interface RecommendationRepository : JpaRepository<RecommendationEntity, Long> {
         userId: Long,
         recommendationType: RecommendationType,
         contentId: Long
-    ): RecommendationEntity
+    ): RecommendationEntity?
 
     fun findAllByUserId(userId: Long): List<RecommendationEntity>
 

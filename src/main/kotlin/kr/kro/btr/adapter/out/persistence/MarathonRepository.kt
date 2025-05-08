@@ -18,4 +18,13 @@ interface MarathonRepository : JpaRepository<MarathonEntity, Long> {
         locations: List<String>?,
         courses: List<String>?
     ): List<MarathonEntity>
+
+    @Query(
+        """
+        SELECT m FROM MarathonEntity m 
+        LEFT JOIN FETCH m.marathonBookmarkEntities mb 
+        WHERE m.id = :marathonId
+        """
+    )
+    fun findByIdOrNull(marathonId: Long): MarathonEntity?
 }
