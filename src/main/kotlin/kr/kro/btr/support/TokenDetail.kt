@@ -24,6 +24,6 @@ data class TokenDetail(
     fun isLogin(): Boolean = id > 0
 
     companion object {
-        fun defaultUser(): TokenDetail = TokenDetail(id = -1)
+        fun defaultUser(): TokenDetail = TokenDetail(id = -1, authority = RoleType.GUEST.code)
     }
 }

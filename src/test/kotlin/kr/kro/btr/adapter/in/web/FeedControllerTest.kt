@@ -205,7 +205,7 @@ class FeedControllerTest (
                             "imageIds" type ARRAY means "이미지 식별자 목록" isOptional true,
                             "contents" type STRING means "내용" isOptional false,
                             "category" type STRING means "카테고리" isOptional false,
-                            "accessLevel" type STRING means "공개 여부" isOptional false,
+                            "accessLevel" type STRING means "공개 여부" isOptional true withDefaultValue "ALL",
                         )
                     )
             }

@@ -22,14 +22,5 @@ class ObjectStorageEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", insertable = false, updatable = false)
-    val userEntity: UserEntity? = null,
-
-    @OneToOne(mappedBy = "imageEntity", cascade = [CascadeType.REMOVE])
-    val crewImageEntity: CrewEntity? = null,
-
-    @OneToOne(mappedBy = "logoEntity", cascade = [CascadeType.REMOVE])
-    val crewLogoEntity: CrewEntity? = null
-) {
-    @OneToMany(mappedBy = "objectStorageEntity", cascade = [CascadeType.REMOVE])
-    val feedImageMappingEntities: MutableSet<FeedImageMappingEntity> = mutableSetOf()
-}
+    val userEntity: UserEntity? = null
+)

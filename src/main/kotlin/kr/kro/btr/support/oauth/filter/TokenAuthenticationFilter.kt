@@ -22,18 +22,15 @@ class TokenAuthenticationFilter(
     ) {
         val token = HeaderSupport.getAccessToken(request)
 
-        try {
-            if (token != null) {
-                val authToken = tokenProvider.convertAuthToken(token)
-                authToken.validate()
+        if (token != null) {
+            val authToken = tokenProvider.convertAuthToken(token)
 
+            if (authToken.isValidate()) {
                 val authentication = tokenProvider.getAuthentication(authToken)
                 SecurityContextHolder.getContext().authentication = authentication
-            } else {
-                // 미회원 접근
             }
-        } finally {
-            filterChain.doFilter(request, response)
         }
+
+        filterChain.doFilter(request, response)
     }
 }

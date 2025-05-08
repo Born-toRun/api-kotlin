@@ -17,7 +17,7 @@ class CrewEntity(
     val logoId: Long? = null,
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "imageId", insertable = false, updatable = false)
     val imageEntity: ObjectStorageEntity? = null,
 
     @OneToOne(fetch = FetchType.LAZY)

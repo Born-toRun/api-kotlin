@@ -1,6 +1,7 @@
 package kr.kro.btr.core.converter
 
 import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
+import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewResponse
 import kr.kro.btr.domain.entity.CrewEntity
 import kr.kro.btr.domain.port.model.CreateCrewCommand
@@ -27,6 +28,18 @@ class CrewConverter {
         return  SearchCrewResponse(crewDetails)
     }
 
+    fun map(source: Crew): DetailCrewResponse {
+        return DetailCrewResponse(
+            id = source.id,
+            crewName = source.name,
+            contents = source.contents,
+            region = source.region,
+            imageUri = source.imageUri,
+            logoUri = source.logoUri,
+            crewSnsUri = source.sns
+        )
+    }
+
     fun map(source: CreateCrewRequest): CreateCrewCommand {
         return CreateCrewCommand(
             name = source.name,
@@ -36,17 +49,21 @@ class CrewConverter {
         )
     }
 
+    fun map(source: CrewEntity): Crew {
+        return Crew(
+            id = source.id,
+            name = source.name,
+            contents = source.contents,
+            region = source.region,
+            sns = source.sns,
+            imageUri = source.imageEntity?.fileUri,
+            logoUri = source.logoEntity?.fileUri
+        )
+    }
+
     fun map(source: List<CrewEntity>): List<Crew> {
         return source.map { crewEntity ->
-            Crew(
-                id = crewEntity.id,
-                name = crewEntity.name,
-                contents = crewEntity.contents,
-                region = crewEntity.region,
-                sns = crewEntity.sns,
-                imageUri = crewEntity.imageEntity?.fileUri,
-                logoUri = crewEntity.logoEntity?.fileUri
-            )
+            map(crewEntity)
         }
     }
 

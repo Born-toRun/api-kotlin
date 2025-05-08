@@ -1,7 +1,6 @@
 package kr.kro.btr.core.converter
 
 import kr.kro.btr.adapter.`in`.web.payload.CreateYellowCardRequest
-import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.entity.YellowCardEntity
 import kr.kro.btr.domain.port.model.CreateYellowCardCommand
 import kr.kro.btr.infrastructure.model.CreateYellowCardQuery
@@ -19,14 +18,12 @@ class YellowCardConverter {
         )
     }
 
-    fun map(source: CreateYellowCardCommand, sourceUser: UserEntity, targetUser: UserEntity): CreateYellowCardQuery {
+    fun map(source: CreateYellowCardCommand): CreateYellowCardQuery {
         return CreateYellowCardQuery(
             targetUserId = source.targetUserId,
             sourceUserId = source.sourceUserId,
             reason = source.reason,
-            basis = source.basis,
-            sourceUser = sourceUser,
-            targetUser = targetUser
+            basis = source.basis
         )
     }
 
@@ -35,9 +32,7 @@ class YellowCardConverter {
             targetUserId = source.targetUserId,
             sourceUserId = source.sourceUserId,
             reason = source.reason,
-            basis = source.basis,
-            targetUser = source.targetUser,
-            sourceUser = source.sourceUser
+            basis = source.basis
         )
     }
 }

@@ -5,6 +5,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
 import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
+import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
@@ -96,6 +97,63 @@ class CrewControllerTest (
                             "crewDetails" type ARRAY means "등록된 크루 목록" isOptional false
                         )
                             .andWithPrefix("crewDetails[].", getCrewDetailsResponseSnippet())
+                    )
+            }
+        }
+    }
+
+    describe("GET : $baseUrl/{crewId}") {
+        val url = "$baseUrl/{crewId}"
+        val crewId = 0L
+        val crew = Crew(
+            id = 0,
+            name = "crewName",
+            contents = "contents",
+            region = "region",
+            imageUri = "imageUri",
+            logoUri = "logoUri",
+            sns = "crewSnsUri"
+        )
+        val response = DetailCrewResponse(
+            id = crew.id,
+            crewName = crew.name,
+            contents = crew.contents,
+            region = crew.region,
+            imageUri = crew.imageUri,
+            logoUri = crew.logoUri,
+            crewSnsUri = crew.sns
+        )
+
+        context("조회를 하면") {
+            val request = request(HttpMethod.GET, url, crewId)
+                .contentType(APPLICATION_JSON)
+
+            it("200 OK") {
+                every { proxy.detail(any()) } returns crew
+                every { converter.map(any<Crew>()) } returns response
+
+                mockMvc.perform(request)
+                    .andExpect(status().isOk)
+                    .andExpectData(
+                        jsonPath("$.id") shouldBe response.id,
+                        jsonPath("$.crewName") shouldBe response.crewName,
+                        jsonPath("$.contents") shouldBe response.contents,
+                        jsonPath("$.region") shouldBe response.region,
+                        jsonPath("$.imageUri") shouldBe response.imageUri,
+                        jsonPath("$.logoUri") shouldBe response.logoUri,
+                        jsonPath("$.crewSnsUri") shouldBe response.crewSnsUri
+                    )
+                    .andDocument(
+                        "search-crew-detail",
+                        responseBody(
+                            "id" type NUMBER means "식별자" isOptional false,
+                            "crewName" type STRING means "크루명" isOptional false,
+                            "contents" type STRING means "크루 소개" isOptional false,
+                            "region" type STRING means "크루 활동 지역" isOptional false,
+                            "imageUri" type STRING means "크루 대표 이미지 uri" isOptional true,
+                            "logoUri" type STRING means "크루 로고 uri" isOptional true,
+                            "crewSnsUri" type STRING means "크루 sns uri" isOptional true
+                        )
                     )
             }
         }
