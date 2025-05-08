@@ -25,10 +25,10 @@ class YellowCardService(
             )
         }
 
-        val sourceUser = userGateway.searchById(command.sourceUserId)
-        val targetUser = userGateway.searchById(command.targetUserId)
+//        val sourceUser = userGateway.searchById(command.sourceUserId)
+//        val targetUser = userGateway.searchById(command.targetUserId)
 
-        val query = yellowCardConverter.map(command, sourceUser, targetUser)
+        val query = yellowCardConverter.map(command)
         yellowCardGateway.create(query)
     }
 }
