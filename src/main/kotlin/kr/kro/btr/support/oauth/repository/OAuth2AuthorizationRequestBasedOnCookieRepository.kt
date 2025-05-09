@@ -15,7 +15,7 @@ class OAuth2AuthorizationRequestBasedOnCookieRepository :
     AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
     companion object {
-        const val OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request"
+        private const val OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request"
         private const val COOKIE_EXPIRE_SECONDS = 180
     }
 

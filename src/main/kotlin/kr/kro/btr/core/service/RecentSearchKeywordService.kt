@@ -12,7 +12,7 @@ class RecentSearchKeywordService(
 ) : RecentSearchKeywordPort {
 
     companion object {
-        private val RECENT_SEARCH_KEYWORD_KEY_PREFIX = "recentSearch:"
+        private const val RECENT_SEARCH_KEYWORD_KEY_PREFIX = "recentSearch:"
     }
 
     @Async

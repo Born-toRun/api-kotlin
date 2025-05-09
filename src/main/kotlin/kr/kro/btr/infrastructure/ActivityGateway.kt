@@ -15,7 +15,6 @@ import kr.kro.btr.infrastructure.model.ParticipateActivityQuery
 import kr.kro.btr.infrastructure.model.SearchAllActivityQuery
 import kr.kro.btr.support.exception.InvalidException
 import kr.kro.btr.support.exception.NotFoundException
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import kotlin.random.Random
@@ -32,17 +31,17 @@ class ActivityGateway(
 ) {
 
     companion object {
-        private val ACCESS_CODE_KEY_PREFIX = "accessCode"
+        private const val ACCESS_CODE_KEY_PREFIX = "accessCode"
     }
 
-    fun create(createActivityQuery: CreateActivityQuery) {
-        val activityEntity = activityConverter.map(createActivityQuery)
+    fun create(query: CreateActivityQuery) {
+        val activityEntity = activityRepository.findByStartAtAndUserId(query.startAt, query.myUserId) ?: activityConverter.map(query)
         activityRepository.save(activityEntity)
     }
 
-    fun modify(modifyActivityQuery: ModifyActivityQuery) {
-        val activityEntity = search(modifyActivityQuery.activityId)
-        activityEntity.modify(modifyActivityQuery)
+    fun modify(query: ModifyActivityQuery) {
+        val activityEntity = search(query.activityId)
+        activityEntity.modify(query)
         activityRepository.save(activityEntity)
     }
 
@@ -102,7 +101,7 @@ class ActivityGateway(
         val activity = search(activityId)
         val now = LocalDateTime.now()
 
-        if (now.isAfter(activity.startAt!!.minusMinutes(10L)) && now.isBefore(activity.startAt!!.plusMonths(10L))) {
+        if (now.isAfter(activity.startAt.minusMinutes(10L)) && now.isBefore(activity.startAt.plusMonths(10L))) {
             activity.open()
             return activityRepository.save(activity)
         }

@@ -73,7 +73,9 @@ class SecurityConfig(
                 UsernamePasswordAuthenticationFilter::class.java
             )
             .authorizeHttpRequests { auth ->
-                auth.requestMatchers("/api/v1/admin/**").hasAnyAuthority(RoleType.ADMIN.code)
+                auth.requestMatchers(HttpMethod.POST,
+                    "/api/v1/crews")
+                    .hasAnyAuthority(RoleType.ADMIN.code)
                     .requestMatchers(HttpMethod.POST,
                         "/api/v1/auth/sign-out",
                         "/api/v1/auth/refresh",
@@ -87,7 +89,8 @@ class SecurityConfig(
                     .authenticated()
                     .requestMatchers(HttpMethod.GET,
                         "$privacyBased/users",
-                        "$usersBased/my")
+                        "$usersBased/my",
+                        "$activityBased/**")
                     .authenticated()
                     .requestMatchers(HttpMethod.PUT,
                         "$usersBased/sign-up",
@@ -95,7 +98,7 @@ class SecurityConfig(
                         "$feedsBased/{feedId}",
                         "$activityBased/**",
                         "$privacyBased/users",
-                        "$commentBased/{commentId}")
+                        "$commentBased/{commentId}",)
                     .authenticated()
                     .requestMatchers(HttpMethod.DELETE,
                         usersBased,
