@@ -4,6 +4,7 @@ import kr.kro.btr.adapter.out.persistence.CrewRepository
 import kr.kro.btr.core.converter.CrewConverter
 import kr.kro.btr.domain.entity.CrewEntity
 import kr.kro.btr.infrastructure.model.CreateCrewQuery
+import kr.kro.btr.support.exception.NotFoundException
 import org.springframework.stereotype.Component
 
 @Component
@@ -23,6 +24,6 @@ class CrewGateway(
     }
 
     fun searchById(crewId: Long): CrewEntity {
-        return crewRepository.findByIdOrNull(crewId) ?: throw NoSuchElementException("크루를 찾을 수 없습니다.")
+        return crewRepository.findByIdOrNull(crewId) ?: throw NotFoundException("크루를 찾을 수 없습니다.")
     }
 }

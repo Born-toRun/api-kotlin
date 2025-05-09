@@ -99,6 +99,9 @@ class ActivityGateway(
 
     fun open(activityId: Long): ActivityEntity {
         val activity = search(activityId)
+        if (activity.isOpen) {
+            throw InvalidException("이미 오픈하였습니다.")
+        }
         val now = LocalDateTime.now()
 
         if (now.isAfter(activity.startAt.minusMinutes(10L)) && now.isBefore(activity.startAt.plusMonths(10L))) {

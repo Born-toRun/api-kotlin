@@ -41,9 +41,9 @@ class AuthToken(
 
     companion object {
         private val log = KotlinLogging.logger {}
-        private const val AUTHORITIES_KEY = "role"
-        private const val USER_NAME_KEY = "userName"
-        private const val CREW_ID_KEY = "crewId"
+        const val AUTHORITIES_KEY = "role"
+        const val USER_NAME_KEY = "userName"
+        const val CREW_ID_KEY = "crewId"
 
         fun from(token: String, key: SecretKey): AuthToken {
             return AuthToken(token, key)

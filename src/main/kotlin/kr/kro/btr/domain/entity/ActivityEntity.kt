@@ -49,15 +49,15 @@ class ActivityEntity(
     }
 
     fun modify(query: ModifyActivityQuery) {
-        query.title.takeIf { it.isNotBlank() }?.let { title = it }
-        query.contents.takeIf { it.isNotBlank() }?.let { contents = it }
-        query.startAt.let { startAt = it }
+        query.title.takeIf { it != title }?.let { title = it }
+        query.contents.takeIf { it != contents }?.let { contents = it }
+        query.startAt.takeIf { it != startAt }?.let { startAt = it }
         query.venue?.takeIf { it.isNotBlank() }?.let { venue = it }
-        query.venueUrl.takeIf { it.isNotBlank() }?.let { venueUrl = it }
+        query.venueUrl.takeIf { it != venueUrl }?.let { venueUrl = it }
         query.participantsLimit.let { participantsLimit = it }
         query.participationFee.let { participationFee = it }
-        query.course?.takeIf { it.isNotBlank() }?.let { course = it }
-        query.courseDetail?.takeIf { it.isNotBlank() }?.let { courseDetail = it }
-        query.path?.takeIf { it.isNotBlank() }?.let { path = it }
+        query.course?.takeIf { it != course }?.let { course = it }
+        query.courseDetail?.takeIf { it != courseDetail }?.let { courseDetail = it }
+        query.path?.takeIf { it != path }?.let { path = it }
     }
 }
