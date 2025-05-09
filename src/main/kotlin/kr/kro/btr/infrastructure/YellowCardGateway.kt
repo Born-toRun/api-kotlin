@@ -11,10 +11,6 @@ class YellowCardGateway(
     private val yellowCardRepository: YellowCardRepository
 ) {
 
-    fun exists(sourceUserId: Long, targetUserId: Long): Boolean {
-        return yellowCardRepository.existsBySourceUserIdAndTargetUserId(sourceUserId, targetUserId)
-    }
-
     fun create(query: CreateYellowCardQuery) {
         val yellowCardEntity = yellowCardConverter.map(query)
         yellowCardRepository.save(yellowCardEntity)

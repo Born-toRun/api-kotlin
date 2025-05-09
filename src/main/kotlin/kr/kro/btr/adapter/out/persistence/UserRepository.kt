@@ -21,7 +21,6 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
         SELECT DISTINCT u FROM UserEntity u 
         LEFT JOIN FETCH u.crewEntity 
         LEFT JOIN FETCH u.profileImageEntity 
-        LEFT JOIN FETCH u.userRefreshTokenEntity 
         LEFT JOIN FETCH u.userPrivacyEntity 
         LEFT JOIN FETCH u.feedEntities 
         LEFT JOIN FETCH u.activityEntities 

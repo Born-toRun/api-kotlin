@@ -75,6 +75,6 @@ class FeedService(
             .map(FeedImageMappingEntity::imageId)
             .filter { command.imageIds?.contains(it) != true  }
 
-        feedImageMappingGateway.removeAllByFileId(removedImageIds as List<Long>)
+        feedImageMappingGateway.removeAllByFileId(removedImageIds)
     }
 }

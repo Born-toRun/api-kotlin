@@ -95,7 +95,7 @@ class UserConverter {
             userId = source.id,
             socialId = source.socialId,
             providerType = source.providerType,
-            refreshToken = source.userRefreshTokenEntity?.refreshToken,
+//            refreshToken = source.userRefreshTokenEntity?.refreshToken,
             roleType = source.roleType,
             userName = source.name,
             crewId = source.crewId,

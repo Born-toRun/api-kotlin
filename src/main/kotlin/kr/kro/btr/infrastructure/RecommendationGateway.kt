@@ -1,15 +1,18 @@
 package kr.kro.btr.infrastructure
 
 import kr.kro.btr.adapter.out.persistence.RecommendationRepository
+import kr.kro.btr.core.converter.RecommendationConverter
 import kr.kro.btr.domain.entity.RecommendationEntity
 import kr.kro.btr.infrastructure.model.CreateRecommendationQuery
 import kr.kro.btr.infrastructure.model.RemoveRecommendationQuery
 import kr.kro.btr.infrastructure.model.SearchAllRecommendationQuery
+import kr.kro.btr.support.exception.NotFoundException
 import org.springframework.stereotype.Component
 
 @Component
 class RecommendationGateway(
-    private val recommendationRepository: RecommendationRepository
+    private val recommendationRepository: RecommendationRepository,
+    private val recommendationConverter: RecommendationConverter
 ) {
 
     fun searchAll(query: SearchAllRecommendationQuery): List<RecommendationEntity> {
@@ -20,11 +23,12 @@ class RecommendationGateway(
     }
 
     fun create(query: CreateRecommendationQuery) {
-        val recommendationEntity = RecommendationEntity(
-            userId = query.myUserId,
-            contentId = query.contentId,
-            recommendationType = query.recommendationType
-        )
+        val recommendationEntity = recommendationRepository
+            .findByUserIdAndRecommendationTypeAndContentId(
+                query.myUserId,
+                query.recommendationType,
+                query.contentId
+            ) ?: recommendationConverter.map(query)
 
         recommendationRepository.save(recommendationEntity)
     }
@@ -35,7 +39,7 @@ class RecommendationGateway(
                 query.myUserId,
                 query.recommendationType,
                 query.contentId
-            )
+            ) ?: throw NotFoundException("좋아요를 하지 않았습니다.")
         recommendationRepository.deleteById(recommendationEntity.id)
     }
 

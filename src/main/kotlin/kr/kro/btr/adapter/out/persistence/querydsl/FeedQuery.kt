@@ -36,8 +36,8 @@ class FeedQuery(private val queryFactory: JPAQueryFactory) {
         val feedQuery: JPAQuery<FeedEntity> = queryFactory
             .selectFrom(feed)
             .innerJoin(feed.userEntity, user).fetchJoin()
-            .innerJoin(user.crewEntity, crew).fetchJoin()
             .innerJoin(user.userPrivacyEntity, userPrivacy).fetchJoin()
+            .innerJoin(user.crewEntity, crew).fetchJoin()
             .leftJoin(feed.feedImageMappingEntities, feedImageMapping).fetchJoin()
             .leftJoin(feedImageMapping.objectStorageEntity, objectStorage).fetchJoin()
             .leftJoin(feed.commentEntities, comment).fetchJoin()

@@ -9,7 +9,7 @@ interface FeedRepository : JpaRepository<FeedEntity, Long> {
     @Query(
         """
         SELECT DISTINCT f FROM FeedEntity f 
-        LEFT JOIN FETCH f.userEntity 
+        INNER JOIN FETCH f.userEntity
         LEFT JOIN FETCH f.commentEntities 
         LEFT JOIN FETCH f.feedImageMappingEntities 
         LEFT JOIN FETCH f.recommendationEntities 
