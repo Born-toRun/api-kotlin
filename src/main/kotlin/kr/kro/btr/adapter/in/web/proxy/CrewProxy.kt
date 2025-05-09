@@ -21,6 +21,11 @@ class CrewProxy(
         return crewPort.searchAll()
     }
 
+    @Cacheable(key = "'detail: ' + #crewId")
+    fun detail(crewId: Long): Crew {
+        return crewPort.detail(crewId)
+    }
+
     @CacheEvict(allEntries = true)
     fun create(request: CreateCrewRequest) {
         val command = crewConverter.map(request)

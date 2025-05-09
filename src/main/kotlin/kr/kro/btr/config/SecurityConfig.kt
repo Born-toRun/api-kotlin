@@ -4,6 +4,7 @@ import kr.kro.btr.config.properties.AppProperties
 import kr.kro.btr.domain.constant.RoleType
 import kr.kro.btr.domain.port.UserPort
 import kr.kro.btr.domain.port.UserRefreshTokenPort
+import kr.kro.btr.support.http.model.CustomErrorAttributes
 import kr.kro.btr.support.oauth.RestAuthenticationEntryPoint
 import kr.kro.btr.support.oauth.filter.TokenAuthenticationFilter
 import kr.kro.btr.support.oauth.handler.OAuth2AuthenticationFailureHandler
@@ -14,6 +15,7 @@ import kr.kro.btr.support.oauth.service.BornToRunOAuth2UserService
 import kr.kro.btr.support.oauth.service.BornToRunUserDetailsService
 import kr.kro.btr.support.oauth.token.AuthTokenProvider
 import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.boot.web.servlet.error.ErrorAttributes
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -49,8 +51,9 @@ class SecurityConfig(
         val objectStorageBased = "/api/v1/object-storage"
         val recommendationBased = "/api/v1/recommendations"
         val activityBased = "/api/v1/activities"
-        val recentSearchKeywordBased = "/api/v1/recent-search-keyword"
+        val recentSearchKeywordBased = "/api/v1/recent-search-keywords"
         val privacyBased = "/api/v1/privacy"
+        val yellowCardBased = "/api/v1/yellow-cards"
 
         return httpSecurity
             .headers { headers ->
@@ -73,10 +76,17 @@ class SecurityConfig(
                 auth.requestMatchers("/api/v1/admin/**").hasAnyAuthority(RoleType.ADMIN.code)
                     .requestMatchers(HttpMethod.POST,
                         "/api/v1/auth/sign-out",
-                        "/api/v1/auth/refresh")
+                        "/api/v1/auth/refresh",
+                        "$commentBased/{feedId}",
+                        "$objectStorageBased/{bucket}",
+                        "$recommendationBased/{recommendationType}/{contentId}",
+                        "$activityBased/**",
+                        "$marathonBookmarkBased/{marathonId}",
+                        yellowCardBased,
+                        feedsBased)
                     .authenticated()
                     .requestMatchers(HttpMethod.GET,
-                        "$privacyBased/user",
+                        "$privacyBased/users",
                         "$usersBased/my")
                     .authenticated()
                     .requestMatchers(HttpMethod.PUT,
@@ -84,7 +94,7 @@ class SecurityConfig(
                         usersBased,
                         "$feedsBased/{feedId}",
                         "$activityBased/**",
-                        "$privacyBased/user",
+                        "$privacyBased/users",
                         "$commentBased/{commentId}")
                     .authenticated()
                     .requestMatchers(HttpMethod.DELETE,
@@ -96,13 +106,6 @@ class SecurityConfig(
                         "$activityBased/**",
                         recentSearchKeywordBased,
                         "$recentSearchKeywordBased/{keyword}",
-                        "$marathonBookmarkBased/{marathonId}")
-                    .authenticated()
-                    .requestMatchers(HttpMethod.POST,
-                        "$commentBased/{feedId}",
-                        "$objectStorageBased/{bucket}",
-                        "$recommendationBased/{recommendationType}/{contentId}",
-                        "$activityBased/**",
                         "$marathonBookmarkBased/{marathonId}")
                     .authenticated()
                     .anyRequest().permitAll()
@@ -144,5 +147,10 @@ class SecurityConfig(
     @Bean
     fun oAuth2AuthenticationFailureHandler(): OAuth2AuthenticationFailureHandler {
         return OAuth2AuthenticationFailureHandler(oAuth2AuthorizationRequestBasedOnCookieRepository())
+    }
+
+    @Bean
+    fun errorAttributes(): ErrorAttributes {
+        return CustomErrorAttributes()
     }
 }

@@ -22,13 +22,13 @@ class AuthenticationPrincipalArgumentResolver : HandlerMethodArgumentResolver {
         mavContainer: ModelAndViewContainer?,
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
-    ): Any? {
+    ): TokenDetail {
         val authentication: Authentication? = SecurityContextHolder.getContext().authentication
 
-        if (authentication !is JwtAuthenticationToken) {
-            return TokenDetail.defaultUser()
+        if (authentication is JwtAuthenticationToken) {
+            return TokenDetail(authentication)
         }
 
-        return TokenDetail(authentication)
+        return TokenDetail.defaultUser()
     }
 }

@@ -21,4 +21,8 @@ class CrewGateway(
         val crewEntity = crewConverter.map(query)
         crewRepository.save(crewEntity)
     }
+
+    fun searchById(crewId: Long): CrewEntity {
+        return crewRepository.findByIdOrNull(crewId) ?: throw NoSuchElementException("크루를 찾을 수 없습니다.")
+    }
 }

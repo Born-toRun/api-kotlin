@@ -37,8 +37,9 @@ class UserEntity(
     @JoinColumn(name = "imageId", insertable = false, updatable = false)
     val profileImageEntity: ObjectStorageEntity? = null,
 
-    @OneToOne(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
-    var userRefreshTokenEntity: UserRefreshTokenEntity? = null,
+    // TODO: 리프레시 토큰 작업
+//    @OneToOne(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+//    var userRefreshTokenEntity: UserRefreshTokenEntity? = null,
 
     @OneToOne(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
     var userPrivacyEntity: UserPrivacyEntity? = null

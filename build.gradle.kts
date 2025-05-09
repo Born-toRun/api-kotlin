@@ -84,8 +84,8 @@ dependencies {
     testImplementation("org.springframework:spring-test")
     testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
     testImplementation("io.kotest:kotest-framework-datatest:5.9.1")
-    testImplementation("com.ninja-squad:springmockk:4.0.2")
     testImplementation("io.kotest.extensions:kotest-extensions-spring:1.3.0")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
     testImplementation("org.springframework.security:spring-security-test")
 
     annotationProcessor("com.querydsl:querydsl-apt:$querydslVersion:jakarta")

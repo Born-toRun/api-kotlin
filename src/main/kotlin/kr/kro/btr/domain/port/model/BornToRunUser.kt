@@ -8,7 +8,7 @@ data class BornToRunUser(
     val userId: Long,
     val socialId: String,
     val providerType: ProviderType,
-    val refreshToken: String?,
+//    val refreshToken: String?,
     val roleType: RoleType,
     val userName: String?,
     val crewId: Long?,
