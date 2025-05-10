@@ -7,7 +7,7 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchAllActivityRequest
 import kr.kro.btr.core.converter.ActivityConverter
 import kr.kro.btr.domain.port.ActivityPort
 import kr.kro.btr.domain.port.model.ActivityResult
-import kr.kro.btr.domain.port.model.AttendanceResult
+import kr.kro.btr.domain.port.model.ParticipantResult
 import kr.kro.btr.domain.port.model.ParticipateActivityCommand
 import kr.kro.btr.support.TokenDetail
 import org.springframework.cache.annotation.CacheConfig
@@ -72,8 +72,8 @@ class ActivityProxy(
         activityPort.attendance(command)
     }
 
-    @Cacheable(key = "'getAttendance: ' + #activityId")
-    fun getAttendance(activityId: Long): AttendanceResult {
-        return activityPort.getAttendance(activityId)
+    @Cacheable(key = "'getParticipation: ' + #activityId")
+    fun getParticipation(activityId: Long): ParticipantResult {
+        return activityPort.getParticipation(activityId)
     }
 }

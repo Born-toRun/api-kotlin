@@ -38,7 +38,7 @@ class CommentService(
     @Transactional(readOnly = true)
     override fun detail(command: DetailCommentCommand): CommentDetail {
         val parentComment = commentGateway.search(command.commentId)
-        val reCommentEntities = commentGateway.searchReComments(command.commentId)
+        val reCommentEntities = parentComment.child
 
         val reCommentResults = reCommentEntities
             .map { commentConverter.map(it, command.myUserId) }

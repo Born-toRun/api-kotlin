@@ -6,7 +6,6 @@ import kr.kro.btr.domain.entity.CommentEntity
 import kr.kro.btr.infrastructure.model.CreateCommentQuery
 import kr.kro.btr.infrastructure.model.ModifyCommentQuery
 import kr.kro.btr.support.exception.NotFoundException
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
@@ -24,6 +23,9 @@ class CommentGateway(
     }
 
     fun create(query: CreateCommentQuery) {
+        if (query.parentCommentId != null) {
+            commentRepository.findByIdOrNull(query.parentCommentId) ?: throw NotFoundException("부모 댓글을 찾을 수 없습니다.")
+        }
         val commentEntity = commentConverter.map(query)
         commentRepository.save(commentEntity)
     }

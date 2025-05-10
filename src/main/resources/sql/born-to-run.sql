@@ -159,7 +159,7 @@ CREATE TABLE `activity`
     `id`                 bigint(20)   NOT NULL AUTO_INCREMENT,
     `title`              varchar(225) NOT NULL COMMENT '행사 명칭',
     `contents`           text         NOT NULL COMMENT '내용',
-    `start_date`         datetime     NOT NULL COMMENT '행사 시작 일자',
+    `start_at`         datetime     NOT NULL COMMENT '행사 시작 일자',
     `venue`              varchar(125)          DEFAULT NULL COMMENT '장소',
     `venue_url`          varchar(125) NOT NULL COMMENT '장소의 지도 url',
     `participants_limit` int(11)               DEFAULT NULL COMMENT '인원제한 (제한없음: -1)',
@@ -172,7 +172,7 @@ CREATE TABLE `activity`
     `updated_at`         datetime     NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
     `registered_at`      datetime     NOT NULL DEFAULT current_timestamp(),
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uk__start_date__user_id` (`start_date`, `user_id`),
+    UNIQUE KEY `uk__start_date__user_id` (`start_at`, `user_id`),
     KEY `idx__course` (`course`),
     KEY `idx__venue__course` (`venue`, `course`),
     KEY `idx__venue` (`venue`)

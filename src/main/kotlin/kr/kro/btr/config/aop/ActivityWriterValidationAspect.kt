@@ -4,10 +4,10 @@ import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
 import kr.kro.btr.adapter.out.persistence.ActivityRepository
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.exception.ForBiddenException
+import kr.kro.btr.support.exception.NotFoundException
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
 import org.aspectj.lang.annotation.Pointcut
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Aspect
@@ -45,7 +45,7 @@ class ActivityWriterValidationAspect(private val activityRepository: ActivityRep
     }
 
     private fun isValid(userId: Long, activityId: Long): Boolean {
-        val activity = activityRepository.findByIdOrNull(activityId) ?: throw NoSuchElementException("존재하지 않는 활동입니다.")
+        val activity = activityRepository.findByIdOrNull(activityId) ?: throw NotFoundException("존재하지 않는 활동입니다.")
 
         return activity.userId == userId
     }

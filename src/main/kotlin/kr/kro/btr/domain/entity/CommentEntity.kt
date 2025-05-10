@@ -1,7 +1,6 @@
 package kr.kro.btr.domain.entity
 
 import jakarta.persistence.*
-import kr.kro.btr.domain.constant.RecommendationType
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
@@ -38,20 +37,8 @@ class CommentEntity(
     @OneToMany(mappedBy = "commentEntity", cascade = [CascadeType.REMOVE])
     val recommendationEntities: MutableSet<RecommendationEntity> = mutableSetOf()
 
-    @OneToMany(mappedBy = "parent", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "parent", cascade = [CascadeType.REMOVE], orphanRemoval = true)
     val child: MutableSet<CommentEntity> = mutableSetOf()
-
-    fun addParent(parent: CommentEntity) {
-        this.parent = parent
-        parent.child.add(this)
-    }
-
-    fun getRecommendationQty(): Long {
-        return recommendationEntities
-            .filter { it.recommendationType == RecommendationType.FEED }
-            .count()
-            .toLong()
-    }
 
     fun isRootComment(): Boolean {
         return parentId == null

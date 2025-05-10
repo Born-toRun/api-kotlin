@@ -4,9 +4,9 @@ import kr.kro.btr.core.converter.ActivityConverter
 import kr.kro.btr.domain.port.ActivityPort
 import kr.kro.btr.domain.port.model.ActivityResult
 import kr.kro.btr.domain.port.model.AttendanceActivityCommand
-import kr.kro.btr.domain.port.model.AttendanceResult
 import kr.kro.btr.domain.port.model.CreateActivityCommand
 import kr.kro.btr.domain.port.model.ModifyActivityCommand
+import kr.kro.btr.domain.port.model.ParticipantResult
 import kr.kro.btr.domain.port.model.ParticipateActivityCommand
 import kr.kro.btr.domain.port.model.SearchAllActivityCommand
 import kr.kro.btr.infrastructure.ActivityGateway
@@ -79,10 +79,12 @@ class ActivityService(
     }
 
     @Transactional(readOnly = true)
-    override fun getAttendance(activityId: Long): AttendanceResult {
+    override fun getParticipation(activityId: Long): ParticipantResult {
         val activityParticipationEntities = activityGateway.searchParticipation(activityId)
-        val participants = activityParticipationEntities.map { it.userEntity!! }
-        val host = activityGateway.search(activityId).userEntity!!
-        return activityConverter.map(host, participants)
+        if (activityParticipationEntities.isEmpty()) {
+            val activityEntity = activityGateway.search(activityId)
+            return activityConverter.mapToParticipantResult(activityEntity)
+        }
+        return activityConverter.map(activityParticipationEntities)
     }
 }

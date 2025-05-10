@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 @ControllerAdvice
 class ResponseExceptionHandler(private val notification: Notification) {
 
-    @ExceptionHandler(Exception::class)
-    fun handleDefault(ex: Exception ): ResponseEntity<ExceptionResponse> {
-        ex.printStackTrace()
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ExceptionResponse(message = "시스템 오류입니다."))
-    }
+//    @ExceptionHandler(Exception::class)
+//    fun handleDefault(ex: Exception ): ResponseEntity<ExceptionResponse> {
+//        ex.printStackTrace()
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//            .body(ExceptionResponse(message = "시스템 오류입니다."))
+//    }
 
     @ExceptionHandler(NotFoundException::class)
     fun handleNotFound(ex: NotFoundException ): ResponseEntity<ExceptionResponse> {

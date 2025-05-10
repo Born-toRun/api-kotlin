@@ -8,7 +8,6 @@ import kr.kro.btr.support.exception.NotFoundException
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
 import org.aspectj.lang.annotation.Pointcut
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Aspect
