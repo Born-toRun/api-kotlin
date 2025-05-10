@@ -41,7 +41,7 @@ class UserEntity(
 //    @OneToOne(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
 //    var userRefreshTokenEntity: UserRefreshTokenEntity? = null,
 
-    @OneToOne(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    @OneToOne(mappedBy = "userEntity", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
     var userPrivacyEntity: UserPrivacyEntity? = null
 ) {
     @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])

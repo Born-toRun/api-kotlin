@@ -11,9 +11,12 @@ interface CommentRepository : JpaRepository<CommentEntity, Long> {
     @Query(
         """
         SELECT DISTINCT c FROM CommentEntity c 
-        LEFT JOIN FETCH c.feedEntity 
-        LEFT JOIN FETCH c.userEntity 
-        LEFT JOIN FETCH c.recommendationEntities 
+        INNER JOIN FETCH c.feedEntity 
+        INNER JOIN FETCH c.userEntity
+        LEFT JOIN FETCH c.userEntity.profileImageEntity
+        INNER JOIN FETCH c.userEntity.crewEntity
+        LEFT JOIN FETCH c.recommendationEntities
+        LEFT JOIN FETCH c.child
         WHERE c.feedId = :feedId
         """
     )
@@ -24,4 +27,18 @@ interface CommentRepository : JpaRepository<CommentEntity, Long> {
     fun countByFeedId(feedId: Long): Int
 
     fun findAllByUserId(userId: Long): List<CommentEntity>
+
+    @Query(
+        """
+        SELECT DISTINCT c FROM CommentEntity c 
+        INNER JOIN FETCH c.feedEntity 
+        INNER JOIN FETCH c.userEntity
+        LEFT JOIN FETCH c.userEntity.profileImageEntity
+        INNER JOIN FETCH c.userEntity.crewEntity
+        LEFT JOIN FETCH c.recommendationEntities
+        LEFT JOIN FETCH c.child
+        WHERE c.id = :id
+        """
+    )
+    fun findByIdOrNull(id: Long): CommentEntity?
 }
