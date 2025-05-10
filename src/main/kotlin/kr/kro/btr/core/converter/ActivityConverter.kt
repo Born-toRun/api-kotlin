@@ -1,10 +1,10 @@
 package kr.kro.btr.core.converter
 
 import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityRequest
-import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.OpenActivityResponse
+import kr.kro.btr.adapter.`in`.web.payload.ParticipationActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityResponse.Host
@@ -15,9 +15,9 @@ import kr.kro.btr.domain.entity.ActivityParticipationEntity
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.port.model.ActivityResult
 import kr.kro.btr.domain.port.model.AttendanceActivityCommand
-import kr.kro.btr.domain.port.model.AttendanceResult
 import kr.kro.btr.domain.port.model.CreateActivityCommand
 import kr.kro.btr.domain.port.model.ModifyActivityCommand
+import kr.kro.btr.domain.port.model.ParticipantResult
 import kr.kro.btr.domain.port.model.ParticipateActivityCommand
 import kr.kro.btr.domain.port.model.SearchAllActivityCommand
 import kr.kro.btr.infrastructure.model.AttendanceActivityQuery
@@ -97,17 +97,18 @@ class ActivityConverter {
         )
     }
 
-    fun map(source: AttendanceResult): AttendanceActivityResponse {
-        val participants = source.participants.map { participant ->
-            AttendanceActivityResponse.Person(
+    fun map(source: ParticipantResult): ParticipationActivityResponse {
+        val participants = source.participants?.map { participant ->
+            ParticipationActivityResponse.Person(
+                participationId = participant.participationId,
                 userId = participant.userId,
                 userName = participant.userName,
                 crewName = participant.crewName,
                 userProfileUri = participant.userProfileUri
             )
         }
-        return AttendanceActivityResponse(
-            host = AttendanceActivityResponse.Person(
+        return ParticipationActivityResponse(
+            host = ParticipationActivityResponse.Person(
                 userId = source.host.userId,
                 userName = source.host.userName,
                 crewName = source.host.crewName,
@@ -290,10 +291,11 @@ class ActivityConverter {
         )
     }
 
-    fun map(host: UserEntity, participants: List<UserEntity>): AttendanceResult {
-        return AttendanceResult(
+    fun map(source: List<ActivityParticipationEntity>): ParticipantResult{
+        val host = source.first().activityEntity!!.userEntity!!
+        return ParticipantResult(
             host = map(host),
-            participants = map(participants)
+            participants = mapToParticipant(source)
         )
     }
 
@@ -320,18 +322,33 @@ class ActivityConverter {
         )
     }
 
-    fun map(source: List<UserEntity>): List<AttendanceResult.Participant> {
-        return source.map { userEntity ->
-            map(userEntity)
+    fun mapToParticipant(source: List<ActivityParticipationEntity>): List<ParticipantResult.Participant> {
+        return source.map { activityParticipationEntity ->
+            val userEntity = activityParticipationEntity.userEntity!!
+
+            ParticipantResult.Participant(
+                participationId = activityParticipationEntity.id,
+                userId = userEntity.id,
+                userName = userEntity.name,
+                crewName = userEntity.crewEntity!!.name,
+                userProfileUri = userEntity.getProfileImageUri()
+
+            )
         }
     }
 
-    fun map(source: UserEntity): AttendanceResult.Participant {
-        return AttendanceResult.Participant(
+    fun map(source: UserEntity): ParticipantResult.Participant {
+        return ParticipantResult.Participant(
             userId = source.id,
             userName = source.name,
             crewName = source.crewEntity?.name,
             userProfileUri = source.getProfileImageUri()
+        )
+    }
+
+    fun mapToParticipantResult(source: ActivityEntity): ParticipantResult {
+        return ParticipantResult(
+            host = map(source.userEntity!!)
         )
     }
 

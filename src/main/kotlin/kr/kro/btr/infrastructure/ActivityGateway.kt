@@ -59,8 +59,12 @@ class ActivityGateway(
         activityRepository.deleteById(activityId)
     }
 
-    fun participate(participateActivityQuery: ParticipateActivityQuery) {
-        val activityParticipationEntity = activityConverter.map(participateActivityQuery)
+    fun participate(query: ParticipateActivityQuery) {
+        if (!activityRepository.existsById(query.activityId)) {
+            throw NotFoundException("행사를 찾을 수 없습니다.")
+        }
+
+        val activityParticipationEntity = activityParticipationRepository.findByActivityIdAndUserId(query.activityId, query.myUserId) ?: activityConverter.map(query)
         activityParticipationRepository.save(activityParticipationEntity)
     }
 

@@ -2,10 +2,10 @@ package kr.kro.btr.adapter.`in`.web
 
 import jakarta.validation.Valid
 import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityRequest
-import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.OpenActivityResponse
+import kr.kro.btr.adapter.`in`.web.payload.ParticipationActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchAllActivityRequest
@@ -47,18 +47,6 @@ class ActivityController(
         return ResponseEntity.ok().build()
     }
 
-    @PostMapping("/participation/{activityId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun participate(@AuthUser my: TokenDetail, @PathVariable activityId: Long): ResponseEntity<Void> {
-        activityProxy.participate(activityId, my.id)
-        return ResponseEntity(CREATED)
-    }
-
-    @PostMapping("/participation-cancel/{participationId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun participateCancel(@AuthUser my: TokenDetail, @PathVariable participationId: Long): ResponseEntity<Void> {
-        activityProxy.participateCancel(participationId)
-        return ResponseEntity(CREATED)
-    }
-
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun searchAll(
         @AuthUser my: TokenDetail,
@@ -86,13 +74,25 @@ class ActivityController(
         return ResponseEntity.ok(response)
     }
 
-    @GetMapping("/attendance/{activityId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping("/participation/{activityId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun participate(@AuthUser my: TokenDetail, @PathVariable activityId: Long): ResponseEntity<Void> {
+        activityProxy.participate(activityId, my.id)
+        return ResponseEntity(CREATED)
+    }
+
+    @PostMapping("/participation-cancel/{participationId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun participateCancel(@AuthUser my: TokenDetail, @PathVariable participationId: Long): ResponseEntity<Void> {
+        activityProxy.participateCancel(participationId)
+        return ResponseEntity(CREATED)
+    }
+
+    @GetMapping("/participation/{activityId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun searchAttendance(
         @AuthUser my: TokenDetail,
         @PathVariable activityId: Long
-    ): ResponseEntity<AttendanceActivityResponse> {
-        val attendanceResult = activityProxy.getAttendance(activityId)
-        val response = activityConverter.map(attendanceResult)
+    ): ResponseEntity<ParticipationActivityResponse> {
+        val participationResult = activityProxy.getParticipation(activityId)
+        val response = activityConverter.map(participationResult)
         return ResponseEntity.ok(response)
     }
 

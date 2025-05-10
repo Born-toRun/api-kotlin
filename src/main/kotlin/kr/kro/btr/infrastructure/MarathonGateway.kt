@@ -7,7 +7,6 @@ import kr.kro.btr.domain.entity.MarathonEntity
 import kr.kro.btr.infrastructure.model.BookmarkMarathonQuery
 import kr.kro.btr.infrastructure.model.SearchMarathonQuery
 import kr.kro.btr.support.exception.NotFoundException
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component

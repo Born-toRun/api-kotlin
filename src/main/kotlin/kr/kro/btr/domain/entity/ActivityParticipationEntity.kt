@@ -20,7 +20,7 @@ class ActivityParticipationEntity(
     var isAttendance: Boolean = true,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "activityId", insertable = false, updatable = false)
     val activityEntity: ActivityEntity? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)

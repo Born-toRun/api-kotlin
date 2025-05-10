@@ -2,9 +2,9 @@ package kr.kro.btr.domain.port
 
 import kr.kro.btr.domain.port.model.ActivityResult
 import kr.kro.btr.domain.port.model.AttendanceActivityCommand
-import kr.kro.btr.domain.port.model.AttendanceResult
 import kr.kro.btr.domain.port.model.CreateActivityCommand
 import kr.kro.btr.domain.port.model.ModifyActivityCommand
+import kr.kro.btr.domain.port.model.ParticipantResult
 import kr.kro.btr.domain.port.model.ParticipateActivityCommand
 import kr.kro.btr.domain.port.model.SearchAllActivityCommand
 
@@ -19,5 +19,5 @@ interface ActivityPort {
     fun search(activityId: Long, myUserId: Long): ActivityResult
     fun open(activityId: Long): ActivityResult
     fun attendance(command: AttendanceActivityCommand)
-    fun getAttendance(activityId: Long): AttendanceResult
+    fun getParticipation(activityId: Long): ParticipantResult
 }

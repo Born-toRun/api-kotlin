@@ -5,7 +5,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
 import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityRequest
-import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityResponse
+import kr.kro.btr.adapter.`in`.web.payload.ParticipationActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.OpenActivityResponse
@@ -17,7 +17,7 @@ import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.core.converter.ActivityConverter
 import kr.kro.btr.domain.constant.ActivityRecruitmentType
 import kr.kro.btr.domain.port.model.ActivityResult
-import kr.kro.btr.domain.port.model.AttendanceResult
+import kr.kro.btr.domain.port.model.ParticipantResult
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.ARRAY
 import kr.kro.btr.utils.restdocs.BOOLEAN
@@ -525,15 +525,15 @@ class ActivityControllerTest (
     describe("GET : $baseUrl/attendance/{activityId}") {
         val url = "$baseUrl/attendance/{activityId}"
         val activityId = 0L
-        val attendanceResult = AttendanceResult(
-            host = AttendanceResult.Participant(
+        val participantResult = ParticipantResult(
+            host = ParticipantResult.Participant(
                 userId = 0,
                 userName = "userName",
                 crewName = "crewName",
                 userProfileUri = "userProfileUri"
             ),
             participants = listOf(
-                AttendanceResult.Participant(
+                ParticipantResult.Participant(
                     userId = 0,
                     userName = "userName",
                     crewName = "crewName",
@@ -541,19 +541,19 @@ class ActivityControllerTest (
                 )
             )
         )
-        val response = AttendanceActivityResponse(
-            host = AttendanceActivityResponse.Person(
-                userId = attendanceResult.host.userId,
-                userName = attendanceResult.host.userName,
-                crewName = attendanceResult.host.crewName,
-                userProfileUri = attendanceResult.host.userProfileUri
+        val response = ParticipationActivityResponse(
+            host = ParticipationActivityResponse.Person(
+                userId = participantResult.host.userId,
+                userName = participantResult.host.userName,
+                crewName = participantResult.host.crewName,
+                userProfileUri = participantResult.host.userProfileUri
             ),
             participants = listOf(
-                AttendanceActivityResponse.Person(
-                    userId = attendanceResult.participants[0].userId,
-                    userName = attendanceResult.participants[0].userName,
-                    crewName = attendanceResult.participants[0].crewName,
-                    userProfileUri = attendanceResult.participants[0].userProfileUri
+                ParticipationActivityResponse.Person(
+                    userId = participantResult.participants[0].userId,
+                    userName = participantResult.participants[0].userName,
+                    crewName = participantResult.participants[0].crewName,
+                    userProfileUri = participantResult.participants[0].userProfileUri
                 )
             )
         )
@@ -563,8 +563,8 @@ class ActivityControllerTest (
                 .contentType(APPLICATION_JSON)
 
             it("200 OK") {
-                every { proxy.getAttendance(any()) } returns attendanceResult
-                every { converter.map(any<AttendanceResult>()) } returns response
+                every { proxy.getParticipation(any()) } returns participantResult
+                every { converter.map(any<ParticipantResult>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
