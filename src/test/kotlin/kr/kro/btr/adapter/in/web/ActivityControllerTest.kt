@@ -5,10 +5,10 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
 import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityRequest
-import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.OpenActivityResponse
+import kr.kro.btr.adapter.`in`.web.payload.ParticipationActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchAllActivityRequest
@@ -17,7 +17,7 @@ import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.core.converter.ActivityConverter
 import kr.kro.btr.domain.constant.ActivityRecruitmentType
 import kr.kro.btr.domain.port.model.ActivityResult
-import kr.kro.btr.domain.port.model.AttendanceResult
+import kr.kro.btr.domain.port.model.ParticipantResult
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.ARRAY
 import kr.kro.btr.utils.restdocs.BOOLEAN
@@ -522,18 +522,19 @@ class ActivityControllerTest (
         }
     }
 
-    describe("GET : $baseUrl/attendance/{activityId}") {
-        val url = "$baseUrl/attendance/{activityId}"
+    describe("GET : $baseUrl/participation/{activityId}") {
+        val url = "$baseUrl/participation/{activityId}"
         val activityId = 0L
-        val attendanceResult = AttendanceResult(
-            host = AttendanceResult.Participant(
+        val participantResult = ParticipantResult(
+            host = ParticipantResult.Participant(
                 userId = 0,
                 userName = "userName",
                 crewName = "crewName",
                 userProfileUri = "userProfileUri"
             ),
             participants = listOf(
-                AttendanceResult.Participant(
+                ParticipantResult.Participant(
+                    participationId = 0,
                     userId = 0,
                     userName = "userName",
                     crewName = "crewName",
@@ -541,19 +542,20 @@ class ActivityControllerTest (
                 )
             )
         )
-        val response = AttendanceActivityResponse(
-            host = AttendanceActivityResponse.Person(
-                userId = attendanceResult.host.userId,
-                userName = attendanceResult.host.userName,
-                crewName = attendanceResult.host.crewName,
-                userProfileUri = attendanceResult.host.userProfileUri
+        val response = ParticipationActivityResponse(
+            host = ParticipationActivityResponse.Person(
+                userId = participantResult.host.userId,
+                userName = participantResult.host.userName,
+                crewName = participantResult.host.crewName,
+                userProfileUri = participantResult.host.userProfileUri
             ),
             participants = listOf(
-                AttendanceActivityResponse.Person(
-                    userId = attendanceResult.participants[0].userId,
-                    userName = attendanceResult.participants[0].userName,
-                    crewName = attendanceResult.participants[0].crewName,
-                    userProfileUri = attendanceResult.participants[0].userProfileUri
+                ParticipationActivityResponse.Person(
+                    participationId = participantResult.participants!![0].participationId,
+                    userId = participantResult.participants[0].userId,
+                    userName = participantResult.participants[0].userName,
+                    crewName = participantResult.participants[0].crewName,
+                    userProfileUri = participantResult.participants[0].userProfileUri
                 )
             )
         )
@@ -563,8 +565,8 @@ class ActivityControllerTest (
                 .contentType(APPLICATION_JSON)
 
             it("200 OK") {
-                every { proxy.getAttendance(any()) } returns attendanceResult
-                every { converter.map(any<AttendanceResult>()) } returns response
+                every { proxy.getParticipation(any()) } returns participantResult
+                every { converter.map(any<ParticipantResult>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -573,19 +575,21 @@ class ActivityControllerTest (
                         jsonPath("$.host.userName") shouldBe response.host.userName,
                         jsonPath("$.host.crewName") shouldBe response.host.crewName,
                         jsonPath("$.host.userProfileUri") shouldBe response.host.userProfileUri,
+                        jsonPath("$.participants[0].participationId") shouldBe response.participants!![0].participationId,
                         jsonPath("$.participants[0].userId") shouldBe response.participants[0].userId,
                         jsonPath("$.participants[0].userName") shouldBe response.participants[0].userName,
                         jsonPath("$.participants[0].crewName") shouldBe response.participants[0].crewName,
                         jsonPath("$.participants[0].userProfileUri") shouldBe response.participants[0].userProfileUri,
                     )
                     .andDocument(
-                        "search-activities-attendance",
+                        "search-activities-participation",
                         pathParameters(
                             "activityId" pathMeans "식별자"
                         ),
                         responseBody(
                             "host" type OBJECT means "호스트" isOptional false,
-                            "host.userId" type NUMBER means "식별자" isOptional false,
+                            "host.participationId" type NUMBER means "참여 식별자" isOptional true,
+                            "host.userId" type NUMBER means "유저 식별자" isOptional false,
                             "host.userName" type STRING means "유저명" isOptional true,
                             "host.crewName" type STRING means "소속 크루명" isOptional true,
                             "host.userProfileUri" type STRING means "프로필 이미지 uri" isOptional true,
@@ -631,7 +635,8 @@ class ActivityControllerTest (
     companion object {
         fun getParticipantsResponseSnippet(): List<FieldDescriptor> {
             return descriptor(
-                "userId" type NUMBER means "식별자" isOptional false,
+                "participationId" type NUMBER means "참여 식별자" isOptional true,
+                "userId" type NUMBER means "유저 식별자" isOptional false,
                 "userName" type STRING means "유저명" isOptional true,
                 "crewName" type STRING means "소속 크루명" isOptional true,
                 "userProfileUri" type STRING means "프로필 이미지 Uri" isOptional true

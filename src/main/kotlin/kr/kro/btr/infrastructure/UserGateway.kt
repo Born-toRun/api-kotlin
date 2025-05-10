@@ -34,7 +34,7 @@ class UserGateway(
         return userRepository.save(userEntity)
     }
 
-    fun modify(query: SignUpUserQuery): String {
+    fun signUp(query: SignUpUserQuery): String {
         val userEntity = searchById(query.userId)
         userEntity.modify(query.userName, query.crewId, query.instagramId)
         return userRepository.save(userEntity).name!!

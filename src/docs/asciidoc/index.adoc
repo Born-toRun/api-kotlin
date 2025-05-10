@@ -111,7 +111,7 @@ operation::search-activities[snippets="http-request,request-fields,http-response
 operation::search-activities-detail[snippets="http-request,path-parameters,http-response,response-fields"]
 === 오픈
 operation::open-activities[snippets="http-request,path-parameters,http-response,response-fields"]
-=== 출석체크 조회
-operation::search-activities-attendance[snippets="http-request,path-parameters,http-response,response-fields"]
+=== 참여자 조회
+operation::search-activities-participation[snippets="http-request,path-parameters,http-response,response-fields"]
 === 출석체크
 operation::activities-attendance[snippets="http-request,path-parameters,request-fields,http-response"]

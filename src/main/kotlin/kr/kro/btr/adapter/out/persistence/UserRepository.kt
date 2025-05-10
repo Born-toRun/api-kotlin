@@ -10,6 +10,7 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
         """
         SELECT u FROM UserEntity u 
         LEFT JOIN FETCH u.crewEntity 
+        INNER JOIN FETCH u.userPrivacyEntity
         LEFT JOIN FETCH u.profileImageEntity 
         WHERE u.id = :id
         """
