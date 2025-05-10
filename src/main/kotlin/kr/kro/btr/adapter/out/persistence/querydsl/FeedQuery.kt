@@ -15,6 +15,7 @@ import kr.kro.btr.domain.entity.QRecommendationEntity
 import kr.kro.btr.domain.entity.QUserEntity
 import kr.kro.btr.domain.entity.QUserPrivacyEntity
 import kr.kro.btr.infrastructure.model.SearchAllFeedQuery
+import kr.kro.btr.support.exception.AuthorizationException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
@@ -69,7 +70,7 @@ class FeedQuery(private val queryFactory: JPAQueryFactory) {
 
         whereClause = if (query.isMyCrew) {
             whereClause.and(
-                feed.userEntity.crewId.eq(query.my?.crewId)
+                feed.userEntity.crewId.eq(query.my?.crewId ?: throw AuthorizationException("로그인이 필요합니다."))
                     .and(feed.accessLevel.eq(FeedAccessLevel.IN_CREW))
             )
         } else {

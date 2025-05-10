@@ -1030,7 +1030,7 @@ Content-Length: 397
   "homepage" : "homepage",
   "venueDetail" : "venueDetail",
   "remark" : "remark",
-  "registeredAt" : "2025-05-07T20:01:23",
+  "registeredAt" : "2025-05-10T10:05:29",
   "isBookmarking" : true
 }</code></pre>
 </div>
@@ -1647,10 +1647,10 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 51
+Content-Length: 28
 
 {
-  "searchKeywords" : [ "keyword1", "keyword2" ]
+  "searchKeywords" : [ ]
 }</code></pre>
 </div>
 </div>
@@ -2305,17 +2305,18 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 466
+Content-Length: 485
 
 {
   "id" : 0,
   "contents" : "contents",
+  "images" : null,
   "category" : "COMMUNITY",
   "accessLevel" : "ALL",
   "viewQty" : 0,
   "recommendationQty" : 0,
   "commentQty" : 0,
-  "registeredAt" : "2025-05-07T20:01:22",
+  "registeredAt" : "2025-05-10T10:05:28",
   "writer" : {
     "userId" : 0,
     "userName" : "userName",
@@ -2729,7 +2730,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 905
+Content-Length: 929
 
 {
   "totalElements" : 1,
@@ -2739,11 +2740,12 @@ Content-Length: 905
   "size" : 10,
   "content" : [ {
     "id" : 0,
+    "imageUris" : null,
     "contents" : "contents",
     "viewQty" : 0,
     "recommendationQty" : 0,
     "commentQty" : 0,
-    "registeredAt" : "2025-05-07T20:01:23",
+    "registeredAt" : "2025-05-10T10:05:29",
     "writer" : {
       "userName" : "userName",
       "crewName" : "crewName",
@@ -3048,11 +3050,12 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 392
+Content-Length: 415
 
 {
   "comments" : [ {
     "id" : 0,
+    "parentId" : null,
     "reCommentQty" : 0,
     "writer" : {
       "userId" : 0,
@@ -3063,7 +3066,7 @@ Content-Length: 392
       "isManager" : false
     },
     "contents" : "contents",
-    "registeredAt" : "2025-05-07T20:01:21",
+    "registeredAt" : "2025-05-10T10:05:27",
     "isMyComment" : true,
     "isReComment" : false
   } ]
@@ -3222,11 +3225,11 @@ Content-Length: 609
     "isManager" : false
   },
   "contents" : "contents",
-  "registeredAt" : "2025-05-07T20:01:21",
+  "registeredAt" : "2025-05-10T10:05:27",
   "reComments" : [ {
     "id" : 0,
     "contents" : "contents",
-    "registeredAt" : "2025-05-07T20:01:21",
+    "registeredAt" : "2025-05-10T10:05:27",
     "writer" : {
       "userId" : 0,
       "userName" : "userName",
@@ -3700,7 +3703,7 @@ Host: localhost:8080
 {
   "title" : "title",
   "contents" : "contents",
-  "startAt" : "2025-05-07T20:01:17.603773",
+  "startAt" : "2025-05-10T10:05:26.150965",
   "venue" : "venue",
   "venueUrl" : "venueUrl",
   "participantsLimit" : 0,
@@ -3807,7 +3810,7 @@ Host: localhost:8080
 {
   "title" : "title",
   "contents" : "contents",
-  "startAt" : "2025-05-07T20:01:18.220103",
+  "startAt" : "2025-05-10T10:05:26.493145",
   "venue" : "venue",
   "venueUrl" : "venueUrl",
   "participantsLimit" : 0,
@@ -4131,12 +4134,12 @@ Content-Length: 547
       "isManager" : true,
       "isAdmin" : false
     },
-    "startAt" : "2025-05-07T20:01:18",
+    "startAt" : "2025-05-10T10:05:26",
     "course" : "course",
     "participantsLimit" : 1,
     "participantsQty" : 1,
-    "updatedAt" : "2025-05-07T20:01:18",
-    "registeredAt" : "2025-05-07T20:01:18",
+    "updatedAt" : "2025-05-10T10:05:26",
+    "registeredAt" : "2025-05-10T10:05:26",
     "isOpen" : true,
     "recruitmentType" : "RECRUITING"
   } ]
@@ -4308,7 +4311,7 @@ Content-Length: 601
   "id" : 0,
   "title" : "title",
   "contents" : "contents",
-  "startAt" : "2025-05-07T20:01:20",
+  "startAt" : "2025-05-10T10:05:27",
   "venue" : "venue",
   "venueUrl" : "venueUrl",
   "participantsLimit" : 1,
@@ -4327,8 +4330,8 @@ Content-Length: 601
     "isAdmin" : false
   },
   "isOpen" : true,
-  "updatedAt" : "2025-05-07T20:01:20",
-  "registeredAt" : "2025-05-07T20:01:20"
+  "updatedAt" : "2025-05-10T10:05:27",
+  "registeredAt" : "2025-05-10T10:05:27"
 }</code></pre>
 </div>
 </div>
@@ -4763,7 +4766,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2025-05-07 19:56:38 +0900
+Last updated 2025-05-08 17:12:48 +0900
 </div>
 </div>
 </body>
