@@ -87,14 +87,16 @@ class UserEntity(
     }
 
     fun modify(userName: String?, crewId: Long?, instagramId: String?) {
-        if (crewId != null && crewId != 0L) {
-            this.crewId = crewId
+        crewId?.takeIf { it != 0L }?.let {
+            this.crewId = it
         }
-        if (StringUtils.hasLength(instagramId)) {
-            this.instagramId = instagramId
+
+        instagramId?.takeIf { it.isNotBlank() }?.let {
+            this.instagramId = it
         }
-        if (StringUtils.hasLength(userName)) {
-            this.name = userName
+
+        userName?.takeIf { it.isNotBlank() }?.let {
+            this.name = it
         }
     }
 

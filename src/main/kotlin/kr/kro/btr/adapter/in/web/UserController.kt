@@ -23,7 +23,7 @@ class UserController(
 ) {
 
     @PostMapping("/refresh", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun signIn(request: HttpServletRequest): ResponseEntity<Void> {
+    fun refresh(request: HttpServletRequest): ResponseEntity<Void> {
         // TODO
         return ResponseEntity.noContent().build()
     }

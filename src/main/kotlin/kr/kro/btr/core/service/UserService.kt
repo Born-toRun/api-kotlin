@@ -19,7 +19,7 @@ class UserService(
     @Transactional
     override fun signUp(command: SignUpCommand): String {
         val query = userConverter.map(command)
-        return userGateway.modify(query)
+        return userGateway.signUp(query)
     }
 
     @Transactional
