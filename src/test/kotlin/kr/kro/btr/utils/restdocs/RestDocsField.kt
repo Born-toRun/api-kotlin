@@ -44,7 +44,7 @@ class RestDocsField(
 	}
 
 	infix fun isOptional(value: Boolean): RestDocsField {
-        val att: Attribute = Attribute("optional", value)
+        val att: Attribute = Attribute("required", !value)
         descriptor.attributes(att)
 //		if (value) descriptor.optional()
 		return this

@@ -74,7 +74,7 @@ class CrewControllerTest (
             crewSnsUri = crew.sns
         )))
 
-        context("조회를 하면") {
+        context("목록 조회를 하면") {
             val request = request(HttpMethod.GET, url)
                 .contentType(APPLICATION_JSON)
 
