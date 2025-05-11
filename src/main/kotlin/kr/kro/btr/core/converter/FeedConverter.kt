@@ -136,6 +136,17 @@ class FeedConverter {
     }
 
     fun map(source: FeedEntity, my: TokenDetail): FeedResult {
+        val writer = source.userEntity!!
+        val images = if (source.feedImageMappingEntities.isNotEmpty()) {
+            source.feedImageMappingEntities.map { image ->
+                FeedResult.Image(
+                    id = image.objectStorageEntity!!.id,
+                    imageUri = image.objectStorageEntity!!.fileUri
+                )
+            }
+        } else {
+            null
+        }
         return FeedResult(
             id = source.id,
             contents = source.contents,
@@ -145,19 +156,14 @@ class FeedConverter {
             registeredAt = source.registeredAt,
             updatedAt = source.updatedAt,
 
-            images = source.feedImageMappingEntities.map { image ->
-                FeedResult.Image(
-                    id = image.objectStorageEntity?.id,
-                    imageUri = image.objectStorageEntity?.fileUri
-                )
-            },
+            images = images,
             writer = FeedResult.Writer(
-                userId = source.userEntity?.id,
-                userName = source.userEntity?.name,
-                crewName = source.userEntity?.crewEntity?.name,
-                profileImageUri = source.userEntity?.getProfileImageUri(),
-                isAdmin = source.userEntity?.getIsAdmin(),
-                isManager = source.userEntity?.getIsManager()
+                userId = writer.id,
+                userName = writer.name!!,
+                crewName = writer.crewEntity!!.name,
+                profileImageUri = writer.getProfileImageUri(),
+                isAdmin = writer.getIsAdmin(),
+                isManager = writer.getIsManager()
             ),
             recommendationQty = source.recommendationEntities.size,
             hasMyRecommendation = source.hasMyRecommendation(my.id),
@@ -178,6 +184,7 @@ class FeedConverter {
     }
 
     fun map(source: FeedEntity, userId: Long): FeedCard {
+        val writer = source.userEntity!!
         return FeedCard(
             id = source.id,
             imageUris = source.getImageUris(),
@@ -190,11 +197,11 @@ class FeedConverter {
             hasComment = source.hasMyComment(userId),
 
             writer = FeedCard.Writer(
-                userName = source.userEntity?.name,
-                crewName = source.userEntity?.crewEntity?.name,
-                profileImageUri = source.userEntity?.getProfileImageUri(),
-                isAdmin = source.userEntity?.getIsAdmin(),
-                isManager = source.userEntity?.getIsManager(),
+                userName = writer.name!!,
+                crewName = writer.crewEntity!!.name,
+                profileImageUri = writer.getProfileImageUri(),
+                isAdmin = writer.getIsAdmin(),
+                isManager = writer.getIsManager(),
             ),
         )
     }

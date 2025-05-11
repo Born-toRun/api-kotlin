@@ -15,10 +15,10 @@ data class FeedCard(
     val hasComment: Boolean
 ) {
     data class Writer(
-        val userName: String?,
-        val crewName: String?,
+        val userName: String,
+        val crewName: String,
         val profileImageUri: String?,
-        val isAdmin: Boolean?,
-        val isManager: Boolean?
+        val isAdmin: Boolean,
+        val isManager: Boolean
     )
 }

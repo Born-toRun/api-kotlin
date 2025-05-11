@@ -20,17 +20,17 @@ data class DetailFeedResponse(
     val viewer: Viewer
 ) {
         data class Image(
-        val imageId: Long?,
-        val imageUri: String?
+        val imageId: Long,
+        val imageUri: String
     )
 
         data class Writer(
-        val userId: Long?,
-        val userName: String?,
-        val crewName: String?,
+        val userId: Long,
+        val userName: String,
+        val crewName: String,
         val profileImageUri: String?,
-        val isAdmin: Boolean?,
-        val isManager: Boolean?
+        val isAdmin: Boolean,
+        val isManager: Boolean
     )
 
         data class Viewer(
