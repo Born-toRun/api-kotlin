@@ -71,11 +71,11 @@ class MarathonControllerTest (
                     schedule = marathons[0].schedule,
                     venue = marathons[0].venue,
                     course = marathons[0].course,
-                    isBookmarking = marathons[0].isBookmarking
+                    isBookmarking = marathons[0].isBookmarking == true
                 )
             )
         )
-        context("조회를 하면") {
+        context("목록 조회를 하면") {
             val request = request(HttpMethod.GET, url)
                 .contentType(APPLICATION_JSON)
 
@@ -272,7 +272,7 @@ class MarathonControllerTest (
                 "schedule" type STRING means "대회일시" isRequired false,
                 "venue" type STRING means "대회장소" isRequired false,
                 "course" type STRING means "대회종목" isRequired false,
-                "isBookmarking" type BOOLEAN means "북마크 여부" isRequired false
+                "isBookmarking" type BOOLEAN means "북마크 여부" isRequired true
             )
         }
 

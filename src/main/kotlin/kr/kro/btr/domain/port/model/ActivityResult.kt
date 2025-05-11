@@ -24,12 +24,12 @@ data class ActivityResult(
     val host: Host
 ) {
     data class Host(
-        val userId: Long?,
-        val crewId: Long?,
+        val userId: Long,
+        val crewId: Long,
         val userProfileUri: String?,
-        val userName: String?,
-        val crewName: String?,
-        val isManager: Boolean?,
-        val isAdmin: Boolean?
+        val userName: String,
+        val crewName: String,
+        val isManager: Boolean,
+        val isAdmin: Boolean
     )
 }

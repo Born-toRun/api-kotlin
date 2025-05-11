@@ -8,8 +8,8 @@ data class ParticipationActivityResponse(
     data class Person(
         val participationId: Long? = null,
         val userId: Long,
-        val userName: String?,
-        val crewName: String?,
+        val userName: String,
+        val crewName: String,
         val userProfileUri: String?
     )
 }

@@ -329,7 +329,7 @@ class ActivityConverter {
             ParticipantResult.Participant(
                 participationId = activityParticipationEntity.id,
                 userId = userEntity.id,
-                userName = userEntity.name,
+                userName = userEntity.name!!,
                 crewName = userEntity.crewEntity!!.name,
                 userProfileUri = userEntity.getProfileImageUri()
 
@@ -340,8 +340,8 @@ class ActivityConverter {
     fun map(source: UserEntity): ParticipantResult.Participant {
         return ParticipantResult.Participant(
             userId = source.id,
-            userName = source.name,
-            crewName = source.crewEntity?.name,
+            userName = source.name!!,
+            crewName = source.crewEntity!!.name,
             userProfileUri = source.getProfileImageUri()
         )
     }
@@ -353,14 +353,15 @@ class ActivityConverter {
     }
 
     fun map(source: ActivityEntity): ActivityResult.Host {
+        val host = source.userEntity!!
         return ActivityResult.Host(
-            userId = source.userEntity?.id,
-            crewId = source.userEntity?.crewId,
-            userProfileUri = source.userEntity?.getProfileImageUri(),
-            userName = source.userEntity?.name,
-            crewName = source.userEntity?.crewEntity?.name,
-            isManager = source.userEntity?.getIsManager(),
-            isAdmin = source.userEntity?.getIsAdmin()
+            userId = host.id,
+            crewId = host.crewId!!,
+            userProfileUri = host.getProfileImageUri(),
+            userName = host.name!!,
+            crewName = host.crewEntity!!.name,
+            isManager = host.getIsManager(),
+            isAdmin = host.getIsAdmin()
         )
     }
 

@@ -9,13 +9,13 @@ data class SearchActivityResponse(
 ) {
 
     data class Host(
-        val userId: Long?,
-        val crewId: Long?,
+        val userId: Long,
+        val crewId: Long,
         val userProfileUri: String?,
-        val userName: String?,
-        val crewName: String?,
-        val isManager: Boolean?,
-        val isAdmin: Boolean?
+        val userName: String,
+        val crewName: String,
+        val isManager: Boolean,
+        val isAdmin: Boolean
     )
 
     data class Activity(
@@ -31,7 +31,7 @@ data class SearchActivityResponse(
         val updatedAt: LocalDateTime,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
         val registeredAt: LocalDateTime,
-        val isOpen: Boolean?,
+        val isOpen: Boolean,
         val recruitmentType: ActivityRecruitmentType?
     )
 }

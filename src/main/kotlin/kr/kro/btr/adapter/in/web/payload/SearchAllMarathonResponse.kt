@@ -9,6 +9,6 @@ data class SearchAllMarathonResponse(
         val schedule: String?,
         val venue: String?,
         val course: String?,
-        val isBookmarking: Boolean? = false
+        val isBookmarking: Boolean = false
     )
 }

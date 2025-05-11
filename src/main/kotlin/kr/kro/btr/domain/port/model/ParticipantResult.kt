@@ -7,8 +7,8 @@ data class ParticipantResult(
     data class Participant(
         val participationId: Long? = null,
         val userId: Long,
-        val userName: String?,
-        val crewName: String?,
+        val userName: String,
+        val crewName: String,
         val userProfileUri: String?
     )
 }

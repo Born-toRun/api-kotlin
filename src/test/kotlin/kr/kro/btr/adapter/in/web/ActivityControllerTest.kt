@@ -446,13 +446,13 @@ class ActivityControllerTest (
                             "updatedAt" type DATETIME means "수정일자" isRequired true,
                             "registeredAt" type DATETIME means "등록일자" isRequired true,
                             "host" type OBJECT means "호스트" isRequired true,
-                            "host.userId" type NUMBER means "식별자" isRequired false,
-                            "host.crewId" type NUMBER means "소속 크루 식별자" isRequired false,
+                            "host.userId" type NUMBER means "식별자" isRequired true,
+                            "host.crewId" type NUMBER means "소속 크루 식별자" isRequired true,
                             "host.userProfileUri" type STRING means "프로필 이미지 uri" isRequired false,
-                            "host.userName" type STRING means "유저명" isRequired false,
-                            "host.crewName" type STRING means "소속 크루명" isRequired false,
-                            "host.isManager" type BOOLEAN means "크루장 여부" isRequired false,
-                            "host.isAdmin" type BOOLEAN means "관리자 여부" isRequired false,
+                            "host.userName" type STRING means "유저명" isRequired true,
+                            "host.crewName" type STRING means "소속 크루명" isRequired true,
+                            "host.isManager" type BOOLEAN means "크루장 여부" isRequired true,
+                            "host.isAdmin" type BOOLEAN means "관리자 여부" isRequired true,
                         )
                     )
             }
@@ -590,8 +590,8 @@ class ActivityControllerTest (
                             "host" type OBJECT means "호스트" isRequired true,
                             "host.participationId" type NUMBER means "참여 식별자" isRequired false,
                             "host.userId" type NUMBER means "유저 식별자" isRequired true,
-                            "host.userName" type STRING means "유저명" isRequired false,
-                            "host.crewName" type STRING means "소속 크루명" isRequired false,
+                            "host.userName" type STRING means "유저명" isRequired true,
+                            "host.crewName" type STRING means "소속 크루명" isRequired true,
                             "host.userProfileUri" type STRING means "프로필 이미지 uri" isRequired false,
                             "participants" type ARRAY means "참여자 목록" isRequired true
                         )
@@ -656,10 +656,10 @@ class ActivityControllerTest (
                 "isOpen" type BOOLEAN means "오픈 여부" isRequired false,
                 "recruitmentType" type STRING means "상태" isRequired false,
                 "host" type OBJECT means "호스트" isRequired true,
-                "host.userId" type NUMBER means "식별자" isRequired false,
+                "host.userId" type NUMBER means "식별자" isRequired true,
                 "host.crewId" type NUMBER means "소속 크루 식별자" isRequired false,
                 "host.userProfileUri" type STRING means "프로필 이미지 uri" isRequired false,
-                "host.userName" type STRING means "유저명" isRequired false,
+                "host.userName" type STRING means "유저명" isRequired true,
                 "host.crewName" type STRING means "소속 크루명" isRequired false,
                 "host.isManager" type BOOLEAN means "크루장 여부" isRequired false,
                 "host.isAdmin" type BOOLEAN means "관리자 여부" isRequired false

@@ -79,6 +79,7 @@ class CommentControllerTest (
                     profileImageUri = "profileImageUri",
                     crewName = "crewName",
                     isAdmin = true,
+                    isManager = false
                 ),
             )
         )
@@ -173,6 +174,7 @@ class CommentControllerTest (
                         profileImageUri = "profileImageUri",
                         crewName = "crewName",
                         isAdmin = true,
+                        isManager = false
                     ),
                 )
             )
@@ -249,12 +251,12 @@ class CommentControllerTest (
                             "contents" type STRING means "내용" isRequired true,
                             "registeredAt" type DATETIME means "등록일자" isRequired true,
                             "writer" type OBJECT means "작성자" isRequired true,
-                            "writer.userId" type NUMBER means "유저 식별자" isRequired false,
-                            "writer.userName" type STRING means "유저명" isRequired false,
+                            "writer.userId" type NUMBER means "유저 식별자" isRequired true,
+                            "writer.userName" type STRING means "유저명" isRequired true,
                             "writer.profileImageUri" type STRING means "프로필 이미지 uri" isRequired false,
-                            "writer.crewName" type STRING means "소속 크루 명" isRequired false,
-                            "writer.isAdmin" type BOOLEAN means "관리자 여부" isRequired false,
-                            "writer.isManager" type BOOLEAN means "크루장 여부" isRequired false,
+                            "writer.crewName" type STRING means "소속 크루 명" isRequired true,
+                            "writer.isAdmin" type BOOLEAN means "관리자 여부" isRequired true,
+                            "writer.isManager" type BOOLEAN means "크루장 여부" isRequired true,
                             "reComments" type ARRAY means "대댓글 목록" isRequired true,
                         )
                             .andWithPrefix("reComments[]", getReCommentsResponseSnippet())
@@ -339,6 +341,7 @@ class CommentControllerTest (
                 profileImageUri = "profileImageUri",
                 crewName = "crewName",
                 isAdmin = true,
+                isManager = false
             ),
         )
         val response = ModifyCommentResponse(
@@ -434,12 +437,12 @@ class CommentControllerTest (
                 "isMyComment" type BOOLEAN means "나의 댓글 여부" isRequired true,
                 "isReComment" type BOOLEAN means "대댓글 여부" isRequired true,
                 "writer" type OBJECT means "식별자" isRequired true,
-                "writer.userId" type NUMBER means "식별자" isRequired false,
-                "writer.userName" type STRING means "유저명" isRequired false,
+                "writer.userId" type NUMBER means "식별자" isRequired true,
+                "writer.userName" type STRING means "유저명" isRequired true,
                 "writer.profileImageUri" type STRING means "프로필 이미지 uri" isRequired false,
-                "writer.crewName" type STRING means "소속 크루명" isRequired false,
-                "writer.isAdmin" type BOOLEAN means "관리자 여부" isRequired false withDefaultValue "false",
-                "writer.isManager" type BOOLEAN means "크루장 여부" isRequired false withDefaultValue "false",
+                "writer.crewName" type STRING means "소속 크루명" isRequired true,
+                "writer.isAdmin" type BOOLEAN means "관리자 여부" isRequired true,
+                "writer.isManager" type BOOLEAN means "크루장 여부" isRequired true,
             )
         }
 

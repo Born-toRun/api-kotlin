@@ -113,6 +113,7 @@ class CommentConverter {
     }
 
     fun map(source: CommentEntity, userId: Long): CommentResult {
+        val writer = source.userEntity!!
         return CommentResult(
             id = source.id,
             parentId = source.parentId,
@@ -123,17 +124,18 @@ class CommentConverter {
             updatedAt = source.updatedAt,
             isMyComment = source.userId == userId,
             writer = CommentResult.Writer(
-                userId = source.userEntity?.id,
-                userName = source.userEntity?.name,
-                profileImageUri = source.userEntity?.getProfileImageUri(),
-                crewName = source.userEntity?.crewEntity?.name,
-                isAdmin = source.userEntity?.getIsAdmin(),
-                isManager = source.userEntity?.getIsManager()
+                userId = writer.id,
+                userName = writer.name!!,
+                profileImageUri = writer.getProfileImageUri(),
+                crewName = writer.crewEntity!!.name,
+                isAdmin = writer.getIsAdmin(),
+                isManager = writer.getIsManager()
             )
         )
     }
 
     fun map(source: CommentEntity): CommentResult {
+        val writer = source.userEntity!!
         return CommentResult(
             id = source.id,
             parentId = source.parentId,
@@ -142,12 +144,12 @@ class CommentConverter {
             registeredAt = source.registeredAt,
             updatedAt = source.updatedAt,
             writer = CommentResult.Writer(
-                userId = source.userEntity?.id,
-                userName = source.userEntity?.name,
-                profileImageUri = source.userEntity?.getProfileImageUri(),
-                crewName = source.userEntity?.crewEntity?.name,
-                isAdmin = source.userEntity?.getIsAdmin(),
-                isManager = source.userEntity?.getIsManager()
+                userId = writer.id,
+                userName = writer.name!!,
+                profileImageUri = writer.getProfileImageUri(),
+                crewName = writer.crewEntity!!.name,
+                isAdmin = writer.getIsAdmin(),
+                isManager = writer.getIsManager()
             )
         )
     }
@@ -159,6 +161,7 @@ class CommentConverter {
     }
 
     fun map(commentEntity: CommentEntity, commentResults: List<CommentResult>): CommentDetail {
+        val writer = commentEntity.userEntity!!
         return CommentDetail(
             id = commentEntity.id,
             parentId = commentEntity.parentId,
@@ -168,12 +171,12 @@ class CommentConverter {
             updatedAt = commentEntity.updatedAt,
             reCommentResults = commentResults,
             writer = CommentDetail.Writer(
-                userId = commentEntity.userEntity?.id,
-                userName = commentEntity.userEntity?.name,
-                profileImageUri = commentEntity.userEntity?.getProfileImageUri(),
-                crewName = commentEntity.userEntity?.crewEntity?.name,
-                isAdmin = commentEntity.userEntity?.getIsAdmin(),
-                isManager = commentEntity.userEntity?.getIsManager()
+                userId = writer.id,
+                userName = writer.name!!,
+                profileImageUri = writer.getProfileImageUri(),
+                crewName = writer.crewEntity!!.name,
+                isAdmin = writer.getIsAdmin(),
+                isManager = writer.getIsManager()
             )
         )
     }

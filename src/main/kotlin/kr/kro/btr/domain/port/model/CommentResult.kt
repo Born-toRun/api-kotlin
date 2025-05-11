@@ -14,11 +14,11 @@ data class CommentResult(
     val isMyComment: Boolean = false
 ) {
     data class Writer(
-        val userId: Long?,
-        val userName: String?,
+        val userId: Long,
+        val userName: String,
         val profileImageUri: String?,
-        val crewName: String?,
-        val isAdmin: Boolean? = false,
-        val isManager: Boolean? = false
+        val crewName: String,
+        val isAdmin: Boolean,
+        val isManager: Boolean
     )
 }
