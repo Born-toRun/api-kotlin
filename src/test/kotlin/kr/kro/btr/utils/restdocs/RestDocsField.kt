@@ -5,6 +5,7 @@ import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.payload.RequestFieldsSnippet
 import org.springframework.restdocs.payload.ResponseFieldsSnippet
+import org.springframework.restdocs.snippet.Attributes.Attribute
 
 class RestDocsField(
 	val descriptor: FieldDescriptor
@@ -43,7 +44,9 @@ class RestDocsField(
 	}
 
 	infix fun isOptional(value: Boolean): RestDocsField {
-		if (value) descriptor.optional()
+        val att: Attribute = Attribute("optional", value)
+        descriptor.attributes(att)
+//		if (value) descriptor.optional()
 		return this
 	}
 
