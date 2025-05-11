@@ -26,7 +26,7 @@ class MarathonConverter {
                 schedule = marathon.schedule,
                 venue = marathon.venue,
                 course = marathon.course,
-                isBookmarking = marathon.isBookmarking
+                isBookmarking = marathon.isBookmarking == true
             )
         }
         return SearchAllMarathonResponse(
