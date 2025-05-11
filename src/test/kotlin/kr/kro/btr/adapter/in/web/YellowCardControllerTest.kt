@@ -59,9 +59,9 @@ class YellowCardControllerTest (
                     .andDocument(
                         "create-yellow-cards",
                         requestBody(
-                            "targetUserId" type NUMBER means "신고 대상 식별자" isOptional false,
-                            "reason" type STRING means "신고사유" isOptional true,
-                            "basis" type STRING means "신고 대상 게시글" isOptional false
+                            "targetUserId" type NUMBER means "신고 대상 식별자" isRequired true,
+                            "reason" type STRING means "신고사유" isRequired false,
+                            "basis" type STRING means "신고 대상 게시글" isRequired true
                         )
                     )
             }

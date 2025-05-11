@@ -84,9 +84,9 @@ class UserControllerTest (
                     .andDocument(
                         "sign-up",
                         requestBody(
-                            "userName" type STRING means "성명" isOptional false,
-                            "crewId" type NUMBER means "소속 크루 식별자" isOptional false,
-                            "instagramId" type STRING means "인스타그램 아이디"  isOptional true
+                            "userName" type STRING means "성명" isRequired true,
+                            "crewId" type NUMBER means "소속 크루 식별자" isRequired true,
+                            "instagramId" type STRING means "인스타그램 아이디"  isRequired false
                         )
                     )
             }
@@ -157,15 +157,15 @@ class UserControllerTest (
                     .andDocument(
                         "my-detail",
                         responseBody(
-                            "userId" type NUMBER means "식별자" isOptional false,
-                            "userName" type STRING means "성명" isOptional true,
-                            "crewName" type STRING means "소속 크루명" isOptional true,
-                            "profileImageUri" type STRING means "프로필 이미지 uri" isOptional true,
-                            "isAdmin" type BOOLEAN means "관리자 여부" isOptional false,
-                            "isManager" type BOOLEAN means "크루장 여부" isOptional false,
-                            "yellowCardQty" type NUMBER means "신고 개수" isOptional false,
-                            "isInstagramIdPublic" type BOOLEAN means "인스타그램 공개 여부" isOptional true,
-                            "instagramUri" type STRING means "인스타그램 uri" isOptional true
+                            "userId" type NUMBER means "식별자" isRequired true,
+                            "userName" type STRING means "성명" isRequired false,
+                            "crewName" type STRING means "소속 크루명" isRequired false,
+                            "profileImageUri" type STRING means "프로필 이미지 uri" isRequired false,
+                            "isAdmin" type BOOLEAN means "관리자 여부" isRequired true,
+                            "isManager" type BOOLEAN means "크루장 여부" isRequired true,
+                            "yellowCardQty" type NUMBER means "신고 개수" isRequired true,
+                            "isInstagramIdPublic" type BOOLEAN means "인스타그램 공개 여부" isRequired false,
+                            "instagramUri" type STRING means "인스타그램 uri" isRequired false
                         )
                     )
             }
@@ -221,15 +221,15 @@ class UserControllerTest (
                             "userId" pathMeans "대상 유저 식별자"
                         ),
                         responseBody(
-                            "userId" type NUMBER means "식별자" isOptional false,
-                            "userName" type STRING means "성명" isOptional true,
-                            "crewName" type STRING means "소속 크루명" isOptional true,
-                            "profileImageUri" type STRING means "프로필 이미지 uri" isOptional true,
-                            "isAdmin" type BOOLEAN means "관리자 여부" isOptional false,
-                            "isManager" type BOOLEAN means "크루장 여부" isOptional false,
-                            "yellowCardQty" type NUMBER means "신고 개수" isOptional false,
-                            "isInstagramIdPublic" type BOOLEAN means "인스타그램 공개 여부" isOptional true,
-                            "instagramUri" type STRING means "인스타그램 uri" isOptional true
+                            "userId" type NUMBER means "식별자" isRequired true,
+                            "userName" type STRING means "성명" isRequired false,
+                            "crewName" type STRING means "소속 크루명" isRequired false,
+                            "profileImageUri" type STRING means "프로필 이미지 uri" isRequired false,
+                            "isAdmin" type BOOLEAN means "관리자 여부" isRequired true,
+                            "isManager" type BOOLEAN means "크루장 여부" isRequired true,
+                            "yellowCardQty" type NUMBER means "신고 개수" isRequired true,
+                            "isInstagramIdPublic" type BOOLEAN means "인스타그램 공개 여부" isRequired false,
+                            "instagramUri" type STRING means "인스타그램 uri" isRequired false
                         )
                     )
             }
@@ -282,14 +282,14 @@ class UserControllerTest (
                     .andDocument(
                         "modify-users",
                         requestBody(
-                            "profileImageId" type NUMBER means "프로필 이미지 식별자" isOptional true,
-                            "instagramId" type STRING means "인스타그램 아이디" isOptional true
+                            "profileImageId" type NUMBER means "프로필 이미지 식별자" isRequired false,
+                            "instagramId" type STRING means "인스타그램 아이디" isRequired false
                         ),
                         responseBody(
-                            "userName" type STRING means "유저명" isOptional true,
-                            "crewName" type STRING means "소속 크루명" isOptional true,
-                            "instagramId" type STRING means "인스타그램 아이디" isOptional true,
-                            "profileImageUri" type STRING means "프로필 이미지 uri" isOptional true
+                            "userName" type STRING means "유저명" isRequired false,
+                            "crewName" type STRING means "소속 크루명" isRequired false,
+                            "instagramId" type STRING means "인스타그램 아이디" isRequired false,
+                            "profileImageUri" type STRING means "프로필 이미지 uri" isRequired false
                         )
                     )
             }

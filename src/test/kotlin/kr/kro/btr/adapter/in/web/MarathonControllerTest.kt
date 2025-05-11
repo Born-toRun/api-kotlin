@@ -96,7 +96,7 @@ class MarathonControllerTest (
                     .andDocument(
                         "search-marathons",
                         responseBody(
-                            "marathons" type ARRAY means "대회 목록" isOptional false
+                            "marathons" type ARRAY means "대회 목록" isRequired true
                         )
                             .andWithPrefix("marathons[].", getMarathonsResponseSnippet())
                     )
@@ -178,22 +178,22 @@ class MarathonControllerTest (
                             "marathonId" pathMeans "조회 대상 마라톤 식별자"
                         ),
                         responseBody(
-                            "id" type NUMBER means "식별자" isOptional false,
-                            "title" type STRING means "대회명" isOptional true,
-                            "owner" type STRING means "대표자명" isOptional true,
-                            "email" type STRING means "대표 이메일" isOptional true,
-                            "schedule" type STRING means "대회일시" isOptional true,
-                            "contact" type STRING means "전화번호" isOptional true,
-                            "course" type STRING means "대회종목" isOptional true,
-                            "location" type STRING means "대회지역" isOptional true,
-                            "venue" type STRING means "대회장소" isOptional true,
-                            "host" type STRING means "주최단체" isOptional true,
-                            "duration" type STRING means "접수기간" isOptional true,
-                            "homepage" type STRING means "홈페이지" isOptional true,
-                            "venueDetail" type STRING means "대회장" isOptional true,
-                            "remark" type STRING means "기타소개" isOptional true,
-                            "registeredAt" type DATETIME means "등록 일시" isOptional false,
-                            "isBookmarking" type BOOLEAN means "북마크 여부" isOptional true
+                            "id" type NUMBER means "식별자" isRequired true,
+                            "title" type STRING means "대회명" isRequired false,
+                            "owner" type STRING means "대표자명" isRequired false,
+                            "email" type STRING means "대표 이메일" isRequired false,
+                            "schedule" type STRING means "대회일시" isRequired false,
+                            "contact" type STRING means "전화번호" isRequired false,
+                            "course" type STRING means "대회종목" isRequired false,
+                            "location" type STRING means "대회지역" isRequired false,
+                            "venue" type STRING means "대회장소" isRequired false,
+                            "host" type STRING means "주최단체" isRequired false,
+                            "duration" type STRING means "접수기간" isRequired false,
+                            "homepage" type STRING means "홈페이지" isRequired false,
+                            "venueDetail" type STRING means "대회장" isRequired false,
+                            "remark" type STRING means "기타소개" isRequired false,
+                            "registeredAt" type DATETIME means "등록 일시" isRequired true,
+                            "isBookmarking" type BOOLEAN means "북마크 여부" isRequired false
                         )
                     )
             }
@@ -225,7 +225,7 @@ class MarathonControllerTest (
                             "marathonId" pathMeans "북마크 대상 식별자"
                         ),
                         responseBody(
-                            "marathonId" type NUMBER means "북마크한 마라톤 식별자" isOptional false
+                            "marathonId" type NUMBER means "북마크한 마라톤 식별자" isRequired true
                         )
                     )
             }
@@ -257,7 +257,7 @@ class MarathonControllerTest (
                             "marathonId" pathMeans "북마크 취소 대상 식별자"
                         ),
                         responseBody(
-                            "marathonId" type NUMBER means "북마크 취소한 마라톤 식별자" isOptional false
+                            "marathonId" type NUMBER means "북마크 취소한 마라톤 식별자" isRequired true
                         )
                     )
             }
@@ -267,12 +267,12 @@ class MarathonControllerTest (
     companion object {
         fun getMarathonsResponseSnippet(): List<FieldDescriptor> {
             return descriptor(
-                "id" type NUMBER means "식별자" isOptional false,
-                "title" type STRING means "대회명" isOptional true,
-                "schedule" type STRING means "대회일시" isOptional true,
-                "venue" type STRING means "대회장소" isOptional true,
-                "course" type STRING means "대회종목" isOptional true,
-                "isBookmarking" type BOOLEAN means "북마크 여부" isOptional true
+                "id" type NUMBER means "식별자" isRequired true,
+                "title" type STRING means "대회명" isRequired false,
+                "schedule" type STRING means "대회일시" isRequired false,
+                "venue" type STRING means "대회장소" isRequired false,
+                "course" type STRING means "대회종목" isRequired false,
+                "isBookmarking" type BOOLEAN means "북마크 여부" isRequired false
             )
         }
 

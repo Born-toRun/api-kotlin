@@ -118,7 +118,7 @@ class RecentSearchKeywordControllerTest (
                     .andDocument(
                         "search-recent-search-keywords",
                         responseBody(
-                            "searchKeywords" type ARRAY means "최근 검색어 목록" isOptional false
+                            "searchKeywords" type ARRAY means "최근 검색어 목록" isRequired true
                         )
                     )
             }

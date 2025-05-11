@@ -92,16 +92,16 @@ class ActivityControllerTest (
                     .andDocument(
                         "create-activities",
                         requestBody(
-                            "title" type STRING means "행사명" isOptional false,
-                            "contents" type STRING means "내용" isOptional false,
-                            "startAt" type DATETIME means "시작일자" isOptional false,
-                            "venue" type STRING means "장소" isOptional false,
-                            "venueUrl" type STRING means "장소의 지도 url" isOptional false,
-                            "participantsLimit" type NUMBER means "인원제한 (제한없음: -1)" isOptional false,
-                            "participationFee" type NUMBER means "참가비" isOptional false,
-                            "course" type STRING means "코스" isOptional true,
-                            "courseDetail" type STRING means "코스 설명" isOptional true,
-                            "path" type STRING means "경로" isOptional true
+                            "title" type STRING means "행사명" isRequired true,
+                            "contents" type STRING means "내용" isRequired true,
+                            "startAt" type DATETIME means "시작일자" isRequired true,
+                            "venue" type STRING means "장소" isRequired true,
+                            "venueUrl" type STRING means "장소의 지도 url" isRequired true,
+                            "participantsLimit" type NUMBER means "인원제한 (제한없음: -1)" isRequired true,
+                            "participationFee" type NUMBER means "참가비" isRequired true,
+                            "course" type STRING means "코스" isRequired false,
+                            "courseDetail" type STRING means "코스 설명" isRequired false,
+                            "path" type STRING means "경로" isRequired false
                         )
                     )
             }
@@ -141,16 +141,16 @@ class ActivityControllerTest (
                             "activityId" pathMeans "식별자"
                         ),
                         requestBody(
-                            "title" type STRING means "행사명" isOptional false,
-                            "contents" type STRING means "내용" isOptional false,
-                            "startAt" type DATETIME means "시작일자" isOptional false,
-                            "venue" type STRING means "장소" isOptional false,
-                            "venueUrl" type STRING means "장소의 지도 url" isOptional false,
-                            "participantsLimit" type NUMBER means "인원제한 (제한없음: -1)" isOptional false,
-                            "participationFee" type NUMBER means "참가비" isOptional false,
-                            "course" type STRING means "코스" isOptional true,
-                            "courseDetail" type STRING means "코스 설명" isOptional true,
-                            "path" type STRING means "경로" isOptional true
+                            "title" type STRING means "행사명" isRequired true,
+                            "contents" type STRING means "내용" isRequired true,
+                            "startAt" type DATETIME means "시작일자" isRequired true,
+                            "venue" type STRING means "장소" isRequired true,
+                            "venueUrl" type STRING means "장소의 지도 url" isRequired true,
+                            "participantsLimit" type NUMBER means "인원제한 (제한없음: -1)" isRequired true,
+                            "participationFee" type NUMBER means "참가비" isRequired true,
+                            "course" type STRING means "코스" isRequired false,
+                            "courseDetail" type STRING means "코스 설명" isRequired false,
+                            "path" type STRING means "경로" isRequired false
                         )
                     )
             }
@@ -321,11 +321,11 @@ class ActivityControllerTest (
                     .andDocument(
                         "search-activities",
                         requestBody(
-                            "courses" type ARRAY means "코스 리스트" isOptional true,
-                            "recruitmentType" type STRING means "상태" isOptional true
+                            "courses" type ARRAY means "코스 리스트" isRequired false,
+                            "recruitmentType" type STRING means "상태" isRequired false
                         ),
                         responseBody(
-                            "activities" type ARRAY means "행사 목록" isOptional false,
+                            "activities" type ARRAY means "행사 목록" isRequired true,
                         )
                             .andWithPrefix("activities[]", getActivitiesResponseSnippet())
                     )
@@ -430,29 +430,29 @@ class ActivityControllerTest (
                             "activityId" pathMeans "식별자"
                         ),
                         responseBody(
-                            "id" type NUMBER means "식별자" isOptional false,
-                            "title" type STRING means "행사명" isOptional false,
-                            "contents" type STRING means "내용" isOptional false,
-                            "startAt" type DATETIME means "시작일자" isOptional false,
-                            "venue" type STRING means "장소" isOptional true,
-                            "venueUrl" type STRING means "장소의 지도 url" isOptional false,
-                            "participantsLimit" type NUMBER means "참여제한" isOptional true,
-                            "participantsQty" type NUMBER means "참여자 수" isOptional false,
-                            "participationFee" type NUMBER means "참가비" isOptional false,
-                            "course" type STRING means "코스" isOptional true,
-                            "courseDetail" type STRING means "코스 설명" isOptional true,
-                            "path" type STRING means "경로" isOptional true,
-                            "isOpen" type BOOLEAN means "오픈 여부" isOptional true,
-                            "updatedAt" type DATETIME means "수정일자" isOptional false,
-                            "registeredAt" type DATETIME means "등록일자" isOptional false,
-                            "host" type OBJECT means "호스트" isOptional false,
-                            "host.userId" type NUMBER means "식별자" isOptional true,
-                            "host.crewId" type NUMBER means "소속 크루 식별자" isOptional true,
-                            "host.userProfileUri" type STRING means "프로필 이미지 uri" isOptional true,
-                            "host.userName" type STRING means "유저명" isOptional true,
-                            "host.crewName" type STRING means "소속 크루명" isOptional true,
-                            "host.isManager" type BOOLEAN means "크루장 여부" isOptional true,
-                            "host.isAdmin" type BOOLEAN means "관리자 여부" isOptional true,
+                            "id" type NUMBER means "식별자" isRequired true,
+                            "title" type STRING means "행사명" isRequired true,
+                            "contents" type STRING means "내용" isRequired true,
+                            "startAt" type DATETIME means "시작일자" isRequired true,
+                            "venue" type STRING means "장소" isRequired false,
+                            "venueUrl" type STRING means "장소의 지도 url" isRequired true,
+                            "participantsLimit" type NUMBER means "참여제한" isRequired false,
+                            "participantsQty" type NUMBER means "참여자 수" isRequired true,
+                            "participationFee" type NUMBER means "참가비" isRequired true,
+                            "course" type STRING means "코스" isRequired false,
+                            "courseDetail" type STRING means "코스 설명" isRequired false,
+                            "path" type STRING means "경로" isRequired false,
+                            "isOpen" type BOOLEAN means "오픈 여부" isRequired false,
+                            "updatedAt" type DATETIME means "수정일자" isRequired true,
+                            "registeredAt" type DATETIME means "등록일자" isRequired true,
+                            "host" type OBJECT means "호스트" isRequired true,
+                            "host.userId" type NUMBER means "식별자" isRequired false,
+                            "host.crewId" type NUMBER means "소속 크루 식별자" isRequired false,
+                            "host.userProfileUri" type STRING means "프로필 이미지 uri" isRequired false,
+                            "host.userName" type STRING means "유저명" isRequired false,
+                            "host.crewName" type STRING means "소속 크루명" isRequired false,
+                            "host.isManager" type BOOLEAN means "크루장 여부" isRequired false,
+                            "host.isAdmin" type BOOLEAN means "관리자 여부" isRequired false,
                         )
                     )
             }
@@ -514,8 +514,8 @@ class ActivityControllerTest (
                             "activityId" pathMeans "식별자"
                         ),
                         responseBody(
-                            "activityId" type NUMBER means "식별자" isOptional false,
-                            "attendanceCode" type NUMBER means "참여코드" isOptional false,
+                            "activityId" type NUMBER means "식별자" isRequired true,
+                            "attendanceCode" type NUMBER means "참여코드" isRequired true,
                         )
                     )
             }
@@ -587,13 +587,13 @@ class ActivityControllerTest (
                             "activityId" pathMeans "식별자"
                         ),
                         responseBody(
-                            "host" type OBJECT means "호스트" isOptional false,
-                            "host.participationId" type NUMBER means "참여 식별자" isOptional true,
-                            "host.userId" type NUMBER means "유저 식별자" isOptional false,
-                            "host.userName" type STRING means "유저명" isOptional true,
-                            "host.crewName" type STRING means "소속 크루명" isOptional true,
-                            "host.userProfileUri" type STRING means "프로필 이미지 uri" isOptional true,
-                            "participants" type ARRAY means "참여자 목록" isOptional false
+                            "host" type OBJECT means "호스트" isRequired true,
+                            "host.participationId" type NUMBER means "참여 식별자" isRequired false,
+                            "host.userId" type NUMBER means "유저 식별자" isRequired true,
+                            "host.userName" type STRING means "유저명" isRequired false,
+                            "host.crewName" type STRING means "소속 크루명" isRequired false,
+                            "host.userProfileUri" type STRING means "프로필 이미지 uri" isRequired false,
+                            "participants" type ARRAY means "참여자 목록" isRequired true
                         )
                             .andWithPrefix("participants[]", getParticipantsResponseSnippet())
                     )
@@ -625,7 +625,7 @@ class ActivityControllerTest (
                             "activityId" pathMeans "식별자"
                         ),
                         requestBody(
-                            "accessCode" type NUMBER means "참여코드" isOptional false
+                            "accessCode" type NUMBER means "참여코드" isRequired true
                         )
                     )
             }
@@ -635,34 +635,34 @@ class ActivityControllerTest (
     companion object {
         fun getParticipantsResponseSnippet(): List<FieldDescriptor> {
             return descriptor(
-                "participationId" type NUMBER means "참여 식별자" isOptional true,
-                "userId" type NUMBER means "유저 식별자" isOptional false,
-                "userName" type STRING means "유저명" isOptional true,
-                "crewName" type STRING means "소속 크루명" isOptional true,
-                "userProfileUri" type STRING means "프로필 이미지 Uri" isOptional true
+                "participationId" type NUMBER means "참여 식별자" isRequired false,
+                "userId" type NUMBER means "유저 식별자" isRequired true,
+                "userName" type STRING means "유저명" isRequired false,
+                "crewName" type STRING means "소속 크루명" isRequired false,
+                "userProfileUri" type STRING means "프로필 이미지 Uri" isRequired false
             )
         }
 
         fun getActivitiesResponseSnippet(): List<FieldDescriptor> {
             return descriptor(
-                "id" type NUMBER means "식별자" isOptional false,
-                "title" type STRING means "행사명" isOptional false,
-                "startAt" type DATETIME means "시작일자" isOptional false,
-                "course" type STRING means "코스" isOptional true,
-                "participantsLimit" type NUMBER means "인원제한" isOptional true,
-                "participantsQty" type NUMBER means "참여자 수" isOptional false,
-                "updatedAt" type DATETIME means "수정일자" isOptional false,
-                "registeredAt" type DATETIME means "등록일자" isOptional false,
-                "isOpen" type BOOLEAN means "오픈 여부" isOptional true,
-                "recruitmentType" type STRING means "상태" isOptional true,
-                "host" type OBJECT means "호스트" isOptional false,
-                "host.userId" type NUMBER means "식별자" isOptional true,
-                "host.crewId" type NUMBER means "소속 크루 식별자" isOptional true,
-                "host.userProfileUri" type STRING means "프로필 이미지 uri" isOptional true,
-                "host.userName" type STRING means "유저명" isOptional true,
-                "host.crewName" type STRING means "소속 크루명" isOptional true,
-                "host.isManager" type BOOLEAN means "크루장 여부" isOptional true,
-                "host.isAdmin" type BOOLEAN means "관리자 여부" isOptional true
+                "id" type NUMBER means "식별자" isRequired true,
+                "title" type STRING means "행사명" isRequired true,
+                "startAt" type DATETIME means "시작일자" isRequired true,
+                "course" type STRING means "코스" isRequired false,
+                "participantsLimit" type NUMBER means "인원제한" isRequired false,
+                "participantsQty" type NUMBER means "참여자 수" isRequired true,
+                "updatedAt" type DATETIME means "수정일자" isRequired true,
+                "registeredAt" type DATETIME means "등록일자" isRequired true,
+                "isOpen" type BOOLEAN means "오픈 여부" isRequired false,
+                "recruitmentType" type STRING means "상태" isRequired false,
+                "host" type OBJECT means "호스트" isRequired true,
+                "host.userId" type NUMBER means "식별자" isRequired false,
+                "host.crewId" type NUMBER means "소속 크루 식별자" isRequired false,
+                "host.userProfileUri" type STRING means "프로필 이미지 uri" isRequired false,
+                "host.userName" type STRING means "유저명" isRequired false,
+                "host.crewName" type STRING means "소속 크루명" isRequired false,
+                "host.isManager" type BOOLEAN means "크루장 여부" isRequired false,
+                "host.isAdmin" type BOOLEAN means "관리자 여부" isRequired false
             )
         }
 

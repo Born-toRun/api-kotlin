@@ -96,7 +96,7 @@ class CrewControllerTest (
                     .andDocument(
                         "search-crews",
                         responseBody(
-                            "crewDetails" type ARRAY means "등록된 크루 목록" isOptional false
+                            "crewDetails" type ARRAY means "등록된 크루 목록" isRequired true
                         )
                             .andWithPrefix("crewDetails[].", getCrewDetailsResponseSnippet())
                     )
@@ -151,13 +151,13 @@ class CrewControllerTest (
                             "crewId" pathMeans "식별자"
                         ),
                         responseBody(
-                            "id" type NUMBER means "식별자" isOptional false,
-                            "crewName" type STRING means "크루명" isOptional false,
-                            "contents" type STRING means "크루 소개" isOptional false,
-                            "region" type STRING means "크루 활동 지역" isOptional false,
-                            "imageUri" type STRING means "크루 대표 이미지 uri" isOptional true,
-                            "logoUri" type STRING means "크루 로고 uri" isOptional true,
-                            "crewSnsUri" type STRING means "크루 sns uri" isOptional true
+                            "id" type NUMBER means "식별자" isRequired true,
+                            "crewName" type STRING means "크루명" isRequired true,
+                            "contents" type STRING means "크루 소개" isRequired true,
+                            "region" type STRING means "크루 활동 지역" isRequired true,
+                            "imageUri" type STRING means "크루 대표 이미지 uri" isRequired false,
+                            "logoUri" type STRING means "크루 로고 uri" isRequired false,
+                            "crewSnsUri" type STRING means "크루 sns uri" isRequired false
                         )
                     )
             }
@@ -187,10 +187,10 @@ class CrewControllerTest (
                     .andDocument(
                         "create-crews",
                         requestBody(
-                            "name" type STRING means "크루명" isOptional false,
-                            "contents" type STRING means "크루소개" isOptional false,
-                            "sns" type STRING means "크루 sns uri" isOptional true,
-                            "region" type STRING means "크루 활동 지역" isOptional false
+                            "name" type STRING means "크루명" isRequired true,
+                            "contents" type STRING means "크루소개" isRequired true,
+                            "sns" type STRING means "크루 sns uri" isRequired false,
+                            "region" type STRING means "크루 활동 지역" isRequired true
                         )
                     )
             }
@@ -200,13 +200,13 @@ class CrewControllerTest (
     companion object {
         fun getCrewDetailsResponseSnippet(): List<FieldDescriptor> {
             return descriptor(
-                "id" type NUMBER means "식별자" isOptional false,
-                "crewName" type STRING means "크루명" isOptional false,
-                "contents" type STRING means "크루 소개" isOptional false,
-                "region" type STRING means "크루 활동 지역" isOptional false,
-                "imageUri" type STRING means "크루 대표 이미지 uri" isOptional true,
-                "logoUri" type STRING means "크루 로고 uri" isOptional true,
-                "crewSnsUri" type STRING means "크루 sns uri" isOptional true
+                "id" type NUMBER means "식별자" isRequired true,
+                "crewName" type STRING means "크루명" isRequired true,
+                "contents" type STRING means "크루 소개" isRequired true,
+                "region" type STRING means "크루 활동 지역" isRequired true,
+                "imageUri" type STRING means "크루 대표 이미지 uri" isRequired false,
+                "logoUri" type STRING means "크루 로고 uri" isRequired false,
+                "crewSnsUri" type STRING means "크루 sns uri" isRequired false
             )
         }
 

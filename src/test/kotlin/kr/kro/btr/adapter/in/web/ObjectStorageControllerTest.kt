@@ -89,8 +89,8 @@ class ObjectStorageControllerTest (
                         ),
                         // TODO: file 추가
                         responseBody(
-                            "fileId" type NUMBER means "식별자" isOptional false,
-                            "fileUri" type STRING means "uri" isOptional false
+                            "fileId" type NUMBER means "식별자" isRequired true,
+                            "fileUri" type STRING means "uri" isRequired true
                         )
                     )
             }
