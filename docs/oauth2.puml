@@ -12,7 +12,7 @@ end box
 u -> fe: 로그인 페이지 요청
 fe -> be
 note right
-  GET /oauth2/authorization/{provider}
+  GET /oauth2/authorization/{provider}?redirectUri={로그인 후 접근할 페이지}
 end note
 fe <-- be: Provider별 로그인 페이지 리다이렉트
 
@@ -44,11 +44,11 @@ be --> db: 유저의 토큰 맵핑
 be --> fe: 로그인 후 접근할 페이지 리다이렉트
 
 note left
-  {base-url}/home?isMember={isMember}&accessToken={jwt}
+  {base-url}/login?isMember={isMember}&accessToken={jwt}
 end note
 
 'vue.js에서는 보통 mutations로 jwt를 관리함
-fe --> fe: ????에 jwt 저장
+fe --> fe: 쿠키에 jwt 저장
 alt#Gold #Pink isMember=false case
     fe -> be: 회원가입(성명, 인스타그램 등)
     be --> db: 회원 정보 수정
