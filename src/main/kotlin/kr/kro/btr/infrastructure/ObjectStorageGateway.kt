@@ -1,6 +1,7 @@
 package kr.kro.btr.infrastructure
 
 import kr.kro.btr.adapter.out.persistence.ObjectStorageRepository
+import kr.kro.btr.base.extension.findByIdOrThrow
 import kr.kro.btr.config.properties.MinioProperties
 import kr.kro.btr.core.converter.ObjectStorageConverter
 import kr.kro.btr.core.event.model.MinioRemoveAllEventModel
@@ -11,9 +12,7 @@ import kr.kro.btr.infrastructure.model.RemoveAllObjectStorageQuery
 import kr.kro.btr.infrastructure.model.RemoveObjectStorageQuery
 import kr.kro.btr.infrastructure.model.UploadObjectStorageQuery
 import kr.kro.btr.support.exception.InvalidException
-import kr.kro.btr.support.exception.NotFoundException
 import org.springframework.context.ApplicationEventPublisher
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
@@ -40,7 +39,7 @@ class ObjectStorageGateway(
     }
 
     fun search(id: Long): ObjectStorageEntity {
-        return objectStorageRepository.findByIdOrNull(id) ?: throw NotFoundException("파일을 찾을 수 없습니다.")
+        return objectStorageRepository.findByIdOrThrow(id)
     }
 
     fun searchAll(fileIds: List<Long>): List<ObjectStorageEntity> {

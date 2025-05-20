@@ -2,6 +2,7 @@ package kr.kro.btr.infrastructure
 
 import kr.kro.btr.adapter.out.persistence.UserPrivacyRepository
 import kr.kro.btr.adapter.out.persistence.UserRepository
+import kr.kro.btr.base.extension.findByIdOrThrow
 import kr.kro.btr.core.converter.UserConverter
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.entity.UserPrivacyEntity
@@ -24,7 +25,7 @@ class UserGateway(
     }
 
     fun searchById(userId: Long): UserEntity {
-        return userRepository.findByIdOrNull(userId)
+        return userRepository.findByIdOrThrow(userId)
             ?: throw NotFoundException("회원을 찾을 수 없습니다.")
     }
 

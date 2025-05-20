@@ -1,13 +1,12 @@
 package kr.kro.btr.config.aop
 
 import kr.kro.btr.adapter.out.persistence.ActivityParticipationRepository
+import kr.kro.btr.base.extension.findByIdOrThrow
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.exception.ForBiddenException
-import kr.kro.btr.support.exception.NotFoundException
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
 import org.aspectj.lang.annotation.Pointcut
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Aspect
@@ -31,7 +30,7 @@ class ActivityParticipationWriterValidationAspect(
     }
 
     private fun isValid(userId: Long, participationId: Long): Boolean {
-        val participation = activityParticipationRepository.findByIdOrNull(participationId) ?: throw NotFoundException("참여를 하지 않은 상태입니다.")
+        val participation = activityParticipationRepository.findByIdOrThrow(participationId)
 
         return participation.userId == userId
     }
