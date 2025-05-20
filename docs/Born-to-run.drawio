@@ -51,10 +51,10 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="t8GZxJ8JMjlUp7sah_Ib-20" value="" style="shape=image;imageAspect=0;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;image=https://blog.kakaocdn.net/dn/niaU7/btscRr51sAP/904YrckJPDWfiHgh0V1bX0/img.png;" vertex="1" parent="1">
-          <mxGeometry x="330" y="-330" width="132.65" height="100" as="geometry" />
+          <mxGeometry x="390" y="-330" width="132.65" height="100" as="geometry" />
         </mxCell>
         <mxCell id="t8GZxJ8JMjlUp7sah_Ib-21" value="" style="shape=image;imageAspect=0;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;image=https://static.vecteezy.com/system/resources/previews/023/986/880/non_2x/discord-logo-discord-logo-transparent-discord-icon-transparent-free-free-png.png;" vertex="1" parent="1">
-          <mxGeometry x="336.32000000000005" y="-120" width="120" height="120" as="geometry" />
+          <mxGeometry x="396.00000000000006" y="-120" width="120" height="120" as="geometry" />
         </mxCell>
         <mxCell id="t8GZxJ8JMjlUp7sah_Ib-91" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="t8GZxJ8JMjlUp7sah_Ib-22" target="t8GZxJ8JMjlUp7sah_Ib-19">
           <mxGeometry relative="1" as="geometry">
@@ -68,13 +68,13 @@
           <mxGeometry x="1250" y="-314" width="90" height="30" as="geometry" />
         </mxCell>
         <mxCell id="t8GZxJ8JMjlUp7sah_Ib-27" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;Build notify&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="400" y="-190" width="125.85" height="30" as="geometry" />
+          <mxGeometry x="474.15" y="-190" width="125.85" height="30" as="geometry" />
         </mxCell>
         <mxCell id="t8GZxJ8JMjlUp7sah_Ib-28" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;gradle test &amp;amp; build&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="600" y="-314" width="203.67" height="30" as="geometry" />
         </mxCell>
         <mxCell id="t8GZxJ8JMjlUp7sah_Ib-32" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;docker push&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="205" y="-314" width="140" height="30" as="geometry" />
+          <mxGeometry x="240" y="-314" width="140" height="30" as="geometry" />
         </mxCell>
         <mxCell id="t8GZxJ8JMjlUp7sah_Ib-48" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="t8GZxJ8JMjlUp7sah_Ib-33" target="t8GZxJ8JMjlUp7sah_Ib-37">
           <mxGeometry relative="1" as="geometry" />

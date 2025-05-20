@@ -1,0 +1,1620 @@
+{
+	"info": {
+		"_postman_id": "48092a61-c230-473e-9b48-a59165978647",
+		"name": "Born-to-run",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4087539"
+	},
+	"item": [
+		{
+			"name": "크루",
+			"item": [
+				{
+					"name": "상세 조회",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/crews/6",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"crews",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "목록 조회",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/crews",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"crews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "등록",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\" : \"테스트크루\",\n  \"contents\" : \"이것은 등록 테스트입니다.\",\n//   \"sns\" : \"sns\",\n  \"region\" : \"전북\"\n}"
+						},
+						"url": {
+							"raw": "{{target}}/api/v1/crews",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"crews"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "신고",
+			"item": [
+				{
+					"name": "신고하기",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY2OTY3MjB9.2yJMaUSlgi5nb9fIHbI7nPMgAHWeTh_t0ImTC25jYlJlQwj6DiI6dkrDpirxw1YDVlc_do2dZ9wExgFOE3xflg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"targetUserId\" : 17,\n  \"reason\" : \"reason\",\n  \"basis\" : \"basis\"\n}"
+						},
+						"url": {
+							"raw": "{{target}}/api/v1/yellow-cards",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"yellow-cards"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "마라톤",
+			"item": [
+				{
+					"name": "북마크",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY2OTcyODV9.FrDzIEVl3_FBQAWwctDqYIs7na0esjCz7D0gch5ao3j52xnGm7caV4heAailcHB8nxpzWjha4p0k7zb2bpgAGQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/marathons/bookmark/521",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"marathons",
+								"bookmark",
+								"521"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "북마크 취소",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDE1MzB9.5d3EIFjh8-ohCtUb5kC1-3nI5uBeaHJqnuD3By8HusxGsaU-_1MWy3HR-PQdYMjSO1sBN9NwikgiXHRnlrmvuQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/marathons/bookmark/521",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"marathons",
+								"bookmark",
+								"521"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "상세조회",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDE1MzB9.5d3EIFjh8-ohCtUb5kC1-3nI5uBeaHJqnuD3By8HusxGsaU-_1MWy3HR-PQdYMjSO1sBN9NwikgiXHRnlrmvuQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/marathons/521",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"marathons",
+								"521"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "목록 조회",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDE1MzB9.5d3EIFjh8-ohCtUb5kC1-3nI5uBeaHJqnuD3By8HusxGsaU-_1MWy3HR-PQdYMjSO1sBN9NwikgiXHRnlrmvuQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/marathons",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"marathons"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "좋아요",
+			"item": [
+				{
+					"name": "좋아요 취소",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDI4NjF9.zziBYEAVZfOet14Iu7QLPMC-hc_XwaEUsA5ckHjYdJibn94mwtxtYphY4-2x2qCIBRsh_j646Kwpe8T33MBJ8g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/recommendations/FEED/30",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"recommendations",
+								"FEED",
+								"30"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "좋아요",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDI4NjF9.zziBYEAVZfOet14Iu7QLPMC-hc_XwaEUsA5ckHjYdJibn94mwtxtYphY4-2x2qCIBRsh_j646Kwpe8T33MBJ8g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/recommendations/FEED/30",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"recommendations",
+								"FEED",
+								"30"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "프라이버시",
+			"item": [
+				{
+					"name": "수정",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDM2NzF9.7lVw_oERE-E_M9A_WVdwsBNNmfJC_hEiG8ATh9e3ZiOE4P4QIaAoRti0lbG35MwqyaFXCatYT69naLXAn8VZOg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"isInstagramIdPublic\" : true\n}"
+						},
+						"url": {
+							"raw": "{{target}}/api/v1/privacy/users",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"privacy",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "조회",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDM2NzF9.7lVw_oERE-E_M9A_WVdwsBNNmfJC_hEiG8ATh9e3ZiOE4P4QIaAoRti0lbG35MwqyaFXCatYT69naLXAn8VZOg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/privacy/users",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"privacy",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "최근 검색어",
+			"item": [
+				{
+					"name": "검색",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDM2NzF9.7lVw_oERE-E_M9A_WVdwsBNNmfJC_hEiG8ATh9e3ZiOE4P4QIaAoRti0lbG35MwqyaFXCatYT69naLXAn8VZOg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/recent-search-keywords/keyword",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"recent-search-keywords",
+								"keyword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "전체 삭제",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDQwNDF9.Zrc0Ztljat4Tn0tDymGqkC7PGX7AFWpWPK0bRbvXx13PslYi0x1yxIgxAkrn0pSFeDonhIIiWwo2eBF9h2bkyQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/recent-search-keywords",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"recent-search-keywords"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "삭제",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDQwNDF9.Zrc0Ztljat4Tn0tDymGqkC7PGX7AFWpWPK0bRbvXx13PslYi0x1yxIgxAkrn0pSFeDonhIIiWwo2eBF9h2bkyQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/recent-search-keywords/keyword",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"recent-search-keywords",
+								"keyword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "조회",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDQwNDF9.Zrc0Ztljat4Tn0tDymGqkC7PGX7AFWpWPK0bRbvXx13PslYi0x1yxIgxAkrn0pSFeDonhIIiWwo2eBF9h2bkyQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/recent-search-keywords",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"recent-search-keywords"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "유저",
+			"item": [
+				{
+					"name": "수정",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY4NjQ3NDR9.3b20wU9DQjMjf_mRZ0aTnJ_0z5Yl0--8flpd7VxNvtMugmVHsHa84M_UMaRpmmsgSFXSdqTqISpTVd6IvXTh4Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"profileImageId\" : 0,\n  \"instagramId\" : \"instagramId\"\n}"
+						},
+						"url": {
+							"raw": "{{target}}/api/v1/users",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "나의정보 조회",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY4NjUxMTJ9.gnb9S4UtLpbbA-n9fCxIjzjYKgM1yvl43GYU4aM1m_tpH7TixxMw104RhH9MVbjtqdyHnIRlZz7ndHxZdv9VgQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/users/my",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"my"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "삭제",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY4NjUxMTJ9.gnb9S4UtLpbbA-n9fCxIjzjYKgM1yvl43GYU4aM1m_tpH7TixxMw104RhH9MVbjtqdyHnIRlZz7ndHxZdv9VgQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/users",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "회원가입",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY4NjUxMTJ9.gnb9S4UtLpbbA-n9fCxIjzjYKgM1yvl43GYU4aM1m_tpH7TixxMw104RhH9MVbjtqdyHnIRlZz7ndHxZdv9VgQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userName\" : \"userName\",\n  \"crewId\" : 0,\n  \"instagramId\" : \"instagramId\"\n}"
+						},
+						"url": {
+							"raw": "{{target}}/api/v1/users/sign-up",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "조회",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/users/16",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"16"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "파일",
+			"item": [
+				{
+					"name": "업로드",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDQ0Mzl9.Ljw20KpkwTBWee7RxIKGe9C7QFPwV8bzSQMaMuaa9UK3KOJBTO1v9EJidaOqKoOjbuF7LmK2nr0_VgV6xelc6g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/iymaeng/Documents/snake_game.py"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{target}}/api/v1/object-storage/FEED",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"object-storage",
+								"FEED"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "삭제",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDQ0Mzl9.Ljw20KpkwTBWee7RxIKGe9C7QFPwV8bzSQMaMuaa9UK3KOJBTO1v9EJidaOqKoOjbuF7LmK2nr0_VgV6xelc6g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/object-storage/FEED/44",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"object-storage",
+								"FEED",
+								"44"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "피드",
+			"item": [
+				{
+					"name": "등록",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDU1Nzh9.DB-6GHbZjlvH_4DvEoxUPE_nZnsgGk62GehN4klbKuAVxIaCOFnIsWDebb9vVuMBawu1m9PtMSwgT0FocAbS6A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"imageIds\" : [ 39, 40 ],\n  \"contents\" : \"contents\",\n  \"category\" : \"COMMUNITY\",\n  \"accessLevel\" : \"ALL\"\n}"
+						},
+						"url": {
+							"raw": "{{target}}/api/v1/feeds",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feeds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "수정",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDY2NTZ9.G96569QVFtOCW_JfSSiDRksIsl2iO81xsp67-GJD5Xo0KqVi9V8WmLZY6oSa-n0a3WEeIiWbZEDktnUM_nfJUw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n//   \"imageIds\" : [ 0, 1 ],\n  \"contents\" : \"contents1\",\n  \"category\" : \"MARKET\",\n  \"accessLevel\" : \"ALL\"\n}"
+						},
+						"url": {
+							"raw": "{{target}}/api/v1/feeds/36",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feeds",
+								"36"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "삭제",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3NzA5NzJ9.DL6eHgEc_ykxPccllnH2OQU-EB8HhATHbUS2Yl27ghyVOlMNiXc87R_JLzxPny53iVYnOxC42jYlvkULnRLSfw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/feeds/30",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feeds",
+								"30"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "조회",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3NzA5NzJ9.DL6eHgEc_ykxPccllnH2OQU-EB8HhATHbUS2Yl27ghyVOlMNiXc87R_JLzxPny53iVYnOxC42jYlvkULnRLSfw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/feeds/30",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feeds",
+								"30"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "목록조회",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3MDgyODR9.XZf0kuzDMNQYYWPemnWxzRfRjATPZYUskXmwC85Gk3JAkr_Ap6WP6poi1ezLecirb9UZRnRhjK92UtaDJqYN4A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/feeds",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"feeds"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "댓글",
+			"item": [
+				{
+					"name": "수정",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY4NTYwMDh9.khVSSvShtHpp8VfTZx70RdkfXHaOzaC3IZeAVvd8IlGw1QOzlpJ9koQi9NAl59LiqWNm9PSdp-nxC0fB764V1g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"contents\" : \"contents\"\n}"
+						},
+						"url": {
+							"raw": "{{target}}/api/v1/comments/7",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "개수조회",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/comments/qty/7",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"qty",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "삭제",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY4NTYwMDh9.khVSSvShtHpp8VfTZx70RdkfXHaOzaC3IZeAVvd8IlGw1QOzlpJ9koQi9NAl59LiqWNm9PSdp-nxC0fB764V1g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/comments/8",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "상세조회",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/comments/detail/7",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"detail",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "목록조회",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY4NTA4ODB9.7FOutuwRvZdrmPTenyjCwEpxqJo1JhdB85bUpgPQS_WuyN3p-znK__E5w8Qjq9fLOoadrS1haWLbtA6VlLccdw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/comments/33",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"33"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "등록",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY4NTIwMDF9.9DU8jmLpURGgy64PpUZz00Ddvo-x6ImH-Gos7qPYw2AphMe6CodxTA2Fw4JTsaTBclyAXt--IeHOnOk49NgTOg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"parentCommentId\": 8,\n  \"contents\" : \"contents\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{target}}/api/v1/comments/33",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"33"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "행사",
+			"item": [
+				{
+					"name": "출석체크",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY4NTAwMzZ9.QMKMSQV7I6Z7o4a46TJZB23NHbvVjkfqhWUHi_weF_PLwJ0rIiIwBVkPsunRj-Ijfp-fNnhR65LF1alUKnl5vQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"accessCode\" : 20\n}"
+						},
+						"url": {
+							"raw": "{{target}}/api/v1/activities/attendance/4",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"activities",
+								"attendance",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "참여취소",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY4NTAwMzZ9.QMKMSQV7I6Z7o4a46TJZB23NHbvVjkfqhWUHi_weF_PLwJ0rIiIwBVkPsunRj-Ijfp-fNnhR65LF1alUKnl5vQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/activities/participation-cancel/4",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"activities",
+								"participation-cancel",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "등록",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3NzMwNzl9.kG8AuR9Iz8sZCkTAuHnwWtlWUdh6EY1aAp5-x2TnT_rlW4EA2ObKQaTNghXG9ZWxw2AZVsIeITNb15_-0GVkuQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\" : \"title\",\n  \"contents\" : \"contents\",\n  \"startAt\" : \"2025-05-08T13:25:39\",\n  \"venue\" : \"venue\",\n  \"venueUrl\" : \"venueUrl\",\n  \"participantsLimit\" : 0,\n  \"participationFee\" : 0,\n  \"course\" : \"course\",\n  \"courseDetail\" : \"courseDetail\",\n  \"path\" : \"path\"\n}"
+						},
+						"url": {
+							"raw": "{{target}}/api/v1/activities",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "수정",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3ODA0MDV9.Yotgi62Obzx5AJ9I51PR3hFVSf-F7wUkW3o37sqsJozWi-dXiU3pacOSWNWfLG_E29_kgHxHUCCCQ7YmffdjKw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\" : \"title1\",\n  \"contents\" : \"contents1\",\n  \"startAt\" : \"2025-05-07T13:25:39\",\n  \"venue\" : \"venue1\",\n  \"venueUrl\" : \"venueUrl1\",\n  \"participantsLimit\" : 1,\n  \"participationFee\" : 1,\n  \"course\" : \"course1\",\n  \"courseDetail\" : \"courseDetail1\",\n  \"path\" : \"path1\"\n}"
+						},
+						"url": {
+							"raw": "{{target}}/api/v1/activities/4",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"activities",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "오픈",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY4NTAwMzZ9.QMKMSQV7I6Z7o4a46TJZB23NHbvVjkfqhWUHi_weF_PLwJ0rIiIwBVkPsunRj-Ijfp-fNnhR65LF1alUKnl5vQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/activities/open/4",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"activities",
+								"open",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "참여하기",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY4NTAwMzZ9.QMKMSQV7I6Z7o4a46TJZB23NHbvVjkfqhWUHi_weF_PLwJ0rIiIwBVkPsunRj-Ijfp-fNnhR65LF1alUKnl5vQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/activities/participation/4",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"activities",
+								"participation",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "삭제",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY4NTAwMzZ9.QMKMSQV7I6Z7o4a46TJZB23NHbvVjkfqhWUHi_weF_PLwJ0rIiIwBVkPsunRj-Ijfp-fNnhR65LF1alUKnl5vQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/activities/4",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"activities",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "목록조회",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3NzM3NjB9.VNGsugoRT_KWXp0wIYe4Wl1UtOrHoFpMqCXhcyZ7PAkbyP18pi8XHhEqrNpiDF_X2k-HlwUXx9QLBJVUkusiJA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/activities",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "참여자 조회",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY4NTAwMzZ9.QMKMSQV7I6Z7o4a46TJZB23NHbvVjkfqhWUHi_weF_PLwJ0rIiIwBVkPsunRj-Ijfp-fNnhR65LF1alUKnl5vQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/activities/participation/4",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"activities",
+								"participation",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "조회",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNiIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlck5hbWUiOiLrs7jtiKzrn7Ag64yA7ZGcIiwiY3Jld0lkIjo2LCJleHAiOjE3NDY3NzkwMjV9.NibwVP0J5uDoaubrqJx-nez1GK8dt_7BnevAswQQ-hVU0BW8gV0tcj209Rvrhv3fudum7GLF_C-ODAHCcUogTA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "{{target}}/api/v1/activities/4",
+							"host": [
+								"{{target}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"activities",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
