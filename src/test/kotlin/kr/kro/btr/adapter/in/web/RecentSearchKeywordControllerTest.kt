@@ -8,7 +8,7 @@ import kr.kro.btr.adapter.`in`.web.proxy.RecentSearchKeywordProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.utils.restdocs.ARRAY
 import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.pathMeans
+import kr.kro.btr.utils.restdocs.isRequired
 import kr.kro.btr.utils.restdocs.pathParameters
 import kr.kro.btr.utils.restdocs.responseBody
 import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
@@ -53,7 +53,7 @@ class RecentSearchKeywordControllerTest (
                     .andDocument(
                         "create-recent-search-keywords",
                         pathParameters(
-                            "keyword" pathMeans "검색 키워드"
+                            "keyword" isRequired true pathMeans "검색 키워드"
                         )
                     )
             }
@@ -95,7 +95,7 @@ class RecentSearchKeywordControllerTest (
                     .andDocument(
                         "remove-recent-search-keywords",
                         pathParameters(
-                            "keyword" pathMeans "삭제할 검색 키워드"
+                            "keyword" isRequired true pathMeans "삭제할 검색 키워드"
                         )
                     )
             }

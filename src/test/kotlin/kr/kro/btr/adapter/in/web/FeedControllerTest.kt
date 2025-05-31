@@ -26,8 +26,9 @@ import kr.kro.btr.utils.restdocs.OBJECT
 import kr.kro.btr.utils.restdocs.RestDocsField
 import kr.kro.btr.utils.restdocs.STRING
 import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.pathMeans
+import kr.kro.btr.utils.restdocs.isRequired
 import kr.kro.btr.utils.restdocs.pathParameters
+import kr.kro.btr.utils.restdocs.queryParameters
 import kr.kro.btr.utils.restdocs.requestBody
 import kr.kro.btr.utils.restdocs.responseBody
 import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
@@ -150,7 +151,7 @@ class FeedControllerTest (
                     .andDocument(
                         "search-feed-detail",
                         pathParameters(
-                            "feedId" pathMeans "식별자"
+                            "feedId" isRequired true pathMeans "식별자"
                         ),
                         responseBody(
                             "id" type NUMBER means "식별자" isRequired true,
@@ -228,7 +229,7 @@ class FeedControllerTest (
                     .andDocument(
                         "remove-feeds",
                         pathParameters(
-                            "feedId" pathMeans "식별자"
+                            "feedId" isRequired true pathMeans "식별자"
                         )
                     )
             }
@@ -259,7 +260,7 @@ class FeedControllerTest (
                     .andDocument(
                         "modify-feeds",
                         pathParameters(
-                            "feedId" pathMeans "식별자"
+                            "feedId" isRequired true pathMeans "식별자"
                         ),
                         requestBody(
                             "imageIds" type ARRAY means "이미지 식별자 목록" isRequired false,
@@ -274,7 +275,7 @@ class FeedControllerTest (
 
     describe("GET : $baseUrl") {
         val url = baseUrl
-        val requestBody = SearchFeedRequest(
+        val queryParam = SearchFeedRequest(
             category = FeedCategory.COMMUNITY,
             searchKeyword = "searchKeyword",
             isMyCrew = false
@@ -319,10 +320,11 @@ class FeedControllerTest (
         val page = PageImpl<FeedCard>(listOf(feedCard), PageRequest.of(0, 10), 1);
 
         context("조회를 하면") {
-            val requestJson = toJson(requestBody)
             val request = request(HttpMethod.GET, url)
                 .contentType(APPLICATION_JSON)
-                .content(requestJson)
+                .param("isMyCrew", queryParam.isMyCrew.toString())
+                .param("searchKeyword", queryParam.searchKeyword)
+                .param("category", queryParam.category?.name)
 
             it("200 OK") {
                 every { proxy.searchAll(any(), any(), any(), any()) } returns page
@@ -347,10 +349,10 @@ class FeedControllerTest (
                     )
                     .andDocument(
                         "search-feeds",
-                        requestBody(
-                            "category" type STRING means "카테고리" isRequired false,
-                            "searchKeyword" type STRING means "검색 키워드" isRequired false,
-                            "isMyCrew" type BOOLEAN means "나의 크루 보기 여부" isRequired false withDefaultValue "false"
+                        queryParameters(
+                            "category" isRequired true pathMeans "카테고리",
+                            "searchKeyword" isRequired true pathMeans "검색 키워드",
+                            "isMyCrew" isRequired true pathMeans "나의 크루 보기 여부"
                         ),
                         responseBody(
                             "totalPages" type NUMBER means "총 페이지 수" isRequired true,

@@ -24,7 +24,7 @@ import kr.kro.btr.utils.restdocs.OBJECT
 import kr.kro.btr.utils.restdocs.RestDocsField
 import kr.kro.btr.utils.restdocs.STRING
 import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.pathMeans
+import kr.kro.btr.utils.restdocs.isRequired
 import kr.kro.btr.utils.restdocs.pathParameters
 import kr.kro.btr.utils.restdocs.requestBody
 import kr.kro.btr.utils.restdocs.responseBody
@@ -131,7 +131,7 @@ class CommentControllerTest (
                     .andDocument(
                         "search-comments",
                         pathParameters(
-                            "feedId" pathMeans "조회할 피드 식별자"
+                            "feedId" isRequired true pathMeans "조회할 피드 식별자"
                         ),
                         responseBody(
                             "comments" type ARRAY means "댓글 목록" isRequired true,
@@ -244,7 +244,7 @@ class CommentControllerTest (
                     .andDocument(
                         "search-comment",
                         pathParameters(
-                            "commentId" pathMeans "조회할 댓글 식별자"
+                            "commentId" isRequired true pathMeans "조회할 댓글 식별자"
                         ),
                         responseBody(
                             "id" type NUMBER means "식별자" isRequired true,
@@ -287,7 +287,7 @@ class CommentControllerTest (
                     .andDocument(
                         "modify-comments",
                         pathParameters(
-                            "feedId" pathMeans "피드 식별자"
+                            "feedId" isRequired true pathMeans "피드 식별자"
                         ),
                         requestBody(
                             "parentCommentId" type NUMBER means "부모 댓글 식별자" isRequired false,
@@ -314,7 +314,7 @@ class CommentControllerTest (
                     .andDocument(
                         "remove-comments",
                         pathParameters(
-                            "commentId" pathMeans "식별자"
+                            "commentId" isRequired true pathMeans "식별자"
                         )
                     )
             }
@@ -364,7 +364,7 @@ class CommentControllerTest (
                     .andDocument(
                         "modify-comments",
                         pathParameters(
-                            "commentId" pathMeans "식별자"
+                            "commentId" isRequired true pathMeans "식별자"
                         ),
                         requestBody(
                             "contents" type STRING means "내용" isRequired true
@@ -401,7 +401,7 @@ class CommentControllerTest (
                     .andDocument(
                         "qty-comments",
                         pathParameters(
-                            "feedId" pathMeans "피드 식별자"
+                            "feedId" isRequired true pathMeans "피드 식별자"
                         ),
                         responseBody(
                             "qty" type NUMBER means "댓글 개수" isRequired true,

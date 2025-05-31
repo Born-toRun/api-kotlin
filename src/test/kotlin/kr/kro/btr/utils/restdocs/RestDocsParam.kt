@@ -7,22 +7,30 @@ import org.springframework.restdocs.request.RequestDocumentation
 
 class RestDocsParam(
 	val descriptor: ParameterDescriptor
-)
+) {
 
-infix fun String.pathMeans(
-	description: String
-): RestDocsParam {
-	return createField(this, description)
+    private var default: String
+        get() = descriptor.attributes["default"] as String
+        set(value) {
+            descriptor.attributes["default"] = value
+        }
+
+    infix fun pathMeans(description: String): RestDocsParam {
+        descriptor.description(description)
+        return this
+    }
+}
+
+infix fun String.isRequired(isRequired: Boolean): RestDocsParam {
+    return createField(this, isRequired)
 }
 
 private fun createField(
 	value: String,
-	description: String,
 	optional: Boolean = false
 ): RestDocsParam {
 	val descriptor = RequestDocumentation
 		.parameterWithName(value)
-		.description(description)
 
 	if (optional) descriptor.optional()
 

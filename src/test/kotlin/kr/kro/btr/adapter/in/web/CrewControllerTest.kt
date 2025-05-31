@@ -17,7 +17,7 @@ import kr.kro.btr.utils.restdocs.NUMBER
 import kr.kro.btr.utils.restdocs.RestDocsField
 import kr.kro.btr.utils.restdocs.STRING
 import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.pathMeans
+import kr.kro.btr.utils.restdocs.isRequired
 import kr.kro.btr.utils.restdocs.pathParameters
 import kr.kro.btr.utils.restdocs.requestBody
 import kr.kro.btr.utils.restdocs.responseBody
@@ -148,7 +148,7 @@ class CrewControllerTest (
                     .andDocument(
                         "search-crew-detail",
                         pathParameters(
-                            "crewId" pathMeans "식별자"
+                            "crewId" isRequired true pathMeans "식별자"
                         ),
                         responseBody(
                             "id" type NUMBER means "식별자" isRequired true,

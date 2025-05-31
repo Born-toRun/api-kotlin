@@ -18,7 +18,7 @@ import kr.kro.btr.utils.restdocs.NUMBER
 import kr.kro.btr.utils.restdocs.RestDocsField
 import kr.kro.btr.utils.restdocs.STRING
 import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.pathMeans
+import kr.kro.btr.utils.restdocs.isRequired
 import kr.kro.btr.utils.restdocs.pathParameters
 import kr.kro.btr.utils.restdocs.responseBody
 import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
@@ -175,7 +175,7 @@ class MarathonControllerTest (
                     .andDocument(
                         "search-marathon-detail",
                         pathParameters(
-                            "marathonId" pathMeans "조회 대상 마라톤 식별자"
+                            "marathonId" isRequired true pathMeans "조회 대상 마라톤 식별자"
                         ),
                         responseBody(
                             "id" type NUMBER means "식별자" isRequired true,
@@ -222,7 +222,7 @@ class MarathonControllerTest (
                     .andDocument(
                         "bookmark-marathon",
                         pathParameters(
-                            "marathonId" pathMeans "북마크 대상 식별자"
+                            "marathonId" isRequired true pathMeans "북마크 대상 식별자"
                         ),
                         responseBody(
                             "marathonId" type NUMBER means "북마크한 마라톤 식별자" isRequired true
@@ -254,7 +254,7 @@ class MarathonControllerTest (
                     .andDocument(
                         "cancel-bookmark-marathon",
                         pathParameters(
-                            "marathonId" pathMeans "북마크 취소 대상 식별자"
+                            "marathonId" isRequired true pathMeans "북마크 취소 대상 식별자"
                         ),
                         responseBody(
                             "marathonId" type NUMBER means "북마크 취소한 마라톤 식별자" isRequired true

@@ -78,7 +78,7 @@ operation::remove-feeds[snippets="http-request,path-parameters,http-response"]
 === 수정
 operation::modify-feeds[snippets="http-request,path-parameters,request-fields,http-response"]
 === 목록 조회
-operation::search-feeds[snippets="http-request,request-fields,http-response,response-fields"]
+operation::search-feeds[snippets="http-request,query-parameters,http-response,response-fields"]
 
 == 댓글
 === 목록 조회
@@ -106,7 +106,7 @@ operation::participate-activities[snippets="http-request,path-parameters,http-re
 === 참여 취소
 operation::cancel-participate-activities[snippets="http-request,path-parameters,http-response"]
 === 목록 조회
-operation::search-activities[snippets="http-request,request-fields,http-response,response-fields"]
+operation::search-activities[snippets="http-request,query-parameters,http-response,response-fields"]
 === 상세 조회
 operation::search-activities-detail[snippets="http-request,path-parameters,http-response,response-fields"]
 === 오픈

@@ -1,3 +1,8 @@
+
+import groovy.lang.Closure
+import io.swagger.v3.oas.models.servers.Server
+import org.hidetake.gradle.swagger.generator.GenerateSwaggerUI
+
 plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
@@ -7,6 +12,9 @@ plugins {
     id("org.springframework.boot")
     id("io.spring.dependency-management") version "1.1.7"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
+    id("com.epages.restdocs-api-spec") version "0.19.4"
+    id("org.hidetake.swagger.generator") version "2.19.2"
+
 //    id("org.asciidoctor.convert") version "2.4.0"
 }
 
@@ -32,6 +40,12 @@ java {
 
 repositories {
     mavenCentral()
+}
+
+swaggerSources {
+    create("swaggerSource") {
+        setInputFile(file("${openapi3.outputDirectory}/openapi3.yaml")) // 올바른 함수 사용
+    }
 }
 
 val snippetsDir = file("build/generated-snippets")
@@ -87,6 +101,8 @@ dependencies {
     testImplementation("io.kotest.extensions:kotest-extensions-spring:1.3.0")
     testImplementation("com.ninja-squad:springmockk:4.0.2")
     testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("com.epages:restdocs-api-spec:0.19.4")
+    testImplementation("com.epages:restdocs-api-spec-mockmvc:0.19.4")
 
     annotationProcessor("com.querydsl:querydsl-apt:$querydslVersion:jakarta")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
@@ -101,6 +117,45 @@ dependencies {
     kapt("org.mapstruct:mapstruct-processor:1.6.3")
     kaptTest("org.mapstruct:mapstruct-processor:1.6.3")
     asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
+    swaggerUI("org.webjars:swagger-ui:5.22.0")
+}
+
+openapi3 {
+    val local = closureOf<Server> {
+        url("http://localhost:8080")
+        description("Local Server")
+    } as Closure<Server>
+
+    val dev = closureOf<Server> {
+        url("https://api.born-to-run.kro.kr:8443")
+        description("dev Server")
+    } as Closure<Server>
+
+    setServers(listOf(local, dev))
+    title = "Born-to-run private API"
+    description = "본투런 api docs"
+    version = "1.0.0"
+    format = "yaml"
+    outputDirectory = openapi3.outputDirectory
+}
+
+tasks.withType<GenerateSwaggerUI> {
+    dependsOn("openapi3")
+    doFirst {
+        val swaggerUIFile = file("${openapi3.outputDirectory}/openapi3.yaml")
+        val securitySchemesContent = """
+            securitySchemes:
+                Authorization:
+                  type: apiKey
+                  name: Authorization
+                  scheme: bearer
+                  bearerFormat: JWT
+                  in: header
+          security:
+            - Authorization: []
+        """.trimIndent()
+        swaggerUIFile.appendText(securitySchemesContent)
+    }
 }
 
 tasks {
@@ -118,6 +173,8 @@ tasks {
 
     build {
         dependsOn(asciidoctor)
+        dependsOn(generateSwaggerUI)
+
         doFirst {
             delete("src/main/resources/static/docs")
         }
@@ -125,6 +182,10 @@ tasks {
             copy {
                 from("build/docs/asciidoc")
                 into("src/main/resources/static/docs")
+            }
+            copy {
+                from("build/swagger-ui-swaggerSource")
+                into("src/main/resources/static/docs/swagger")
             }
         }
     }

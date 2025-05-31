@@ -15,7 +15,7 @@ import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.NUMBER
 import kr.kro.btr.utils.restdocs.STRING
 import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.pathMeans
+import kr.kro.btr.utils.restdocs.isRequired
 import kr.kro.btr.utils.restdocs.pathParameters
 import kr.kro.btr.utils.restdocs.responseBody
 import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
@@ -85,7 +85,7 @@ class ObjectStorageControllerTest (
                     .andDocument(
                         "create-object-storage",
                         pathParameters(
-                            "bucket" pathMeans "저장할 버킷명(PROFILE: 프로필 이미지, FEED: 피드 이미지, CREW: 크루 대표/로고, ACTIVITY: 행사 이미지)"
+                            "bucket" isRequired true pathMeans "저장할 버킷명(PROFILE: 프로필 이미지, FEED: 피드 이미지, CREW: 크루 대표/로고, ACTIVITY: 행사 이미지)"
                         ),
                         // TODO: file 추가
                         responseBody(
@@ -114,8 +114,8 @@ class ObjectStorageControllerTest (
                     .andDocument(
                         "remove-object-storage",
                         pathParameters(
-                            "bucket" pathMeans "삭제할 버킷명(PROFILE: 프로필 이미지, FEED: 피드 이미지, CREW: 크루 대표/로고, ACTIVITY: 행사 이미지)",
-                            "fileId" pathMeans "삭제할 파일 식별자"
+                            "bucket" isRequired true pathMeans "삭제할 버킷명(PROFILE: 프로필 이미지, FEED: 피드 이미지, CREW: 크루 대표/로고, ACTIVITY: 행사 이미지)",
+                            "fileId" isRequired true pathMeans "삭제할 파일 식별자"
                         )
                     )
             }

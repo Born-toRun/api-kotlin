@@ -27,8 +27,9 @@ import kr.kro.btr.utils.restdocs.OBJECT
 import kr.kro.btr.utils.restdocs.RestDocsField
 import kr.kro.btr.utils.restdocs.STRING
 import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.pathMeans
+import kr.kro.btr.utils.restdocs.isRequired
 import kr.kro.btr.utils.restdocs.pathParameters
+import kr.kro.btr.utils.restdocs.queryParameters
 import kr.kro.btr.utils.restdocs.requestBody
 import kr.kro.btr.utils.restdocs.responseBody
 import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
@@ -138,7 +139,7 @@ class ActivityControllerTest (
                     .andDocument(
                         "modify-activities",
                         pathParameters(
-                            "activityId" pathMeans "식별자"
+                            "activityId" isRequired true pathMeans "식별자"
                         ),
                         requestBody(
                             "title" type STRING means "행사명" isRequired true,
@@ -173,7 +174,7 @@ class ActivityControllerTest (
                     .andDocument(
                         "remove-activities",
                         pathParameters(
-                            "activityId" pathMeans "식별자"
+                            "activityId" isRequired true pathMeans "식별자"
                         )
                     )
             }
@@ -196,7 +197,7 @@ class ActivityControllerTest (
                     .andDocument(
                         "participate-activities",
                         pathParameters(
-                            "activityId" pathMeans "식별자"
+                            "activityId" isRequired true pathMeans "식별자"
                         )
                     )
             }
@@ -219,7 +220,7 @@ class ActivityControllerTest (
                     .andDocument(
                         "cancel-participate-activities",
                         pathParameters(
-                            "activityId" pathMeans "식별자"
+                            "activityId" isRequired true pathMeans "식별자"
                         )
                     )
             }
@@ -228,7 +229,7 @@ class ActivityControllerTest (
 
     describe("GET : $baseUrl") {
         val url = baseUrl
-        val requestBody = SearchAllActivityRequest(
+        val queryParam = SearchAllActivityRequest(
             courses = listOf("course1", "course2"),
             recruitmentType = ActivityRecruitmentType.RECRUITING
         )
@@ -249,7 +250,7 @@ class ActivityControllerTest (
                 isOpen = true,
                 updatedAt = LocalDateTime.now(),
                 registeredAt = LocalDateTime.now(),
-                recruitmentType = requestBody.recruitmentType,
+                recruitmentType = queryParam.recruitmentType,
                 host = ActivityResult.Host(
                     userId = 0,
                     crewId = 0,
@@ -288,10 +289,10 @@ class ActivityControllerTest (
         )
 
         context("조회를 하면") {
-            val requestJson = toJson(requestBody)
             val request = request(HttpMethod.GET, url)
                 .contentType(APPLICATION_JSON)
-                .content(requestJson)
+                .param("courses", queryParam.courses?.joinToString(","))
+                .param("recruitmentType", queryParam.recruitmentType?.name)
 
             it("200 OK") {
                 every { proxy.searchAll(any(), any()) } returns activityResults
@@ -320,9 +321,9 @@ class ActivityControllerTest (
                     )
                     .andDocument(
                         "search-activities",
-                        requestBody(
-                            "courses" type ARRAY means "코스 리스트" isRequired false,
-                            "recruitmentType" type STRING means "상태" isRequired false
+                        queryParameters(
+                            "courses" isRequired false pathMeans "코스 리스트",
+                            "recruitmentType" isRequired false pathMeans "상태"
                         ),
                         responseBody(
                             "activities" type ARRAY means "행사 목록" isRequired true,
@@ -427,7 +428,7 @@ class ActivityControllerTest (
                     .andDocument(
                         "search-activities-detail",
                         pathParameters(
-                            "activityId" pathMeans "식별자"
+                            "activityId" isRequired true pathMeans "식별자"
                         ),
                         responseBody(
                             "id" type NUMBER means "식별자" isRequired true,
@@ -511,7 +512,7 @@ class ActivityControllerTest (
                     .andDocument(
                         "open-activities",
                         pathParameters(
-                            "activityId" pathMeans "식별자"
+                            "activityId" isRequired true pathMeans "식별자"
                         ),
                         responseBody(
                             "activityId" type NUMBER means "식별자" isRequired true,
@@ -584,7 +585,7 @@ class ActivityControllerTest (
                     .andDocument(
                         "search-activities-participation",
                         pathParameters(
-                            "activityId" pathMeans "식별자"
+                            "activityId" isRequired true pathMeans "식별자"
                         ),
                         responseBody(
                             "host" type OBJECT means "호스트" isRequired true,
@@ -622,7 +623,7 @@ class ActivityControllerTest (
                     .andDocument(
                         "activities-attendance",
                         pathParameters(
-                            "activityId" pathMeans "식별자"
+                            "activityId" isRequired true pathMeans "식별자"
                         ),
                         requestBody(
                             "accessCode" type NUMBER means "참여코드" isRequired true

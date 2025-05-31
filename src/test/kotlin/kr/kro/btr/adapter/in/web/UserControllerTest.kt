@@ -20,7 +20,7 @@ import kr.kro.btr.utils.restdocs.BOOLEAN
 import kr.kro.btr.utils.restdocs.NUMBER
 import kr.kro.btr.utils.restdocs.STRING
 import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.pathMeans
+import kr.kro.btr.utils.restdocs.isRequired
 import kr.kro.btr.utils.restdocs.pathParameters
 import kr.kro.btr.utils.restdocs.requestBody
 import kr.kro.btr.utils.restdocs.responseBody
@@ -218,7 +218,7 @@ class UserControllerTest (
                     .andDocument(
                         "user-detail",
                         pathParameters(
-                            "userId" pathMeans "대상 유저 식별자"
+                            "userId" isRequired true pathMeans "대상 유저 식별자"
                         ),
                         responseBody(
                             "userId" type NUMBER means "식별자" isRequired true,

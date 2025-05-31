@@ -1,10 +1,12 @@
 package kr.kro.btr.utils.restdocs
 
+import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import kr.kro.btr.common.security.MockSecurityFilter
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
-import org.springframework.restdocs.operation.preprocess.Preprocessors
+import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
+import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
+import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
 import org.springframework.restdocs.snippet.Snippet
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers
 import org.springframework.test.web.servlet.MockMvc
@@ -19,7 +21,8 @@ fun ResultActions.andDocument(
 	identifier: String,
 	vararg snippets: Snippet
 ): ResultActions {
-	return andDo(document(identifier, *snippets))
+//	return andDo(document(identifier, *snippets))
+    return andDo(document(identifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()), *snippets))
 }
 
 fun restDocMockMvcBuild(
@@ -31,8 +34,8 @@ fun restDocMockMvcBuild(
 		.apply<DefaultMockMvcBuilder>(
 			MockMvcRestDocumentation.documentationConfiguration(provider)
 				.operationPreprocessors()
-				.withRequestDefaults(Preprocessors.prettyPrint())
-				.withResponseDefaults(Preprocessors.prettyPrint())
+				.withRequestDefaults(prettyPrint())
+				.withResponseDefaults(prettyPrint())
 		)
 		.apply<DefaultMockMvcBuilder>(SecurityMockMvcConfigurers.springSecurity(MockSecurityFilter()))
 		.addFilter<DefaultMockMvcBuilder>(CharacterEncodingFilter("UTF-8", true))

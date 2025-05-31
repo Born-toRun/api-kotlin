@@ -8,7 +8,7 @@ import kr.kro.btr.adapter.`in`.web.proxy.RecommendationProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.constant.RecommendationType
 import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.pathMeans
+import kr.kro.btr.utils.restdocs.isRequired
 import kr.kro.btr.utils.restdocs.pathParameters
 import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
 import org.springframework.beans.factory.annotation.Autowired
@@ -52,8 +52,8 @@ class RecommendationControllerTest (
                     .andDocument(
                         "recommended",
                         pathParameters(
-                            "recommendationType" pathMeans "좋아요 타입(FEED, COMMENT)",
-                            "contentId" pathMeans "좋아요 컨텐츠 식별자"
+                            "recommendationType" isRequired true pathMeans "좋아요 타입(FEED, COMMENT)",
+                            "contentId" isRequired true pathMeans "좋아요 컨텐츠 식별자"
                         )
                     )
             }
@@ -77,8 +77,8 @@ class RecommendationControllerTest (
                     .andDocument(
                         "cancel-recommendation",
                         pathParameters(
-                            "recommendationType" pathMeans "좋아요 타입(FEED, COMMENT)",
-                            "contentId" pathMeans "좋아요 컨텐츠 식별자"
+                            "recommendationType" isRequired true pathMeans "좋아요 타입(FEED, COMMENT)",
+                            "contentId" isRequired true pathMeans "좋아요 컨텐츠 식별자"
                         )
                     )
             }
