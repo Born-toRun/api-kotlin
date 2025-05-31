@@ -26,6 +26,10 @@ jobs:
       with:
         arguments: clean asciidoctor build
 
+    # 디버그
+    - name: List build directory
+      run: ls -R build/resources/main || echo "Directory not found"
+
     # docker image build
     - name: docker image build
       run: docker build --platform linux/arm64/v8 -t ${{ secrets.DOCKERHUB_USERNAME }}/born-to-run-api -f docker/Dockerfile .
