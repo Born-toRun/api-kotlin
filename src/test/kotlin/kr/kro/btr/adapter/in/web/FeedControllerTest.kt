@@ -350,9 +350,9 @@ class FeedControllerTest (
                     .andDocument(
                         "search-feeds",
                         queryParameters(
-                            "category" isRequired true pathMeans "카테고리",
-                            "searchKeyword" isRequired true pathMeans "검색 키워드",
-                            "isMyCrew" isRequired true pathMeans "나의 크루 보기 여부"
+                            "category" isRequired false pathMeans "카테고리",
+                            "searchKeyword" isRequired false pathMeans "검색 키워드",
+                            "isMyCrew" isRequired false pathMeans "나의 크루 보기 여부"
                         ),
                         responseBody(
                             "totalPages" type NUMBER means "총 페이지 수" isRequired true,

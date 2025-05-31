@@ -90,8 +90,6 @@ dependencies {
     implementation("com.querydsl:querydsl-jpa:$querydslVersion:jakarta")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.6")
-//    implementation("org.slf4j:slf4j-api:2.0.17")
-//    implementation("ch.qos.logback:logback-classic:1.5.18")
 
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -176,7 +174,7 @@ tasks {
         dependsOn(generateSwaggerUI)
 
         doFirst {
-            delete("src/main/resources/static/docs")
+            delete("src/main/resources/static")
         }
         doLast {
             copy {

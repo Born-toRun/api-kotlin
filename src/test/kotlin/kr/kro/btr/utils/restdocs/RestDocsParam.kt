@@ -27,12 +27,12 @@ infix fun String.isRequired(isRequired: Boolean): RestDocsParam {
 
 private fun createField(
 	value: String,
-	optional: Boolean = false
+    isRequired: Boolean = false
 ): RestDocsParam {
 	val descriptor = RequestDocumentation
 		.parameterWithName(value)
 
-	if (optional) descriptor.optional()
+	if (!isRequired) descriptor.optional()
 
 	return RestDocsParam(descriptor)
 }
