@@ -22,9 +22,10 @@ jobs:
 
     # build
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      with:
-        arguments: clean asciidoctor build
+      run: ./gradlew clean asciidoctor build
+#      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+#      with:
+#        arguments: clean asciidoctor build
 
         # 디버그
     - name: List build directory
