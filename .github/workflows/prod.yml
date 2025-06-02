@@ -22,14 +22,17 @@ jobs:
 
     # build
     - name: Build with Gradle
-      run: ./gradlew clean asciidoctor build
-#      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-#      with:
-#        arguments: clean asciidoctor build
+      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      with:
+        arguments: clean asciidoctor build
 
-        # 디버그
-    - name: List build directory
-      run: ls -R build
+    # TODO: 왜인지 모르겠으나 git actions에서 build하면 docs copy가 실행이 안됨
+    - name: static directory exists
+      run: mkdir -p build/resources/main/static/swagger
+    - name: copy rest docs
+      run: cp build/docs/asciidoc/index.html build/resources/main/static
+    - name: copy swagger docs
+      run: cp -R build/swagger-ui-swaggerSource/* build/resources/main/static/swagger
 
     # docker image build
     - name: docker image build
