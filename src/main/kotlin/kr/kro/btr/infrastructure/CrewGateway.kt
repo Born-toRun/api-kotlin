@@ -1,7 +1,7 @@
 package kr.kro.btr.infrastructure
 
 import kr.kro.btr.adapter.out.persistence.CrewRepository
-import kr.kro.btr.core.converter.CrewConverter
+import kr.kro.btr.base.extension.toCrewEntity
 import kr.kro.btr.domain.entity.CrewEntity
 import kr.kro.btr.infrastructure.model.CreateCrewQuery
 import kr.kro.btr.support.exception.NotFoundException
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class CrewGateway(
-    private val crewConverter: CrewConverter,
     private val crewRepository: CrewRepository
 ) {
 
@@ -19,7 +18,7 @@ class CrewGateway(
     }
 
     fun create(query: CreateCrewQuery) {
-        val crewEntity = crewConverter.map(query)
+        val crewEntity = query.toCrewEntity()
         crewRepository.save(crewEntity)
     }
 

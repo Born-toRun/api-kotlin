@@ -5,7 +5,8 @@ import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
-import kr.kro.btr.core.converter.CrewConverter
+import kr.kro.btr.base.extension.toDetailCrewResponse
+import kr.kro.btr.base.extension.toSearchCrewResponse
 import kr.kro.btr.domain.port.model.Crew
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType
@@ -15,20 +16,21 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/crews")
 class CrewController(
-    private val crewConverter: CrewConverter,
     private val crewProxy: CrewProxy
 ) {
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun searchAll(): ResponseEntity<SearchCrewResponse> {
         val crews: List<Crew> = crewProxy.searchAll()
-        return ResponseEntity.ok(crewConverter.map(crews))
+        val response = crews.toSearchCrewResponse()
+        return ResponseEntity.ok(response)
     }
 
     @GetMapping("/{crewId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun detail(@PathVariable crewId: Long): ResponseEntity<DetailCrewResponse> {
         val crew = crewProxy.detail(crewId)
-        return ResponseEntity.ok(crewConverter.map(crew))
+        val response = crew.toDetailCrewResponse()
+        return ResponseEntity.ok(response)
     }
 
     // TODO: 관리자 권한

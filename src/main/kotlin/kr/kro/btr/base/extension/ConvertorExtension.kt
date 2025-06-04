@@ -3,6 +3,8 @@ package kr.kro.btr.base.extension
 import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.CreateCommentRequest
+import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
+import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentResponse
@@ -13,10 +15,12 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchAllActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchCommentDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCommentResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchCrewResponse
 import kr.kro.btr.domain.constant.ActivityRecruitmentType
 import kr.kro.btr.domain.entity.ActivityEntity
 import kr.kro.btr.domain.entity.ActivityParticipationEntity
 import kr.kro.btr.domain.entity.CommentEntity
+import kr.kro.btr.domain.entity.CrewEntity
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.port.model.ActivityResult
 import kr.kro.btr.domain.port.model.AttendanceActivityCommand
@@ -24,6 +28,8 @@ import kr.kro.btr.domain.port.model.CommentDetail
 import kr.kro.btr.domain.port.model.CommentResult
 import kr.kro.btr.domain.port.model.CreateActivityCommand
 import kr.kro.btr.domain.port.model.CreateCommentCommand
+import kr.kro.btr.domain.port.model.CreateCrewCommand
+import kr.kro.btr.domain.port.model.Crew
 import kr.kro.btr.domain.port.model.ModifyActivityCommand
 import kr.kro.btr.domain.port.model.ModifyCommentCommand
 import kr.kro.btr.domain.port.model.ParticipantResult
@@ -32,6 +38,7 @@ import kr.kro.btr.domain.port.model.SearchAllActivityCommand
 import kr.kro.btr.infrastructure.model.AttendanceActivityQuery
 import kr.kro.btr.infrastructure.model.CreateActivityQuery
 import kr.kro.btr.infrastructure.model.CreateCommentQuery
+import kr.kro.btr.infrastructure.model.CreateCrewQuery
 import kr.kro.btr.infrastructure.model.ModifyActivityQuery
 import kr.kro.btr.infrastructure.model.ModifyCommentQuery
 import kr.kro.btr.infrastructure.model.ParticipateActivityQuery
@@ -552,5 +559,78 @@ fun UserEntity.toCommentDetailWriter(): CommentDetail.Writer {
         crewName = this.crewEntity!!.name,
         isAdmin = this.getIsAdmin(),
         isManager = this.getIsManager()
+    )
+}
+
+// crew
+fun List<Crew>.toSearchCrewResponse(): SearchCrewResponse {
+    val crewDetails = this.map { it.toCrewDetail() }
+    return SearchCrewResponse(crewDetails)
+}
+
+fun Crew.toCrewDetail(): SearchCrewResponse.CrewDetail {
+    return SearchCrewResponse.CrewDetail(
+        id = this.id,
+        crewName = this.name,
+        contents = this.contents,
+        region = this.region,
+        imageUri = this.imageUri,
+        logoUri = this.logoUri,
+        crewSnsUri = this.sns
+    )
+}
+
+fun Crew.toDetailCrewResponse(): DetailCrewResponse {
+    return DetailCrewResponse(
+        id = this.id,
+        crewName = this.name,
+        contents = this.contents,
+        region = this.region,
+        imageUri = this.imageUri,
+        logoUri = this.logoUri,
+        crewSnsUri = this.sns
+    )
+}
+
+fun CreateCrewRequest.toCreateCrewCommand(): CreateCrewCommand {
+    return CreateCrewCommand(
+        name = this.name,
+        contents = this.contents,
+        sns = this.sns,
+        region = this.region
+    )
+}
+
+fun CrewEntity.toCrew(): Crew {
+    return Crew(
+        id = this.id,
+        name = this.name,
+        contents = this.contents,
+        region = this.region,
+        sns = this.sns,
+        imageUri = this.imageEntity?.fileUri,
+        logoUri = this.logoEntity?.fileUri
+    )
+}
+
+fun List<CrewEntity>.toCrews(): List<Crew> {
+    return this.map { it.toCrew() }
+}
+
+fun CreateCrewCommand.toCreateCrewQuery(): CreateCrewQuery {
+    return CreateCrewQuery(
+        name = this.name,
+        contents = this.contents,
+        sns = this.sns,
+        region = this.region
+    )
+}
+
+fun CreateCrewQuery.toCrewEntity(): CrewEntity {
+    return CrewEntity(
+        name = this.name,
+        contents = this.contents,
+        sns = this.sns,
+        region = this.region
     )
 }

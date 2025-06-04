@@ -9,7 +9,6 @@ import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.core.converter.CrewConverter
 import kr.kro.btr.domain.port.model.Crew
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.ARRAY
@@ -37,8 +36,6 @@ import org.springframework.web.context.WebApplicationContext
 
 @WebMvcTest(CrewController::class)
 class CrewControllerTest (
-    @MockkBean
-    private val converter: CrewConverter,
     @MockkBean
     private val proxy: CrewProxy,
     @Autowired
@@ -80,7 +77,6 @@ class CrewControllerTest (
 
             it("200 OK") {
                 every { proxy.searchAll() } returns crews
-                every { converter.map(any<List<Crew>>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -132,7 +128,6 @@ class CrewControllerTest (
 
             it("200 OK") {
                 every { proxy.detail(any()) } returns crew
-                every { converter.map(any<Crew>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)

@@ -1,6 +1,8 @@
 package kr.kro.btr.core.service
 
-import kr.kro.btr.core.converter.CrewConverter
+import kr.kro.btr.base.extension.toCreateCrewQuery
+import kr.kro.btr.base.extension.toCrew
+import kr.kro.btr.base.extension.toCrews
 import kr.kro.btr.domain.entity.CrewEntity
 import kr.kro.btr.domain.port.CrewPort
 import kr.kro.btr.domain.port.model.CreateCrewCommand
@@ -11,24 +13,23 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CrewService(
-    private val crewConverter: CrewConverter,
     private val crewGateway: CrewGateway
 ) : CrewPort {
 
     @Transactional(readOnly = true)
     override fun searchAll(): List<Crew> {
         val crewEntities: List<CrewEntity> = crewGateway.searchAll()
-        return crewConverter.map(crewEntities)
+        return crewEntities.toCrews()
     }
 
     override fun detail(crewId: Long): Crew {
         val crewEntity = crewGateway.searchById(crewId)
-        return crewConverter.map(crewEntity)
+        return crewEntity.toCrew()
     }
 
     @Transactional
     override fun create(command: CreateCrewCommand) {
-        val query = crewConverter.map(command)
+        val query = command.toCreateCrewQuery()
         crewGateway.create(query)
     }
 }
