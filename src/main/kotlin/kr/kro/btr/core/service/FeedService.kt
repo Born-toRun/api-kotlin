@@ -1,6 +1,10 @@
 package kr.kro.btr.core.service
 
-import kr.kro.btr.core.converter.FeedConverter
+import kr.kro.btr.base.extension.toCreateFeedQuery
+import kr.kro.btr.base.extension.toFeedCard
+import kr.kro.btr.base.extension.toFeedResult
+import kr.kro.btr.base.extension.toModifyFeedQuery
+import kr.kro.btr.base.extension.toSearchAllFeedQuery
 import kr.kro.btr.domain.entity.FeedImageMappingEntity
 import kr.kro.btr.domain.port.FeedPort
 import kr.kro.btr.domain.port.model.CreateFeedCommand
@@ -21,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class FeedService(
-    private val feedConverter: FeedConverter,
     private val feedGateway: FeedGateway,
     private val feedImageMappingGateway: FeedImageMappingGateway,
     private val userGateway: UserGateway
@@ -30,7 +33,7 @@ class FeedService(
     @Transactional(readOnly = true)
     override fun searchDetail(command: SearchFeedDetailCommand): FeedResult {
         val feedEntity = feedGateway.search(command.feedId)
-        return feedConverter.map(feedEntity, command.my)
+        return feedEntity.toFeedResult(command.my)
     }
 
     @Transactional(readOnly = true)
@@ -41,11 +44,11 @@ class FeedService(
                     .map { it.id }
             } ?: emptyList()
 
-        val query = feedConverter.map(command, searchedUserIds)
+        val query = command.toSearchAllFeedQuery(searchedUserIds)
         val feedPage = feedGateway.searchAllByFilter(query, pageable)
 
         return feedPage.map { entity ->
-            feedConverter.map(entity, command.my.id)
+            entity.toFeedCard(command.my.id)
         }
     }
 
@@ -57,7 +60,7 @@ class FeedService(
 
     @Transactional
     override fun create(command: CreateFeedCommand) {
-        val query = feedConverter.map(command)
+        val query = command.toCreateFeedQuery()
         feedGateway.create(query)
     }
 
@@ -68,7 +71,7 @@ class FeedService(
 
     @Transactional
     override fun modify(command: ModifyFeedCommand) {
-        val query = feedConverter.map(command)
+        val query = command.toModifyFeedQuery()
         val modified = feedGateway.modify(query)
 
         val removedImageIds = modified.feedImageMappingEntities

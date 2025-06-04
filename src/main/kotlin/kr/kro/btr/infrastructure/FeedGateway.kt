@@ -3,7 +3,7 @@ package kr.kro.btr.infrastructure
 import kr.kro.btr.adapter.out.persistence.FeedImageMappingRepository
 import kr.kro.btr.adapter.out.persistence.FeedRepository
 import kr.kro.btr.adapter.out.persistence.querydsl.FeedQuery
-import kr.kro.btr.core.converter.FeedConverter
+import kr.kro.btr.base.extension.toFeedEntity
 import kr.kro.btr.domain.entity.FeedEntity
 import kr.kro.btr.domain.entity.FeedImageMappingEntity
 import kr.kro.btr.infrastructure.model.CreateFeedQuery
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class FeedGateway(
-    private val feedConverter: FeedConverter,
     private val feedRepository: FeedRepository,
     private val feedImageMappingRepository: FeedImageMappingRepository,
     private val feedQuery: FeedQuery
@@ -31,7 +30,7 @@ class FeedGateway(
     }
 
     fun create(query: CreateFeedQuery) {
-        val feedEntity = feedConverter.map(query)
+        val feedEntity = query.toFeedEntity()
         feedRepository.save(feedEntity)
 
         val feedImageMappingEntities = query.imageIds?.map { imageId ->

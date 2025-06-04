@@ -12,7 +12,6 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchFeedResponse
 import kr.kro.btr.adapter.`in`.web.proxy.FeedProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.core.converter.FeedConverter
 import kr.kro.btr.domain.constant.FeedAccessLevel
 import kr.kro.btr.domain.constant.FeedCategory
 import kr.kro.btr.domain.port.model.FeedCard
@@ -51,8 +50,6 @@ import kotlin.collections.List
 
 @WebMvcTest(FeedController::class)
 class FeedControllerTest (
-    @MockkBean
-    private val converter: FeedConverter,
     @MockkBean
     private val proxy: FeedProxy,
     @Autowired
@@ -126,7 +123,6 @@ class FeedControllerTest (
             it("200 OK") {
                 every { proxy.searchDetail(any(), any()) } returns feedResult
                 every { proxy.increaseViewQty(any()) } just runs
-                every { converter.map(any<FeedResult>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -328,7 +324,6 @@ class FeedControllerTest (
 
             it("200 OK") {
                 every { proxy.searchAll(any(), any(), any(), any()) } returns page
-                every { converter.map(any<FeedCard>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)

@@ -4,10 +4,13 @@ import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.CreateCommentRequest
 import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
+import kr.kro.btr.adapter.`in`.web.payload.CreateFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
+import kr.kro.btr.adapter.`in`.web.payload.DetailFeedResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentResponse
+import kr.kro.btr.adapter.`in`.web.payload.ModifyFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.OpenActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.ParticipationActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityDetailResponse
@@ -16,11 +19,14 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchAllActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchCommentDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCommentResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchFeedRequest
+import kr.kro.btr.adapter.`in`.web.payload.SearchFeedResponse
 import kr.kro.btr.domain.constant.ActivityRecruitmentType
 import kr.kro.btr.domain.entity.ActivityEntity
 import kr.kro.btr.domain.entity.ActivityParticipationEntity
 import kr.kro.btr.domain.entity.CommentEntity
 import kr.kro.btr.domain.entity.CrewEntity
+import kr.kro.btr.domain.entity.FeedEntity
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.port.model.ActivityResult
 import kr.kro.btr.domain.port.model.AttendanceActivityCommand
@@ -29,20 +35,30 @@ import kr.kro.btr.domain.port.model.CommentResult
 import kr.kro.btr.domain.port.model.CreateActivityCommand
 import kr.kro.btr.domain.port.model.CreateCommentCommand
 import kr.kro.btr.domain.port.model.CreateCrewCommand
+import kr.kro.btr.domain.port.model.CreateFeedCommand
 import kr.kro.btr.domain.port.model.Crew
+import kr.kro.btr.domain.port.model.FeedCard
+import kr.kro.btr.domain.port.model.FeedResult
 import kr.kro.btr.domain.port.model.ModifyActivityCommand
 import kr.kro.btr.domain.port.model.ModifyCommentCommand
+import kr.kro.btr.domain.port.model.ModifyFeedCommand
 import kr.kro.btr.domain.port.model.ParticipantResult
 import kr.kro.btr.domain.port.model.ParticipateActivityCommand
+import kr.kro.btr.domain.port.model.RemoveFeedCommand
 import kr.kro.btr.domain.port.model.SearchAllActivityCommand
+import kr.kro.btr.domain.port.model.SearchAllFeedCommand
+import kr.kro.btr.domain.port.model.SearchFeedDetailCommand
 import kr.kro.btr.infrastructure.model.AttendanceActivityQuery
 import kr.kro.btr.infrastructure.model.CreateActivityQuery
 import kr.kro.btr.infrastructure.model.CreateCommentQuery
 import kr.kro.btr.infrastructure.model.CreateCrewQuery
+import kr.kro.btr.infrastructure.model.CreateFeedQuery
 import kr.kro.btr.infrastructure.model.ModifyActivityQuery
 import kr.kro.btr.infrastructure.model.ModifyCommentQuery
+import kr.kro.btr.infrastructure.model.ModifyFeedQuery
 import kr.kro.btr.infrastructure.model.ParticipateActivityQuery
 import kr.kro.btr.infrastructure.model.SearchAllActivityQuery
+import kr.kro.btr.infrastructure.model.SearchAllFeedQuery
 import kr.kro.btr.support.TokenDetail
 import java.time.LocalDateTime
 
@@ -632,5 +648,223 @@ fun CreateCrewQuery.toCrewEntity(): CrewEntity {
         contents = this.contents,
         sns = this.sns,
         region = this.region
+    )
+}
+
+// feed
+fun FeedResult.toDetailFeedResponse(): DetailFeedResponse {
+    return DetailFeedResponse(
+        id = this.id,
+        contents = this.contents,
+        images = this.images.toDetailFeedResponseImages(),
+        category = this.category,
+        accessLevel = this.accessLevel,
+        viewQty = this.viewQty,
+        recommendationQty = this.recommendationQty,
+        commentQty = this.commentQty,
+        registeredAt = this.registeredAt,
+        writer = this.writer.toDetailFeedResponseWriter(),
+        viewer = DetailFeedResponse.Viewer(
+            hasMyRecommendation = this.hasMyRecommendation,
+            hasMyComment = this.hasMyComment
+        )
+    )
+}
+
+fun FeedResult.Writer.toDetailFeedResponseWriter(): DetailFeedResponse.Writer {
+    return DetailFeedResponse.Writer(
+        userId = this.userId,
+        userName = this.userName,
+        crewName = this.crewName,
+        profileImageUri = this.profileImageUri,
+        isAdmin = this.isAdmin,
+        isManager = this.isManager
+    )
+}
+
+fun List<FeedResult.Image>?.toDetailFeedResponseImages(): List<DetailFeedResponse.Image>? {
+    return this?.map { it.toDetailFeedResponseImage() }
+}
+
+fun FeedResult.Image.toDetailFeedResponseImage(): DetailFeedResponse.Image {
+    return DetailFeedResponse.Image(
+        imageId = this.id,
+        imageUri = this.imageUri
+    )
+}
+
+fun FeedCard.toSearchFeedResponse(): SearchFeedResponse {
+    return SearchFeedResponse(
+        id = this.id,
+        imageUris = this.imageUris,
+        contents = this.contents,
+        viewQty = this.viewQty,
+        recommendationQty = this.recommendationQty,
+        commentQty = this.commentQty,
+        registeredAt = this.registeredAt,
+        writer = this.writer.toSearchFeedResponseWriter(),
+        viewer = SearchFeedResponse.Viewer(
+            hasMyRecommendation = this.hasRecommendation,
+            hasMyComment = this.hasComment
+        )
+    )
+}
+
+fun FeedCard.Writer.toSearchFeedResponseWriter(): SearchFeedResponse.Writer {
+    return SearchFeedResponse.Writer(
+        userName = this.userName,
+        crewName = this.crewName,
+        profileImageUri = this.profileImageUri,
+        isAdmin = this.isAdmin,
+        isManager = this.isManager
+    )
+}
+
+fun TokenDetail.toSearchFeedDetailCommand(feedId: Long): SearchFeedDetailCommand {
+    return SearchFeedDetailCommand(
+        my = this,
+        feedId = feedId
+    )
+}
+
+fun SearchFeedRequest.toSearchAllFeedCommand(my: TokenDetail, feedId: Long): SearchAllFeedCommand {
+    return SearchAllFeedCommand(
+        category = this.category,
+        searchKeyword = this.searchKeyword,
+        isMyCrew = this.isMyCrew,
+        my = my,
+        lastFeedId = feedId
+    )
+}
+
+fun CreateFeedRequest.toCreateFeedCommand(my: TokenDetail): CreateFeedCommand {
+    return CreateFeedCommand(
+        imageIds = this.imageIds,
+        contents = this.contents,
+        category = this.category,
+        accessLevel = this.accessLevel,
+        myUserId = my.id
+    )
+}
+
+fun TokenDetail.toRemoveFeedCommand(feedId: Long): RemoveFeedCommand {
+    return RemoveFeedCommand(
+        feedId = feedId,
+        my = this
+    )
+}
+
+fun ModifyFeedRequest.toModifyFeedCommand(feedId: Long): ModifyFeedCommand {
+    return ModifyFeedCommand(
+        imageIds = this.imageIds,
+        contents = this.contents,
+        category = this.category,
+        accessLevel = this.accessLevel,
+        feedId = feedId
+    )
+}
+
+fun CreateFeedQuery.toFeedEntity(): FeedEntity {
+    return FeedEntity(
+        userId = this.userId,
+        contents = this.contents,
+        category = this.category,
+        accessLevel = this.accessLevel
+    )
+}
+
+fun FeedEntity.toFeedResult(my: TokenDetail): FeedResult {
+    val writer = this.userEntity!!
+    val images = this.feedImageMappingEntities.mapNotNull { image ->
+        image.objectStorageEntity?.let {
+            FeedResult.Image(
+                id = it.id,
+                imageUri = it.fileUri
+            )
+        }
+    }
+
+    return FeedResult(
+        id = this.id,
+        contents = this.contents,
+        category = this.category,
+        accessLevel = this.accessLevel,
+        viewQty = this.viewQty,
+        registeredAt = this.registeredAt,
+        updatedAt = this.updatedAt,
+        images = images.ifEmpty { null },
+        writer = writer.toFeedResultWriter(),
+        recommendationQty = this.recommendationEntities.size,
+        hasMyRecommendation = this.hasMyRecommendation(my.id),
+        commentQty = this.commentEntities.size,
+        hasMyComment = this.hasMyComment(my.id)
+    )
+}
+
+fun UserEntity.toFeedResultWriter(): FeedResult.Writer {
+    return FeedResult.Writer(
+        userId = this.id,
+        userName = this.name!!,
+        crewName = this.crewEntity!!.name,
+        profileImageUri = this.getProfileImageUri(),
+        isAdmin = this.getIsAdmin(),
+        isManager = this.getIsManager()
+    )
+}
+
+fun SearchAllFeedCommand.toSearchAllFeedQuery(userIds: List<Long>): SearchAllFeedQuery {
+    return SearchAllFeedQuery(
+        category = this.category,
+        searchKeyword = this.searchKeyword,
+        isMyCrew = this.isMyCrew,
+        my = this.my,
+        lastFeedId = this.lastFeedId,
+        searchedUserIds = userIds
+    )
+}
+
+fun FeedEntity.toFeedCard(userId: Long): FeedCard {
+    val writer = this.userEntity!!
+    return FeedCard(
+        id = this.id,
+        imageUris = this.getImageUris(),
+        contents = this.contents,
+        viewQty = this.viewQty,
+        recommendationQty = this.getRecommendationQty(),
+        commentQty = this.getCommentQty(),
+        registeredAt = this.registeredAt,
+        hasRecommendation = this.hasMyRecommendation(userId),
+        hasComment = this.hasMyComment(userId),
+        writer = writer.toFeedCardWriter()
+    )
+}
+
+fun UserEntity.toFeedCardWriter(): FeedCard.Writer {
+    return FeedCard.Writer(
+        userName = this.name!!,
+        crewName = this.crewEntity!!.name,
+        profileImageUri = this.getProfileImageUri(),
+        isAdmin = this.getIsAdmin(),
+        isManager = this.getIsManager()
+    )
+}
+
+fun CreateFeedCommand.toCreateFeedQuery(): CreateFeedQuery {
+    return CreateFeedQuery(
+        contents = this.contents,
+        imageIds = this.imageIds,
+        category = this.category,
+        accessLevel = this.accessLevel,
+        userId = this.myUserId
+    )
+}
+
+fun ModifyFeedCommand.toModifyFeedQuery(): ModifyFeedQuery {
+    return ModifyFeedQuery(
+        feedId = this.feedId,
+        imageIds = this.imageIds,
+        contents = this.contents,
+        category = this.category,
+        accessLevel = this.accessLevel
     )
 }

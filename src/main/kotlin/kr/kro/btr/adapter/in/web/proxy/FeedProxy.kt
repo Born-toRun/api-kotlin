@@ -3,7 +3,11 @@ package kr.kro.btr.adapter.`in`.web.proxy
 import kr.kro.btr.adapter.`in`.web.payload.CreateFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchFeedRequest
-import kr.kro.btr.core.converter.FeedConverter
+import kr.kro.btr.base.extension.toCreateFeedCommand
+import kr.kro.btr.base.extension.toModifyFeedCommand
+import kr.kro.btr.base.extension.toRemoveFeedCommand
+import kr.kro.btr.base.extension.toSearchAllFeedCommand
+import kr.kro.btr.base.extension.toSearchFeedDetailCommand
 import kr.kro.btr.domain.port.FeedPort
 import kr.kro.btr.domain.port.model.FeedCard
 import kr.kro.btr.domain.port.model.FeedResult
@@ -18,12 +22,11 @@ import org.springframework.stereotype.Component
 @Component
 @CacheConfig(cacheNames = ["feed"])
 class FeedProxy(
-    private val feedConverter: FeedConverter,
     private val feedPort: FeedPort
 ) {
     @Cacheable(key = "'searchDetail: ' + #feedId + #my.id")
     fun searchDetail(my: TokenDetail, feedId: Long): FeedResult {
-        val command = feedConverter.map(my, feedId)
+        val command = my.toSearchFeedDetailCommand(feedId)
         return feedPort.searchDetail(command)
     }
 
@@ -37,7 +40,7 @@ class FeedProxy(
         lastFeedId: Long,
         pageable: Pageable
     ): Page<FeedCard> {
-        val command = feedConverter.map(request, my, lastFeedId)
+        val command = request.toSearchAllFeedCommand(my, lastFeedId)
         return feedPort.searchAll(command, pageable)
     }
 
@@ -48,19 +51,19 @@ class FeedProxy(
 
     @CacheEvict(allEntries = true)
     fun create(request: CreateFeedRequest, my: TokenDetail) {
-        val command = feedConverter.map(request, my)
+        val command = request.toCreateFeedCommand(my)
         feedPort.create(command)
     }
 
     @CacheEvict(allEntries = true)
     fun remove(feedId: Long, my: TokenDetail) {
-        val command = feedConverter.mapToRemoveFeedCommand(my, feedId)
+        val command = my.toRemoveFeedCommand(feedId)
         feedPort.remove(command)
     }
 
     @CacheEvict(allEntries = true)
     fun modify(request: ModifyFeedRequest, feedId: Long) {
-        val command = feedConverter.map(request, feedId)
+        val command = request.toModifyFeedCommand(feedId)
         feedPort.modify(command)
     }
 }
