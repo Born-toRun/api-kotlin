@@ -1,7 +1,7 @@
 package kr.kro.btr.infrastructure
 
 import kr.kro.btr.adapter.out.persistence.CommentRepository
-import kr.kro.btr.core.converter.CommentConverter
+import kr.kro.btr.base.extension.toCommentEntity
 import kr.kro.btr.domain.entity.CommentEntity
 import kr.kro.btr.infrastructure.model.CreateCommentQuery
 import kr.kro.btr.infrastructure.model.ModifyCommentQuery
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class CommentGateway(
-    private val commentConverter: CommentConverter,
     private val commentRepository: CommentRepository
 ) {
 
@@ -26,7 +25,7 @@ class CommentGateway(
         if (query.parentCommentId != null) {
             commentRepository.findByIdOrNull(query.parentCommentId) ?: throw NotFoundException("부모 댓글을 찾을 수 없습니다.")
         }
-        val commentEntity = commentConverter.map(query)
+        val commentEntity = query.toCommentEntity()
         commentRepository.save(commentEntity)
     }
 

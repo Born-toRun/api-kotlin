@@ -12,7 +12,6 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchCommentDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCommentResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CommentProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.core.converter.CommentConverter
 import kr.kro.btr.domain.port.model.CommentDetail
 import kr.kro.btr.domain.port.model.CommentResult
 import kr.kro.btr.utils.andExpectData
@@ -46,8 +45,6 @@ import kotlin.collections.List
 
 @WebMvcTest(CommentController::class)
 class CommentControllerTest (
-    @MockkBean
-    private val converter: CommentConverter,
     @MockkBean
     private val proxy: CommentProxy,
     @Autowired
@@ -110,7 +107,6 @@ class CommentControllerTest (
 
             it("200 OK") {
                 every { proxy.searchAll(any(), any()) } returns commentResults
-                every { converter.mapToSearchCommentResponse(any<List<CommentResult>>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -215,7 +211,6 @@ class CommentControllerTest (
 
             it("200 OK") {
                 every { proxy.detail(any(), any()) } returns commentDetail
-                every { converter.map(any<CommentDetail>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -357,7 +352,6 @@ class CommentControllerTest (
 
             it("200 OK") {
                 every { proxy.modify(any(), any()) } returns commentResult
-                every { converter.map(any<CommentResult>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)

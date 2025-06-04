@@ -2,33 +2,45 @@ package kr.kro.btr.base.extension
 
 import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
+import kr.kro.btr.adapter.`in`.web.payload.CreateCommentRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
+import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentRequest
+import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentResponse
 import kr.kro.btr.adapter.`in`.web.payload.OpenActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.ParticipationActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchAllActivityRequest
+import kr.kro.btr.adapter.`in`.web.payload.SearchCommentDetailResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchCommentResponse
 import kr.kro.btr.domain.constant.ActivityRecruitmentType
 import kr.kro.btr.domain.entity.ActivityEntity
 import kr.kro.btr.domain.entity.ActivityParticipationEntity
+import kr.kro.btr.domain.entity.CommentEntity
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.port.model.ActivityResult
 import kr.kro.btr.domain.port.model.AttendanceActivityCommand
+import kr.kro.btr.domain.port.model.CommentDetail
+import kr.kro.btr.domain.port.model.CommentResult
 import kr.kro.btr.domain.port.model.CreateActivityCommand
+import kr.kro.btr.domain.port.model.CreateCommentCommand
 import kr.kro.btr.domain.port.model.ModifyActivityCommand
+import kr.kro.btr.domain.port.model.ModifyCommentCommand
 import kr.kro.btr.domain.port.model.ParticipantResult
 import kr.kro.btr.domain.port.model.ParticipateActivityCommand
 import kr.kro.btr.domain.port.model.SearchAllActivityCommand
 import kr.kro.btr.infrastructure.model.AttendanceActivityQuery
 import kr.kro.btr.infrastructure.model.CreateActivityQuery
+import kr.kro.btr.infrastructure.model.CreateCommentQuery
 import kr.kro.btr.infrastructure.model.ModifyActivityQuery
+import kr.kro.btr.infrastructure.model.ModifyCommentQuery
 import kr.kro.btr.infrastructure.model.ParticipateActivityQuery
 import kr.kro.btr.infrastructure.model.SearchAllActivityQuery
 import kr.kro.btr.support.TokenDetail
 import java.time.LocalDateTime
 
+// activity
 fun List<ActivityResult>.toSearchActivityResponse(): SearchActivityResponse {
-
     val activities = this.map { activityResult ->
         SearchActivityResponse.Activity(
             id = activityResult.id,
@@ -350,4 +362,195 @@ fun ActivityEntity.convertRecruitmentType(myUserId: Long): ActivityRecruitmentTy
         return ActivityRecruitmentType.CLOSED
     }
     return ActivityRecruitmentType.RECRUITING
+}
+
+// comment
+fun List<CommentResult>.toSearchCommentResponse(): SearchCommentResponse {
+    val comments = this.map { it.toSearchCommentResponseComment() }
+    return SearchCommentResponse(comments)
+}
+
+fun CommentResult.toSearchCommentResponseComment(): SearchCommentResponse.Comment {
+    return SearchCommentResponse.Comment(
+        id = this.id,
+        parentId = this.parentId,
+        reCommentQty = this.reCommentQty,
+        writer = this.writer.toSearchCommentResponseWriter(),
+        contents = this.contents,
+        registeredAt = this.registeredAt,
+        isMyComment = this.isMyComment
+    )
+}
+
+fun CommentDetail.toSearchCommentDetailResponse(): SearchCommentDetailResponse {
+    return SearchCommentDetailResponse(
+        id = this.id,
+        writer = this.writer.toSearchCommentDetailResponseWriter(),
+        contents = this.contents,
+        registeredAt = this.registeredAt,
+        reComments = this.reCommentResults.toReComments()
+    )
+}
+
+fun CommentResult.toModifyCommentResponse(): ModifyCommentResponse {
+    return ModifyCommentResponse(
+        id = this.id,
+        contents = this.contents
+    )
+}
+
+fun CommentResult.Writer.toSearchCommentResponseWriter(): SearchCommentResponse.Writer {
+    return SearchCommentResponse.Writer(
+        userId = this.userId,
+        userName = this.userName,
+        profileImageUri = this.profileImageUri,
+        crewName = this.crewName,
+        isAdmin = this.isAdmin,
+        isManager = this.isManager
+    )
+}
+
+fun CommentDetail.Writer.toSearchCommentDetailResponseWriter(): SearchCommentDetailResponse.Writer {
+    return SearchCommentDetailResponse.Writer(
+        userId = this.userId,
+        userName = this.userName,
+        profileImageUri = this.profileImageUri,
+        crewName = this.crewName,
+        isAdmin = this.isAdmin,
+        isManager = this.isManager
+    )
+}
+
+fun CommentResult.Writer.toReCommentWriter(): SearchCommentDetailResponse.ReComment.Writer {
+    return SearchCommentDetailResponse.ReComment.Writer(
+        userId = this.userId,
+        userName = this.userName,
+        profileImageUri = this.profileImageUri,
+        crewName = this.crewName,
+        isAdmin = this.isAdmin,
+        isManager = this.isManager
+    )
+}
+
+fun List<CommentResult>.toReComments(): List<SearchCommentDetailResponse.ReComment> {
+    return this.map { it.toReComment() }
+}
+
+fun CommentResult.toReComment(): SearchCommentDetailResponse.ReComment {
+    return SearchCommentDetailResponse.ReComment(
+        id = this.id,
+        contents = this.contents,
+        registeredAt = this.registeredAt,
+        writer = this.writer.toReCommentWriter(),
+        isMyComment = this.isMyComment
+    )
+}
+
+fun CreateCommentRequest.toCreateCommentCommand(userId: Long, feedId: Long): CreateCommentCommand {
+    return CreateCommentCommand(
+        myUserId = userId,
+        feedId = feedId,
+        parentCommentId = this.parentCommentId,
+        contents = this.contents
+    )
+}
+
+fun ModifyCommentRequest.toModifyCommentCommand(commentId: Long): ModifyCommentCommand {
+    return ModifyCommentCommand(
+        commentId = commentId,
+        contents = this.contents
+    )
+}
+
+fun CommentEntity.toCommentResult(userId: Long): CommentResult {
+    val writer = this.userEntity!!
+    return CommentResult(
+        id = this.id,
+        parentId = this.parentId,
+        reCommentQty = this.child.size,
+        feedId = this.feedId,
+        contents = this.contents,
+        registeredAt = this.registeredAt,
+        updatedAt = this.updatedAt,
+        isMyComment = this.userId == userId,
+        writer = writer.toCommentResultWriter()
+    )
+}
+
+fun CommentEntity.toCommentResult(): CommentResult {
+    val writer = this.userEntity!!
+    return CommentResult(
+        id = this.id,
+        parentId = this.parentId,
+        feedId = this.feedId,
+        contents = this.contents,
+        registeredAt = this.registeredAt,
+        updatedAt = this.updatedAt,
+        writer = writer.toCommentResultWriter()
+    )
+}
+
+fun List<CommentEntity>.toCommentResults(userId: Long): List<CommentResult> {
+    return this.map { it.toCommentResult(userId) }
+}
+
+fun CommentEntity.toCommentDetail(commentResults: List<CommentResult>): CommentDetail {
+    val writer = this.userEntity!!
+    return CommentDetail(
+        id = this.id,
+        parentId = this.parentId,
+        feedId = this.feedId,
+        contents = this.contents,
+        registeredAt = this.registeredAt,
+        updatedAt = this.updatedAt,
+        reCommentResults = commentResults,
+        writer = writer.toCommentDetailWriter()
+    )
+}
+
+fun CreateCommentCommand.toCreateCommentQuery(): CreateCommentQuery {
+    return CreateCommentQuery(
+        myUserId = this.myUserId,
+        feedId = this.feedId,
+        parentCommentId = this.parentCommentId,
+        contents = this.contents
+    )
+}
+
+fun ModifyCommentCommand.toModifyCommentQuery(): ModifyCommentQuery {
+    return ModifyCommentQuery(
+        commentId = this.commentId,
+        contents = this.contents
+    )
+}
+
+fun CreateCommentQuery.toCommentEntity(): CommentEntity {
+    return CommentEntity(
+        userId = this.myUserId,
+        feedId = this.feedId,
+        parentId = this.parentCommentId,
+        contents = this.contents
+    )
+}
+
+fun UserEntity.toCommentResultWriter(): CommentResult.Writer {
+    return CommentResult.Writer(
+        userId = this.id,
+        userName = this.name!!,
+        profileImageUri = this.getProfileImageUri(),
+        crewName = this.crewEntity!!.name,
+        isAdmin = this.getIsAdmin(),
+        isManager = this.getIsManager()
+    )
+}
+
+fun UserEntity.toCommentDetailWriter(): CommentDetail.Writer {
+    return CommentDetail.Writer(
+        userId = this.id,
+        userName = this.name!!,
+        profileImageUri = this.getProfileImageUri(),
+        crewName = this.crewEntity!!.name,
+        isAdmin = this.getIsAdmin(),
+        isManager = this.getIsManager()
+    )
 }

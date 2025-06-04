@@ -2,7 +2,8 @@ package kr.kro.btr.adapter.`in`.web.proxy
 
 import kr.kro.btr.adapter.`in`.web.payload.CreateCommentRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentRequest
-import kr.kro.btr.core.converter.CommentConverter
+import kr.kro.btr.base.extension.toCreateCommentCommand
+import kr.kro.btr.base.extension.toModifyCommentCommand
 import kr.kro.btr.domain.port.CommentPort
 import kr.kro.btr.domain.port.model.CommentDetail
 import kr.kro.btr.domain.port.model.CommentResult
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Component
 @Component
 @CacheConfig(cacheNames = ["comment"])
 class CommentProxy(
-    private val commentConverter: CommentConverter,
     private val commentPort: CommentPort
 ) {
 
@@ -35,7 +35,7 @@ class CommentProxy(
 
     @CacheEvict(allEntries = true, cacheNames = ["comment", "feed"])
     fun create(my: TokenDetail, feedId: Long, request: CreateCommentRequest) {
-        val command = commentConverter.map(request, my.id, feedId)
+        val command = request.toCreateCommentCommand(my.id, feedId)
         commentPort.create(command)
     }
 
@@ -51,7 +51,7 @@ class CommentProxy(
 
     @CacheEvict(allEntries = true)
     fun modify(commentId: Long, request: ModifyCommentRequest): CommentResult {
-        val command = commentConverter.map(request, commentId)
+        val command = request.toModifyCommentCommand(commentId)
         return commentPort.modify(command)
     }
 }

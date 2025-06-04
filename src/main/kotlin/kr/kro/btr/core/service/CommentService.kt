@@ -1,6 +1,10 @@
 package kr.kro.btr.core.service
 
-import kr.kro.btr.core.converter.CommentConverter
+import kr.kro.btr.base.extension.toCommentDetail
+import kr.kro.btr.base.extension.toCommentResult
+import kr.kro.btr.base.extension.toCommentResults
+import kr.kro.btr.base.extension.toCreateCommentQuery
+import kr.kro.btr.base.extension.toModifyCommentQuery
 import kr.kro.btr.domain.entity.CommentEntity
 import kr.kro.btr.domain.port.CommentPort
 import kr.kro.btr.domain.port.model.CommentDetail
@@ -15,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CommentService(
-    private val commentConverter: CommentConverter,
     private val commentGateway: CommentGateway
 ) : CommentPort {
 
@@ -32,24 +35,22 @@ class CommentService(
             ).reversed()
         )
 
-        return commentConverter.map(commentEntities, command.myUserId)
+        return commentEntities.toCommentResults(command.myUserId)
     }
 
     @Transactional(readOnly = true)
     override fun detail(command: DetailCommentCommand): CommentDetail {
         val parentComment = commentGateway.search(command.commentId)
-        val reCommentEntities = parentComment.child
-
-        val reCommentResults = reCommentEntities
-            .map { commentConverter.map(it, command.myUserId) }
+        val reCommentResults = parentComment.child
+            .map { it.toCommentResult(command.myUserId) }
             .sortedByDescending { it.id }
 
-        return commentConverter.map(parentComment, reCommentResults)
+        return parentComment.toCommentDetail(reCommentResults)
     }
 
     @Transactional
     override fun create(command: CreateCommentCommand) {
-        val query = commentConverter.map(command)
+        val query = command.toCreateCommentQuery()
         commentGateway.create(query)
     }
 
@@ -65,9 +66,9 @@ class CommentService(
 
     @Transactional
     override fun modify(command: ModifyCommentCommand): CommentResult {
-        val query = commentConverter.map(command)
+        val query = command.toModifyCommentQuery()
         val modified = commentGateway.modify(query)
-        return commentConverter.map(modified)
+        return modified.toCommentResult()
     }
 
     @Transactional(readOnly = true)

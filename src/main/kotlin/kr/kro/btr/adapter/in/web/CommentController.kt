@@ -8,7 +8,9 @@ import kr.kro.btr.adapter.`in`.web.payload.QtyCommentResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCommentDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCommentResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CommentProxy
-import kr.kro.btr.core.converter.CommentConverter
+import kr.kro.btr.base.extension.toModifyCommentResponse
+import kr.kro.btr.base.extension.toSearchCommentDetailResponse
+import kr.kro.btr.base.extension.toSearchCommentResponse
 import kr.kro.btr.domain.port.model.CommentDetail
 import kr.kro.btr.domain.port.model.CommentResult
 import kr.kro.btr.support.TokenDetail
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/comments")
 class CommentController(
-    private val commentConverter: CommentConverter,
     private val commentProxy: CommentProxy
 ) {
 
@@ -31,7 +32,7 @@ class CommentController(
         @PathVariable feedId: Long
     ): ResponseEntity<SearchCommentResponse> {
         val commentResults: List<CommentResult> = commentProxy.searchAll(feedId, my)
-        val response = commentConverter.mapToSearchCommentResponse(commentResults)
+        val response = commentResults.toSearchCommentResponse()
         return ResponseEntity.ok(response)
     }
 
@@ -41,7 +42,7 @@ class CommentController(
         @PathVariable commentId: Long
     ): ResponseEntity<SearchCommentDetailResponse> {
         val commentDetail: CommentDetail = commentProxy.detail(commentId, my)
-        val response = commentConverter.map(commentDetail)
+        val response = commentDetail.toSearchCommentDetailResponse()
         return ResponseEntity.ok(response)
     }
 
@@ -68,7 +69,7 @@ class CommentController(
         @RequestBody @Valid request: ModifyCommentRequest
     ): ResponseEntity<ModifyCommentResponse> {
         val result: CommentResult = commentProxy.modify(commentId, request)
-        val response = commentConverter.map(result)
+        val response = result.toModifyCommentResponse()
         return ResponseEntity.ok(response)
     }
 
