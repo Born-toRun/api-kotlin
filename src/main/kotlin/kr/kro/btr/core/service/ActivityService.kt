@@ -1,6 +1,13 @@
 package kr.kro.btr.core.service
 
-import kr.kro.btr.core.converter.ActivityConverter
+import kr.kro.btr.base.extension.toActivityResult
+import kr.kro.btr.base.extension.toActivityResults
+import kr.kro.btr.base.extension.toAttendanceActivityQuery
+import kr.kro.btr.base.extension.toCreateActivityQuery
+import kr.kro.btr.base.extension.toModifyActivityQuery
+import kr.kro.btr.base.extension.toParticipantResult
+import kr.kro.btr.base.extension.toParticipateActivityQuery
+import kr.kro.btr.base.extension.toSearchAllActivityQuery
 import kr.kro.btr.domain.port.ActivityPort
 import kr.kro.btr.domain.port.model.ActivityResult
 import kr.kro.btr.domain.port.model.AttendanceActivityCommand
@@ -15,19 +22,18 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ActivityService(
-    private val activityConverter: ActivityConverter,
     private val activityGateway: ActivityGateway
 ) : ActivityPort {
 
     @Transactional
     override fun create(command: CreateActivityCommand) {
-        val query = activityConverter.map(command)
+        val query = command.toCreateActivityQuery()
         activityGateway.create(query)
     }
 
     @Transactional
     override fun modify(command: ModifyActivityCommand) {
-        val query = activityConverter.map(command)
+        val query = command.toModifyActivityQuery()
         activityGateway.modify(query)
     }
 
@@ -43,7 +49,7 @@ class ActivityService(
 
     @Transactional
     override fun participate(command: ParticipateActivityCommand) {
-        val query = activityConverter.map(command)
+        val query = command.toParticipateActivityQuery()
         activityGateway.participate(query)
     }
 
@@ -54,27 +60,27 @@ class ActivityService(
 
     @Transactional(readOnly = true)
     override fun searchAll(command: SearchAllActivityCommand): List<ActivityResult> {
-        val query = activityConverter.map(command)
+        val query = command.toSearchAllActivityQuery()
         val activityEntities = activityGateway.searchAll(query)
-        return activityConverter.map(activityEntities, command.myUserId)
+        return activityEntities.toActivityResults(command.myUserId)
     }
 
     @Transactional(readOnly = true)
     override fun search(activityId: Long, myUserId: Long): ActivityResult {
         val activityEntity = activityGateway.search(activityId)
-        return activityConverter.map(activityEntity, myUserId)
+        return activityEntity.toActivityResult(myUserId)
     }
 
     @Transactional
     override fun open(activityId: Long): ActivityResult {
         val opened = activityGateway.open(activityId)
         val accessCode = activityGateway.initAccessCode(activityId)
-        return activityConverter.map(opened, accessCode)
+        return opened.toActivityResult(accessCode)
     }
 
     @Transactional
     override fun attendance(command: AttendanceActivityCommand) {
-        val query = activityConverter.map(command)
+        val query = command.toAttendanceActivityQuery()
         activityGateway.attendance(query)
     }
 
@@ -83,8 +89,8 @@ class ActivityService(
         val activityParticipationEntities = activityGateway.searchParticipation(activityId)
         if (activityParticipationEntities.isEmpty()) {
             val activityEntity = activityGateway.search(activityId)
-            return activityConverter.mapToParticipantResult(activityEntity)
+            return activityEntity.toParticipantResult()
         }
-        return activityConverter.map(activityParticipationEntities)
+        return activityParticipationEntities.toParticipantResult()
     }
 }

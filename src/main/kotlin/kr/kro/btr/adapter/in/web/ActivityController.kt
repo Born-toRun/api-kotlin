@@ -10,7 +10,10 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchActivityDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchAllActivityRequest
 import kr.kro.btr.adapter.`in`.web.proxy.ActivityProxy
-import kr.kro.btr.core.converter.ActivityConverter
+import kr.kro.btr.base.extension.toOpenActivityResponse
+import kr.kro.btr.base.extension.toParticipationActivityResponse
+import kr.kro.btr.base.extension.toSearchActivityDetailResponse
+import kr.kro.btr.base.extension.toSearchActivityResponse
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
 import org.springframework.http.HttpStatus.CREATED
@@ -21,7 +24,6 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/activities")
 class ActivityController(
-    private val activityConverter: ActivityConverter,
     private val activityProxy: ActivityProxy
 ) {
 
@@ -33,7 +35,6 @@ class ActivityController(
 
     @PutMapping("/{activityId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun modify(
-        @AuthUser my: TokenDetail,
         @PathVariable activityId: Long,
         @Valid @RequestBody request: ModifyActivityRequest
     ): ResponseEntity<Void> {
@@ -42,7 +43,7 @@ class ActivityController(
     }
 
     @DeleteMapping("/{activityId}")
-    fun remove(@AuthUser my: TokenDetail, @PathVariable activityId: Long): ResponseEntity<Void> {
+    fun remove(@PathVariable activityId: Long): ResponseEntity<Void> {
         activityProxy.remove(activityId)
         return ResponseEntity.ok().build()
     }
@@ -53,7 +54,7 @@ class ActivityController(
         @Valid @ModelAttribute request: SearchAllActivityRequest
     ): ResponseEntity<SearchActivityResponse> {
         val activities = activityProxy.searchAll(request, my)
-        val response = activityConverter.map(activities)
+        val response = activities.toSearchActivityResponse()
         return ResponseEntity.ok(response)
     }
 
@@ -63,14 +64,14 @@ class ActivityController(
         @PathVariable activityId: Long
     ): ResponseEntity<SearchActivityDetailResponse> {
         val activity = activityProxy.search(activityId, my)
-        val response = activityConverter.mapToSearchActivityDetailResponse(activity)
+        val response = activity.toSearchActivityDetailResponse()
         return ResponseEntity.ok(response)
     }
 
     @PutMapping("/open/{activityId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun open(@AuthUser my: TokenDetail, @PathVariable activityId: Long): ResponseEntity<OpenActivityResponse> {
+    fun open(@PathVariable activityId: Long): ResponseEntity<OpenActivityResponse> {
         val activity = activityProxy.open(activityId)
-        val response = activityConverter.mapToOpenActivityResponse(activity)
+        val response = activity.toOpenActivityResponse()
         return ResponseEntity.ok(response)
     }
 
@@ -81,18 +82,17 @@ class ActivityController(
     }
 
     @PostMapping("/participation-cancel/{participationId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun participateCancel(@AuthUser my: TokenDetail, @PathVariable participationId: Long): ResponseEntity<Void> {
+    fun participateCancel(@PathVariable participationId: Long): ResponseEntity<Void> {
         activityProxy.participateCancel(participationId)
         return ResponseEntity(CREATED)
     }
 
     @GetMapping("/participation/{activityId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun searchAttendance(
-        @AuthUser my: TokenDetail,
         @PathVariable activityId: Long
     ): ResponseEntity<ParticipationActivityResponse> {
         val participationResult = activityProxy.getParticipation(activityId)
-        val response = activityConverter.map(participationResult)
+        val response = participationResult.toParticipationActivityResponse()
         return ResponseEntity.ok(response)
     }
 

@@ -4,7 +4,8 @@ import kr.kro.btr.adapter.out.persistence.ActivityParticipationRepository
 import kr.kro.btr.adapter.out.persistence.ActivityRepository
 import kr.kro.btr.adapter.out.persistence.querydsl.ActivityQuery
 import kr.kro.btr.adapter.out.thirdparty.RedisClient
-import kr.kro.btr.core.converter.ActivityConverter
+import kr.kro.btr.base.extension.toActivityEntity
+import kr.kro.btr.base.extension.toActivityParticipationEntity
 import kr.kro.btr.domain.constant.ActivityRecruitmentType.*
 import kr.kro.btr.domain.entity.ActivityEntity
 import kr.kro.btr.domain.entity.ActivityParticipationEntity
@@ -23,7 +24,6 @@ import kotlin.time.toJavaDuration
 
 @Component
 class ActivityGateway(
-    private val activityConverter: ActivityConverter,
     private val activityRepository: ActivityRepository,
     private val activityParticipationRepository: ActivityParticipationRepository,
     private val activityQuery: ActivityQuery,
@@ -35,7 +35,7 @@ class ActivityGateway(
     }
 
     fun create(query: CreateActivityQuery) {
-        val activityEntity = activityRepository.findByStartAtAndUserId(query.startAt, query.myUserId) ?: activityConverter.map(query)
+        val activityEntity = activityRepository.findByStartAtAndUserId(query.startAt, query.myUserId) ?: query.toActivityEntity()
         activityRepository.save(activityEntity)
     }
 
@@ -64,7 +64,7 @@ class ActivityGateway(
             throw NotFoundException("행사를 찾을 수 없습니다.")
         }
 
-        val activityParticipationEntity = activityParticipationRepository.findByActivityIdAndUserId(query.activityId, query.myUserId) ?: activityConverter.map(query)
+        val activityParticipationEntity = activityParticipationRepository.findByActivityIdAndUserId(query.activityId, query.myUserId) ?: query.toActivityParticipationEntity()
         activityParticipationRepository.save(activityParticipationEntity)
     }
 

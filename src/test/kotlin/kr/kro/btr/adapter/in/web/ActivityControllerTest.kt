@@ -14,7 +14,6 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchAllActivityRequest
 import kr.kro.btr.adapter.`in`.web.proxy.ActivityProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.core.converter.ActivityConverter
 import kr.kro.btr.domain.constant.ActivityRecruitmentType
 import kr.kro.btr.domain.port.model.ActivityResult
 import kr.kro.btr.domain.port.model.ParticipantResult
@@ -49,8 +48,6 @@ import java.time.LocalDateTime
 
 @WebMvcTest(ActivityController::class)
 class ActivityControllerTest (
-    @MockkBean
-    private val converter: ActivityConverter,
     @MockkBean
     private val proxy: ActivityProxy,
     @Autowired
@@ -296,7 +293,6 @@ class ActivityControllerTest (
 
             it("200 OK") {
                 every { proxy.searchAll(any(), any()) } returns activityResults
-                every { converter.map(any<List<ActivityResult>>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -397,7 +393,6 @@ class ActivityControllerTest (
 
             it("200 OK") {
                 every { proxy.search(any(), any()) } returns activityResult
-                every { converter.mapToSearchActivityDetailResponse(any<ActivityResult>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -501,7 +496,6 @@ class ActivityControllerTest (
 
             it("200 OK") {
                 every { proxy.open(any()) } returns activityResult
-                every { converter.mapToOpenActivityResponse(any<ActivityResult>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -567,7 +561,6 @@ class ActivityControllerTest (
 
             it("200 OK") {
                 every { proxy.getParticipation(any()) } returns participantResult
-                every { converter.map(any<ParticipantResult>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
