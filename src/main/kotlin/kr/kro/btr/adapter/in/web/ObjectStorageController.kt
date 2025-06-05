@@ -5,7 +5,7 @@ import kr.kro.btr.adapter.`in`.web.payload.UploadFileResponse
 import kr.kro.btr.adapter.`in`.web.proxy.ObjectStorageProxy
 import kr.kro.btr.base.extension.toUploadFileResponse
 import kr.kro.btr.domain.constant.Bucket
-import kr.kro.btr.domain.port.model.ObjectStorage
+import kr.kro.btr.domain.port.model.result.ObjectStorageResult
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
 import org.springframework.http.MediaType
@@ -29,8 +29,8 @@ class ObjectStorageController(
         @PathVariable bucket: Bucket,
         @RequestParam("file") file: MultipartFile
     ): ResponseEntity<UploadFileResponse> {
-        val objectStorage: ObjectStorage = objectStorageProxy.upload(my, bucket, file)
-        val response: UploadFileResponse = objectStorage.toUploadFileResponse()
+        val objectStorageResult: ObjectStorageResult = objectStorageProxy.upload(my, bucket, file)
+        val response: UploadFileResponse = objectStorageResult.toUploadFileResponse()
         return ResponseEntity.ok(response)
     }
 

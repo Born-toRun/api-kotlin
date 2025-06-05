@@ -9,8 +9,8 @@ import kr.kro.btr.base.extension.toRemoveFeedCommand
 import kr.kro.btr.base.extension.toSearchAllFeedCommand
 import kr.kro.btr.base.extension.toSearchFeedDetailCommand
 import kr.kro.btr.domain.port.FeedPort
-import kr.kro.btr.domain.port.model.FeedCard
-import kr.kro.btr.domain.port.model.FeedResult
+import kr.kro.btr.domain.port.model.result.FeedResult
+import kr.kro.btr.domain.port.model.result.FeedDetailResult
 import kr.kro.btr.support.TokenDetail
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict
@@ -25,7 +25,7 @@ class FeedProxy(
     private val feedPort: FeedPort
 ) {
     @Cacheable(key = "'searchDetail: ' + #feedId + #my.id")
-    fun searchDetail(my: TokenDetail, feedId: Long): FeedResult {
+    fun searchDetail(my: TokenDetail, feedId: Long): FeedDetailResult {
         val command = my.toSearchFeedDetailCommand(feedId)
         return feedPort.searchDetail(command)
     }
@@ -39,7 +39,7 @@ class FeedProxy(
         my: TokenDetail,
         lastFeedId: Long,
         pageable: Pageable
-    ): Page<FeedCard> {
+    ): Page<FeedResult> {
         val command = request.toSearchAllFeedCommand(my, lastFeedId)
         return feedPort.searchAll(command, pageable)
     }

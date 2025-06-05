@@ -14,8 +14,8 @@ import kr.kro.btr.adapter.`in`.web.proxy.FeedProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.constant.FeedAccessLevel
 import kr.kro.btr.domain.constant.FeedCategory
-import kr.kro.btr.domain.port.model.FeedCard
-import kr.kro.btr.domain.port.model.FeedResult
+import kr.kro.btr.domain.port.model.result.FeedResult
+import kr.kro.btr.domain.port.model.result.FeedDetailResult
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.ARRAY
 import kr.kro.btr.utils.restdocs.BOOLEAN
@@ -66,7 +66,7 @@ class FeedControllerTest (
     describe("GET : $baseUrl") {
         val url = "$baseUrl/{feedId}"
         val feedId = 0L
-        val feedResult = FeedResult(
+        val feedDetailResult = FeedDetailResult(
             id = feedId,
             contents = "contents",
             category = FeedCategory.COMMUNITY,
@@ -74,7 +74,7 @@ class FeedControllerTest (
             viewQty = 0,
             registeredAt = LocalDateTime.now(),
             updatedAt = LocalDateTime.now(),
-            writer = FeedResult.Writer(
+            writer = FeedDetailResult.Writer(
                 userId = 0,
                 userName = "userName",
                 crewName = "crewName",
@@ -88,31 +88,31 @@ class FeedControllerTest (
             hasMyComment = false,
         )
         val response = DetailFeedResponse(
-            id = feedResult.id,
-            contents = feedResult.contents,
-            images = feedResult.images?.map { image ->
+            id = feedDetailResult.id,
+            contents = feedDetailResult.contents,
+            images = feedDetailResult.images?.map { image ->
                 Image(
                     imageId = image.id,
                     imageUri = image.imageUri
                 )
             },
-            category = feedResult.category,
-            accessLevel = feedResult.accessLevel,
-            viewQty = feedResult.viewQty,
-            recommendationQty = feedResult.recommendationQty,
-            commentQty = feedResult.commentQty,
-            registeredAt = getDateTimeByFormat(feedResult.registeredAt),
+            category = feedDetailResult.category,
+            accessLevel = feedDetailResult.accessLevel,
+            viewQty = feedDetailResult.viewQty,
+            recommendationQty = feedDetailResult.recommendationQty,
+            commentQty = feedDetailResult.commentQty,
+            registeredAt = getDateTimeByFormat(feedDetailResult.registeredAt),
             writer = DetailFeedResponse.Writer(
-                userId = feedResult.writer.userId,
-                userName = feedResult.writer.userName,
-                crewName = feedResult.writer.crewName,
-                profileImageUri = feedResult.writer.profileImageUri,
-                isAdmin = feedResult.writer.isAdmin,
-                isManager = feedResult.writer.isManager
+                userId = feedDetailResult.writer.userId,
+                userName = feedDetailResult.writer.userName,
+                crewName = feedDetailResult.writer.crewName,
+                profileImageUri = feedDetailResult.writer.profileImageUri,
+                isAdmin = feedDetailResult.writer.isAdmin,
+                isManager = feedDetailResult.writer.isManager
             ),
             viewer = DetailFeedResponse.Viewer(
-                hasMyRecommendation = feedResult.hasMyRecommendation,
-                hasMyComment = feedResult.hasMyComment
+                hasMyRecommendation = feedDetailResult.hasMyRecommendation,
+                hasMyComment = feedDetailResult.hasMyComment
             )
         )
 
@@ -121,7 +121,7 @@ class FeedControllerTest (
                 .contentType(APPLICATION_JSON)
 
             it("200 OK") {
-                every { proxy.searchDetail(any(), any()) } returns feedResult
+                every { proxy.searchDetail(any(), any()) } returns feedDetailResult
                 every { proxy.increaseViewQty(any()) } just runs
 
                 mockMvc.perform(request)
@@ -276,14 +276,14 @@ class FeedControllerTest (
             searchKeyword = "searchKeyword",
             isMyCrew = false
         )
-        val feedCard = FeedCard(
+        val feedResult = FeedResult(
             id = 0,
             contents = "contents",
             viewQty = 0,
             recommendationQty = 0,
             commentQty = 0,
             registeredAt = LocalDateTime.now(),
-            writer = FeedCard.Writer(
+            writer = FeedResult.Writer(
                 userName = "userName",
                 crewName = "crewName",
                 profileImageUri = "profileImageUri",
@@ -294,26 +294,26 @@ class FeedControllerTest (
             hasComment = true
         )
         val response = SearchFeedResponse(
-            id = feedCard.id,
-            imageUris = feedCard.imageUris,
-            contents = feedCard.contents,
-            viewQty = feedCard.viewQty,
-            recommendationQty = feedCard.recommendationQty,
-            commentQty = feedCard.commentQty,
-            registeredAt = getDateTimeByFormat(feedCard.registeredAt),
+            id = feedResult.id,
+            imageUris = feedResult.imageUris,
+            contents = feedResult.contents,
+            viewQty = feedResult.viewQty,
+            recommendationQty = feedResult.recommendationQty,
+            commentQty = feedResult.commentQty,
+            registeredAt = getDateTimeByFormat(feedResult.registeredAt),
             writer = SearchFeedResponse.Writer(
-                userName = feedCard.writer.userName,
-                crewName = feedCard.writer.crewName,
-                profileImageUri = feedCard.writer.profileImageUri,
-                isAdmin = feedCard.writer.isAdmin,
-                isManager = feedCard.writer.isManager
+                userName = feedResult.writer.userName,
+                crewName = feedResult.writer.crewName,
+                profileImageUri = feedResult.writer.profileImageUri,
+                isAdmin = feedResult.writer.isAdmin,
+                isManager = feedResult.writer.isManager
             ),
             viewer = SearchFeedResponse.Viewer(
-                hasMyRecommendation = feedCard.hasRecommendation,
-                hasMyComment = feedCard.hasComment
+                hasMyRecommendation = feedResult.hasRecommendation,
+                hasMyComment = feedResult.hasComment
             )
         )
-        val page = PageImpl<FeedCard>(listOf(feedCard), PageRequest.of(0, 10), 1);
+        val page = PageImpl<FeedResult>(listOf(feedResult), PageRequest.of(0, 10), 1);
 
         context("조회를 하면") {
             val request = request(HttpMethod.GET, url)

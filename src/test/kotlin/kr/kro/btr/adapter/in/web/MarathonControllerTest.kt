@@ -7,8 +7,8 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchAllMarathonResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonDetailResponse
 import kr.kro.btr.adapter.`in`.web.proxy.MarathonProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.domain.port.model.Marathon
-import kr.kro.btr.domain.port.model.MarathonDetail
+import kr.kro.btr.domain.port.model.result.MarathonResult
+import kr.kro.btr.domain.port.model.result.MarathonDetailResult
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.ARRAY
 import kr.kro.btr.utils.restdocs.BOOLEAN
@@ -52,7 +52,7 @@ class MarathonControllerTest (
 
     describe("GET : $baseUrl") {
         val url = baseUrl
-        val marathons = listOf(Marathon(
+        val marathonResults = listOf(MarathonResult(
             id = 0,
             title = "title",
             schedule = "schedule",
@@ -63,12 +63,12 @@ class MarathonControllerTest (
         val response = SearchAllMarathonResponse(
             marathons = listOf(
                 SearchAllMarathonResponse.Marathon(
-                    id = marathons[0].id,
-                    title = marathons[0].title,
-                    schedule = marathons[0].schedule,
-                    venue = marathons[0].venue,
-                    course = marathons[0].course,
-                    isBookmarking = marathons[0].isBookmarking == true
+                    id = marathonResults[0].id,
+                    title = marathonResults[0].title,
+                    schedule = marathonResults[0].schedule,
+                    venue = marathonResults[0].venue,
+                    course = marathonResults[0].course,
+                    isBookmarking = marathonResults[0].isBookmarking == true
                 )
             )
         )
@@ -77,7 +77,7 @@ class MarathonControllerTest (
                 .contentType(APPLICATION_JSON)
 
             it("200 OK") {
-                every { proxy.search(any(), any()) } returns marathons
+                every { proxy.search(any(), any()) } returns marathonResults
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -103,7 +103,7 @@ class MarathonControllerTest (
     describe("GET : $baseUrl/{marathonId}") {
         val marathonId = 0
         val url = "$baseUrl/{marathonId}"
-        val marathonDetail = MarathonDetail(
+        val marathonDetailResult = MarathonDetailResult(
             id = 0,
             title = "title",
             owner = "owner",
@@ -122,22 +122,22 @@ class MarathonControllerTest (
             isBookmarking = true
         )
         val response = SearchMarathonDetailResponse(
-            id = marathonDetail.id,
-            title = marathonDetail.title,
-            owner = marathonDetail.owner,
-            email = marathonDetail.email,
-            schedule = marathonDetail.schedule,
-            contact = marathonDetail.contact,
-            course = marathonDetail.course,
-            location = marathonDetail.location,
-            venue = marathonDetail.venue,
-            host = marathonDetail.host,
-            duration = marathonDetail.duration,
-            homepage = marathonDetail.homepage,
-            venueDetail = marathonDetail.venueDetail,
-            remark = marathonDetail.remark,
-            registeredAt = getDateTimeByFormat(marathonDetail.registeredAt),
-            isBookmarking = marathonDetail.isBookmarking
+            id = marathonDetailResult.id,
+            title = marathonDetailResult.title,
+            owner = marathonDetailResult.owner,
+            email = marathonDetailResult.email,
+            schedule = marathonDetailResult.schedule,
+            contact = marathonDetailResult.contact,
+            course = marathonDetailResult.course,
+            location = marathonDetailResult.location,
+            venue = marathonDetailResult.venue,
+            host = marathonDetailResult.host,
+            duration = marathonDetailResult.duration,
+            homepage = marathonDetailResult.homepage,
+            venueDetail = marathonDetailResult.venueDetail,
+            remark = marathonDetailResult.remark,
+            registeredAt = getDateTimeByFormat(marathonDetailResult.registeredAt),
+            isBookmarking = marathonDetailResult.isBookmarking
         )
 
         context("조회를 하면") {
@@ -145,7 +145,7 @@ class MarathonControllerTest (
                 .contentType(APPLICATION_JSON)
 
             it("200 OK") {
-                every { proxy.detail(any(), any()) } returns marathonDetail
+                every { proxy.detail(any(), any()) } returns marathonDetailResult
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)

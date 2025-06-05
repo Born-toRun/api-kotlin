@@ -7,7 +7,7 @@ import kr.kro.btr.domain.constant.ProviderType
 import kr.kro.btr.domain.constant.RoleType
 import kr.kro.btr.domain.port.UserPort
 import kr.kro.btr.domain.port.UserRefreshTokenPort
-import kr.kro.btr.domain.port.model.BornToRunUser
+import kr.kro.btr.domain.port.model.result.BornToRunUser
 import kr.kro.btr.domain.port.model.CreateRefreshTokenCommand
 import kr.kro.btr.domain.port.model.CreateUserCommand
 import kr.kro.btr.support.CookieSupport

@@ -7,8 +7,8 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonDetailResponse
 import kr.kro.btr.adapter.`in`.web.proxy.MarathonProxy
 import kr.kro.btr.base.extension.toSearchAllMarathonResponse
 import kr.kro.btr.base.extension.toSearchMarathonDetailResponse
-import kr.kro.btr.domain.port.model.Marathon
-import kr.kro.btr.domain.port.model.MarathonDetail
+import kr.kro.btr.domain.port.model.result.MarathonResult
+import kr.kro.btr.domain.port.model.result.MarathonDetailResult
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
 import org.springframework.http.MediaType
@@ -24,15 +24,15 @@ class MarathonController(
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun searchAll(@AuthUser my: TokenDetail, @RequestParam(required = false) locations: List<String>?,
                   @RequestParam(required = false) courses: List<String>?): ResponseEntity<SearchAllMarathonResponse> {
-        val marathons: List<Marathon> = marathonProxy.search(SearchAllMarathonRequest(locations, courses), my)
-        val response = marathons.toSearchAllMarathonResponse()
+        val marathonResults: List<MarathonResult> = marathonProxy.search(SearchAllMarathonRequest(locations, courses), my)
+        val response = marathonResults.toSearchAllMarathonResponse()
         return ResponseEntity.ok(response)
     }
 
     @GetMapping("/{marathonId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun search(@AuthUser my: TokenDetail, @PathVariable marathonId: Long): ResponseEntity<SearchMarathonDetailResponse> {
-        val marathonDetail: MarathonDetail = marathonProxy.detail(marathonId, my)
-        val response: SearchMarathonDetailResponse = marathonDetail.toSearchMarathonDetailResponse()
+        val marathonDetailResult: MarathonDetailResult = marathonProxy.detail(marathonId, my)
+        val response: SearchMarathonDetailResponse = marathonDetailResult.toSearchMarathonDetailResponse()
         return ResponseEntity.ok(response)
     }
 

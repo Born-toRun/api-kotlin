@@ -8,7 +8,7 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchUserPrivacyResponse
 import kr.kro.btr.adapter.`in`.web.payload.SettingUserPrivacyRequest
 import kr.kro.btr.adapter.`in`.web.proxy.PrivacyProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.domain.port.model.UserPrivacy
+import kr.kro.btr.domain.port.model.result.UserPrivacyResult
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.BOOLEAN
 import kr.kro.btr.utils.restdocs.andDocument
@@ -71,13 +71,13 @@ class PrivacyControllerTest (
 
     describe("GET : $baseUrl/users") {
         val url = "$baseUrl/users"
-        val userPrivacy = UserPrivacy(
+        val userPrivacyResult = UserPrivacyResult(
             id = 0,
             userId = 0,
             isInstagramIdPublic = true
         )
         val response = SearchUserPrivacyResponse(
-            isInstagramIdPublic = userPrivacy.isInstagramIdPublic
+            isInstagramIdPublic = userPrivacyResult.isInstagramIdPublic
         )
 
         context("유저별 프라이버시를 조회 하면") {
@@ -85,7 +85,7 @@ class PrivacyControllerTest (
                 .contentType(APPLICATION_JSON)
 
             it("200 OK") {
-                every { proxy.searchUserPrivacy(any()) } returns userPrivacy
+                every { proxy.searchUserPrivacy(any()) } returns userPrivacyResult
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)

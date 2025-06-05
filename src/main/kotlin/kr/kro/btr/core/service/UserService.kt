@@ -5,7 +5,7 @@ import kr.kro.btr.base.extension.toCreateUserQuery
 import kr.kro.btr.base.extension.toModifyUserQuery
 import kr.kro.btr.base.extension.toSignUpUserQuery
 import kr.kro.btr.domain.port.UserPort
-import kr.kro.btr.domain.port.model.BornToRunUser
+import kr.kro.btr.domain.port.model.result.BornToRunUser
 import kr.kro.btr.domain.port.model.CreateUserCommand
 import kr.kro.btr.domain.port.model.ModifyUserCommand
 import kr.kro.btr.domain.port.model.SignUpCommand

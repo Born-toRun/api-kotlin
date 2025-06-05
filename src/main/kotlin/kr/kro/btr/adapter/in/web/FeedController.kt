@@ -9,8 +9,8 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchFeedResponse
 import kr.kro.btr.adapter.`in`.web.proxy.FeedProxy
 import kr.kro.btr.base.extension.toDetailFeedResponse
 import kr.kro.btr.base.extension.toSearchFeedResponse
-import kr.kro.btr.domain.port.model.FeedCard
-import kr.kro.btr.domain.port.model.FeedResult
+import kr.kro.btr.domain.port.model.result.FeedResult
+import kr.kro.btr.domain.port.model.result.FeedDetailResult
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
 import org.springframework.data.domain.Page
@@ -28,9 +28,9 @@ class FeedController(
 
     @GetMapping("{feedId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun detail(@AuthUser my: TokenDetail, @PathVariable feedId: Long): ResponseEntity<DetailFeedResponse> {
-        val feedResult: FeedResult = feedProxy.searchDetail(my, feedId)
+        val feedDetailResult: FeedDetailResult = feedProxy.searchDetail(my, feedId)
         feedProxy.increaseViewQty(feedId)
-        val response = feedResult.toDetailFeedResponse()
+        val response = feedDetailResult.toDetailFeedResponse()
         return ResponseEntity.ok(response)
     }
 
@@ -59,7 +59,7 @@ class FeedController(
         @RequestParam(defaultValue = "0") lastFeedId: Long,
         @RequestParam(defaultValue = "10") size: Int
     ): ResponseEntity<Page<SearchFeedResponse>> {
-        val feedPage: Page<FeedCard> = feedProxy.searchAll(request, my, lastFeedId, PageRequest.of(0, size))
+        val feedPage: Page<FeedResult> = feedProxy.searchAll(request, my, lastFeedId, PageRequest.of(0, size))
         return ResponseEntity.ok(feedPage.map { it.toSearchFeedResponse() })
     }
 }

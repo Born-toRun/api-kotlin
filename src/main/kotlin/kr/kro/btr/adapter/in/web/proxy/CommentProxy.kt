@@ -5,8 +5,8 @@ import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentRequest
 import kr.kro.btr.base.extension.toCreateCommentCommand
 import kr.kro.btr.base.extension.toModifyCommentCommand
 import kr.kro.btr.domain.port.CommentPort
-import kr.kro.btr.domain.port.model.CommentDetail
-import kr.kro.btr.domain.port.model.CommentResult
+import kr.kro.btr.domain.port.model.result.CommentDetailResult
+import kr.kro.btr.domain.port.model.result.CommentResult
 import kr.kro.btr.domain.port.model.DetailCommentCommand
 import kr.kro.btr.domain.port.model.SearchAllCommentCommand
 import kr.kro.btr.support.TokenDetail
@@ -28,7 +28,7 @@ class CommentProxy(
     }
 
     @Cacheable(key = "'detail: ' + #commentId + #my.id")
-    fun detail(commentId: Long, my: TokenDetail): CommentDetail {
+    fun detail(commentId: Long, my: TokenDetail): CommentDetailResult {
         val command = DetailCommentCommand(commentId, my.id)
         return commentPort.detail(command)
     }

@@ -3,7 +3,7 @@ package kr.kro.btr.adapter.`in`.web.proxy
 import kr.kro.btr.adapter.`in`.web.payload.SettingUserPrivacyRequest
 import kr.kro.btr.base.extension.toModifyUserPrivacyCommand
 import kr.kro.btr.domain.port.PrivacyPort
-import kr.kro.btr.domain.port.model.UserPrivacy
+import kr.kro.btr.domain.port.model.result.UserPrivacyResult
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
@@ -22,7 +22,7 @@ class PrivacyProxy(
     }
 
     @Cacheable(key = "'searchUserPrivacy: ' + #userId")
-    fun searchUserPrivacy(userId: Long): UserPrivacy {
+    fun searchUserPrivacy(userId: Long): UserPrivacyResult {
         return privacyPort.searchUserPrivacy(userId)
     }
 }

@@ -9,7 +9,7 @@ import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.domain.port.model.Crew
+import kr.kro.btr.domain.port.model.result.CrewResult
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.ARRAY
 import kr.kro.btr.utils.restdocs.NUMBER
@@ -51,7 +51,7 @@ class CrewControllerTest (
 
     describe("GET : $baseUrl") {
         val url = baseUrl
-        val crew = Crew(
+        val crewResult = CrewResult(
             id = 0,
             name = "crewName",
             contents = "contents",
@@ -60,15 +60,15 @@ class CrewControllerTest (
             logoUri = "logoUri",
             sns = "crewSnsUri"
         )
-        val crews = listOf(crew)
-        val response = SearchCrewResponse(listOf(SearchCrewResponse.CrewDetail(
-            id = crew.id,
-            crewName = crew.name,
-            contents = crew.contents,
-            region = crew.region,
-            imageUri = crew.imageUri,
-            logoUri = crew.logoUri,
-            crewSnsUri = crew.sns
+        val crews = listOf(crewResult)
+        val response = SearchCrewResponse(listOf(SearchCrewResponse.Detail(
+            id = crewResult.id,
+            crewName = crewResult.name,
+            contents = crewResult.contents,
+            region = crewResult.region,
+            imageUri = crewResult.imageUri,
+            logoUri = crewResult.logoUri,
+            crewSnsUri = crewResult.sns
         )))
 
         context("목록 조회를 하면") {
@@ -81,20 +81,20 @@ class CrewControllerTest (
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
                     .andExpectData(
-                        jsonPath("$.crewDetails[0].id") shouldBe response.crewDetails[0].id,
-                        jsonPath("$.crewDetails[0].crewName") shouldBe response.crewDetails[0].crewName,
-                        jsonPath("$.crewDetails[0].contents") shouldBe response.crewDetails[0].contents,
-                        jsonPath("$.crewDetails[0].region") shouldBe response.crewDetails[0].region,
-                        jsonPath("$.crewDetails[0].imageUri") shouldBe response.crewDetails[0].imageUri,
-                        jsonPath("$.crewDetails[0].logoUri") shouldBe response.crewDetails[0].logoUri,
-                        jsonPath("$.crewDetails[0].crewSnsUri") shouldBe response.crewDetails[0].crewSnsUri
+                        jsonPath("$.crewDetails[0].id") shouldBe response.details[0].id,
+                        jsonPath("$.crewDetails[0].crewName") shouldBe response.details[0].crewName,
+                        jsonPath("$.crewDetails[0].contents") shouldBe response.details[0].contents,
+                        jsonPath("$.crewDetails[0].region") shouldBe response.details[0].region,
+                        jsonPath("$.crewDetails[0].imageUri") shouldBe response.details[0].imageUri,
+                        jsonPath("$.crewDetails[0].logoUri") shouldBe response.details[0].logoUri,
+                        jsonPath("$.crewDetails[0].crewSnsUri") shouldBe response.details[0].crewSnsUri
                     )
                     .andDocument(
                         "search-crews",
                         responseBody(
-                            "crewDetails" type ARRAY means "등록된 크루 목록" isRequired true
+                            "details" type ARRAY means "등록된 크루 목록" isRequired true
                         )
-                            .andWithPrefix("crewDetails[].", getCrewDetailsResponseSnippet())
+                            .andWithPrefix("details[].", getCrewDetailsResponseSnippet())
                     )
             }
         }
@@ -103,7 +103,7 @@ class CrewControllerTest (
     describe("GET : $baseUrl/{crewId}") {
         val url = "$baseUrl/{crewId}"
         val crewId = 0L
-        val crew = Crew(
+        val crewResult = CrewResult(
             id = 0,
             name = "crewName",
             contents = "contents",
@@ -113,13 +113,13 @@ class CrewControllerTest (
             sns = "crewSnsUri"
         )
         val response = DetailCrewResponse(
-            id = crew.id,
-            crewName = crew.name,
-            contents = crew.contents,
-            region = crew.region,
-            imageUri = crew.imageUri,
-            logoUri = crew.logoUri,
-            crewSnsUri = crew.sns
+            id = crewResult.id,
+            crewName = crewResult.name,
+            contents = crewResult.contents,
+            region = crewResult.region,
+            imageUri = crewResult.imageUri,
+            logoUri = crewResult.logoUri,
+            crewSnsUri = crewResult.sns
         )
 
         context("조회를 하면") {
@@ -127,7 +127,7 @@ class CrewControllerTest (
                 .contentType(APPLICATION_JSON)
 
             it("200 OK") {
-                every { proxy.detail(any()) } returns crew
+                every { proxy.detail(any()) } returns crewResult
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)

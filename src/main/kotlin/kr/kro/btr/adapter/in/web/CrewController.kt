@@ -7,7 +7,7 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchCrewResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.base.extension.toDetailCrewResponse
 import kr.kro.btr.base.extension.toSearchCrewResponse
-import kr.kro.btr.domain.port.model.Crew
+import kr.kro.btr.domain.port.model.result.CrewResult
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -21,8 +21,8 @@ class CrewController(
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun searchAll(): ResponseEntity<SearchCrewResponse> {
-        val crews: List<Crew> = crewProxy.searchAll()
-        val response = crews.toSearchCrewResponse()
+        val crewResults: List<CrewResult> = crewProxy.searchAll()
+        val response = crewResults.toSearchCrewResponse()
         return ResponseEntity.ok(response)
     }
 

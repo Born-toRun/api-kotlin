@@ -6,8 +6,8 @@ import kr.kro.btr.base.extension.toCancelBookmarkMarathonCommand
 import kr.kro.btr.base.extension.toSearchAllMarathonCommand
 import kr.kro.btr.base.extension.toSearchMarathonDetailCommand
 import kr.kro.btr.domain.port.MarathonPort
-import kr.kro.btr.domain.port.model.Marathon
-import kr.kro.btr.domain.port.model.MarathonDetail
+import kr.kro.btr.domain.port.model.result.MarathonResult
+import kr.kro.btr.domain.port.model.result.MarathonDetailResult
 import kr.kro.btr.support.TokenDetail
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict
@@ -21,13 +21,13 @@ class MarathonProxy(
 ) {
 
     @Cacheable(key = "'searchAll: ' + #request.hashCode() + #my.id")
-    fun search(request: SearchAllMarathonRequest, my: TokenDetail): List<Marathon> {
+    fun search(request: SearchAllMarathonRequest, my: TokenDetail): List<MarathonResult> {
         val command = request.toSearchAllMarathonCommand(my.id)
         return marathonPort.search(command)
     }
 
     @Cacheable(key = "'search: ' + #marathonId + #my.id")
-    fun detail(marathonId: Long, my: TokenDetail): MarathonDetail {
+    fun detail(marathonId: Long, my: TokenDetail): MarathonDetailResult {
         val command = my.toSearchMarathonDetailCommand(marathonId)
         return marathonPort.detail(command)
     }

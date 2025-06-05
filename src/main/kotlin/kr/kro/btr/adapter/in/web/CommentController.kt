@@ -11,8 +11,8 @@ import kr.kro.btr.adapter.`in`.web.proxy.CommentProxy
 import kr.kro.btr.base.extension.toModifyCommentResponse
 import kr.kro.btr.base.extension.toSearchCommentDetailResponse
 import kr.kro.btr.base.extension.toSearchCommentResponse
-import kr.kro.btr.domain.port.model.CommentDetail
-import kr.kro.btr.domain.port.model.CommentResult
+import kr.kro.btr.domain.port.model.result.CommentDetailResult
+import kr.kro.btr.domain.port.model.result.CommentResult
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
 import org.springframework.http.HttpStatus.CREATED
@@ -41,8 +41,8 @@ class CommentController(
         @AuthUser my: TokenDetail,
         @PathVariable commentId: Long
     ): ResponseEntity<SearchCommentDetailResponse> {
-        val commentDetail: CommentDetail = commentProxy.detail(commentId, my)
-        val response = commentDetail.toSearchCommentDetailResponse()
+        val commentDetailResult: CommentDetailResult = commentProxy.detail(commentId, my)
+        val response = commentDetailResult.toSearchCommentDetailResponse()
         return ResponseEntity.ok(response)
     }
 

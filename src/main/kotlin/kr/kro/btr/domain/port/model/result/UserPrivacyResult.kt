@@ -1,6 +1,6 @@
-package kr.kro.btr.domain.port.model
+package kr.kro.btr.domain.port.model.result
 
-data class UserPrivacy(
+data class UserPrivacyResult(
     val id: Long,
     val userId: Long,
     val isInstagramIdPublic: Boolean

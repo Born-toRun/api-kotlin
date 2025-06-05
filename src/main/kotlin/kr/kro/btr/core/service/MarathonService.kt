@@ -7,8 +7,8 @@ import kr.kro.btr.base.extension.toSearchMarathonQuery
 import kr.kro.btr.domain.port.MarathonPort
 import kr.kro.btr.domain.port.model.BookmarkMarathonCommand
 import kr.kro.btr.domain.port.model.CancelBookmarkMarathonCommand
-import kr.kro.btr.domain.port.model.Marathon
-import kr.kro.btr.domain.port.model.MarathonDetail
+import kr.kro.btr.domain.port.model.result.MarathonResult
+import kr.kro.btr.domain.port.model.result.MarathonDetailResult
 import kr.kro.btr.domain.port.model.SearchAllMarathonCommand
 import kr.kro.btr.domain.port.model.SearchMarathonDetailCommand
 import kr.kro.btr.infrastructure.MarathonGateway
@@ -21,14 +21,14 @@ class MarathonService(
 ) : MarathonPort {
 
     @Transactional(readOnly = true)
-    override fun search(command: SearchAllMarathonCommand): List<Marathon> {
+    override fun search(command: SearchAllMarathonCommand): List<MarathonResult> {
         val query = command.toSearchMarathonQuery()
         val marathonEntities = marathonGateway.search(query)
         return marathonEntities.toMarathons(command.myUserId)
     }
 
     @Transactional(readOnly = true)
-    override fun detail(command: SearchMarathonDetailCommand): MarathonDetail {
+    override fun detail(command: SearchMarathonDetailCommand): MarathonDetailResult {
         val marathonEntity = marathonGateway.detail(command.marathonId)
         return marathonEntity.toMarathonDetail(command.myUserId)
     }

@@ -3,7 +3,7 @@ package kr.kro.btr.adapter.`in`.web.proxy
 import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
 import kr.kro.btr.base.extension.toCreateCrewCommand
 import kr.kro.btr.domain.port.CrewPort
-import kr.kro.btr.domain.port.model.Crew
+import kr.kro.btr.domain.port.model.result.CrewResult
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
@@ -16,12 +16,12 @@ class CrewProxy(
 ) {
 
     @Cacheable(key = "'searchAll'")
-    fun searchAll(): List<Crew> {
+    fun searchAll(): List<CrewResult> {
         return crewPort.searchAll()
     }
 
     @Cacheable(key = "'detail: ' + #crewId")
-    fun detail(crewId: Long): Crew {
+    fun detail(crewId: Long): CrewResult {
         return crewPort.detail(crewId)
     }
 

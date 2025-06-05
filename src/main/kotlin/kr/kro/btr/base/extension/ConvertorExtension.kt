@@ -6,6 +6,18 @@ import kr.kro.btr.core.event.model.*
 import kr.kro.btr.domain.constant.*
 import kr.kro.btr.domain.entity.*
 import kr.kro.btr.domain.port.model.*
+import kr.kro.btr.domain.port.model.result.ActivityResult
+import kr.kro.btr.domain.port.model.result.BornToRunUser
+import kr.kro.btr.domain.port.model.result.CommentDetailResult
+import kr.kro.btr.domain.port.model.result.CommentResult
+import kr.kro.btr.domain.port.model.result.CrewResult
+import kr.kro.btr.domain.port.model.result.FeedDetailResult
+import kr.kro.btr.domain.port.model.result.FeedResult
+import kr.kro.btr.domain.port.model.result.MarathonDetailResult
+import kr.kro.btr.domain.port.model.result.MarathonResult
+import kr.kro.btr.domain.port.model.result.ObjectStorageResult
+import kr.kro.btr.domain.port.model.result.ParticipantResult
+import kr.kro.btr.domain.port.model.result.UserPrivacyResult
 import kr.kro.btr.infrastructure.model.*
 import kr.kro.btr.support.TokenDetail
 import org.springframework.web.multipart.MultipartFile
@@ -250,7 +262,7 @@ fun ParticipateActivityCommand.toParticipateActivityQuery(): ParticipateActivity
     )
 }
 
-fun List<ActivityParticipationEntity>.toParticipantResult(): ParticipantResult{
+fun List<ActivityParticipationEntity>.toParticipantResult(): ParticipantResult {
     val host = this.first().activityEntity!!.userEntity!!
     return ParticipantResult(
         host = host.toParticipant(),
@@ -354,7 +366,7 @@ fun CommentResult.toSearchCommentResponseComment(): SearchCommentResponse.Commen
     )
 }
 
-fun CommentDetail.toSearchCommentDetailResponse(): SearchCommentDetailResponse {
+fun CommentDetailResult.toSearchCommentDetailResponse(): SearchCommentDetailResponse {
     return SearchCommentDetailResponse(
         id = this.id,
         writer = this.writer.toSearchCommentDetailResponseWriter(),
@@ -382,7 +394,7 @@ fun CommentResult.Writer.toSearchCommentResponseWriter(): SearchCommentResponse.
     )
 }
 
-fun CommentDetail.Writer.toSearchCommentDetailResponseWriter(): SearchCommentDetailResponse.Writer {
+fun CommentDetailResult.Writer.toSearchCommentDetailResponseWriter(): SearchCommentDetailResponse.Writer {
     return SearchCommentDetailResponse.Writer(
         userId = this.userId,
         userName = this.userName,
@@ -466,9 +478,9 @@ fun List<CommentEntity>.toCommentResults(userId: Long): List<CommentResult> {
     return this.map { it.toCommentResult(userId) }
 }
 
-fun CommentEntity.toCommentDetail(commentResults: List<CommentResult>): CommentDetail {
+fun CommentEntity.toCommentDetail(commentResults: List<CommentResult>): CommentDetailResult {
     val writer = this.userEntity!!
-    return CommentDetail(
+    return CommentDetailResult(
         id = this.id,
         parentId = this.parentId,
         feedId = this.feedId,
@@ -516,8 +528,8 @@ fun UserEntity.toCommentResultWriter(): CommentResult.Writer {
     )
 }
 
-fun UserEntity.toCommentDetailWriter(): CommentDetail.Writer {
-    return CommentDetail.Writer(
+fun UserEntity.toCommentDetailWriter(): CommentDetailResult.Writer {
+    return CommentDetailResult.Writer(
         userId = this.id,
         userName = this.name!!,
         profileImageUri = this.getProfileImageUri(),
@@ -528,13 +540,13 @@ fun UserEntity.toCommentDetailWriter(): CommentDetail.Writer {
 }
 
 // crew
-fun List<Crew>.toSearchCrewResponse(): SearchCrewResponse {
+fun List<CrewResult>.toSearchCrewResponse(): SearchCrewResponse {
     val crewDetails = this.map { it.toCrewDetail() }
     return SearchCrewResponse(crewDetails)
 }
 
-fun Crew.toCrewDetail(): SearchCrewResponse.CrewDetail {
-    return SearchCrewResponse.CrewDetail(
+fun CrewResult.toCrewDetail(): SearchCrewResponse.Detail {
+    return SearchCrewResponse.Detail(
         id = this.id,
         crewName = this.name,
         contents = this.contents,
@@ -545,7 +557,7 @@ fun Crew.toCrewDetail(): SearchCrewResponse.CrewDetail {
     )
 }
 
-fun Crew.toDetailCrewResponse(): DetailCrewResponse {
+fun CrewResult.toDetailCrewResponse(): DetailCrewResponse {
     return DetailCrewResponse(
         id = this.id,
         crewName = this.name,
@@ -566,8 +578,8 @@ fun CreateCrewRequest.toCreateCrewCommand(): CreateCrewCommand {
     )
 }
 
-fun CrewEntity.toCrew(): Crew {
-    return Crew(
+fun CrewEntity.toCrew(): CrewResult {
+    return CrewResult(
         id = this.id,
         name = this.name,
         contents = this.contents,
@@ -578,7 +590,7 @@ fun CrewEntity.toCrew(): Crew {
     )
 }
 
-fun List<CrewEntity>.toCrews(): List<Crew> {
+fun List<CrewEntity>.toCrews(): List<CrewResult> {
     return this.map { it.toCrew() }
 }
 
@@ -601,7 +613,7 @@ fun CreateCrewQuery.toCrewEntity(): CrewEntity {
 }
 
 // feed
-fun FeedResult.toDetailFeedResponse(): DetailFeedResponse {
+fun FeedDetailResult.toDetailFeedResponse(): DetailFeedResponse {
     return DetailFeedResponse(
         id = this.id,
         contents = this.contents,
@@ -620,7 +632,7 @@ fun FeedResult.toDetailFeedResponse(): DetailFeedResponse {
     )
 }
 
-fun FeedResult.Writer.toDetailFeedResponseWriter(): DetailFeedResponse.Writer {
+fun FeedDetailResult.Writer.toDetailFeedResponseWriter(): DetailFeedResponse.Writer {
     return DetailFeedResponse.Writer(
         userId = this.userId,
         userName = this.userName,
@@ -631,18 +643,18 @@ fun FeedResult.Writer.toDetailFeedResponseWriter(): DetailFeedResponse.Writer {
     )
 }
 
-fun List<FeedResult.Image>?.toDetailFeedResponseImages(): List<DetailFeedResponse.Image>? {
+fun List<FeedDetailResult.Image>?.toDetailFeedResponseImages(): List<DetailFeedResponse.Image>? {
     return this?.map { it.toDetailFeedResponseImage() }
 }
 
-fun FeedResult.Image.toDetailFeedResponseImage(): DetailFeedResponse.Image {
+fun FeedDetailResult.Image.toDetailFeedResponseImage(): DetailFeedResponse.Image {
     return DetailFeedResponse.Image(
         imageId = this.id,
         imageUri = this.imageUri
     )
 }
 
-fun FeedCard.toSearchFeedResponse(): SearchFeedResponse {
+fun FeedResult.toSearchFeedResponse(): SearchFeedResponse {
     return SearchFeedResponse(
         id = this.id,
         imageUris = this.imageUris,
@@ -659,7 +671,7 @@ fun FeedCard.toSearchFeedResponse(): SearchFeedResponse {
     )
 }
 
-fun FeedCard.Writer.toSearchFeedResponseWriter(): SearchFeedResponse.Writer {
+fun FeedResult.Writer.toSearchFeedResponseWriter(): SearchFeedResponse.Writer {
     return SearchFeedResponse.Writer(
         userName = this.userName,
         crewName = this.crewName,
@@ -722,18 +734,18 @@ fun CreateFeedQuery.toFeedEntity(): FeedEntity {
     )
 }
 
-fun FeedEntity.toFeedResult(my: TokenDetail): FeedResult {
+fun FeedEntity.toFeedResult(my: TokenDetail): FeedDetailResult {
     val writer = this.userEntity!!
     val images = this.feedImageMappingEntities.mapNotNull { image ->
         image.objectStorageEntity?.let {
-            FeedResult.Image(
+            FeedDetailResult.Image(
                 id = it.id,
                 imageUri = it.fileUri
             )
         }
     }
 
-    return FeedResult(
+    return FeedDetailResult(
         id = this.id,
         contents = this.contents,
         category = this.category,
@@ -750,8 +762,8 @@ fun FeedEntity.toFeedResult(my: TokenDetail): FeedResult {
     )
 }
 
-fun UserEntity.toFeedResultWriter(): FeedResult.Writer {
-    return FeedResult.Writer(
+fun UserEntity.toFeedResultWriter(): FeedDetailResult.Writer {
+    return FeedDetailResult.Writer(
         userId = this.id,
         userName = this.name!!,
         crewName = this.crewEntity!!.name,
@@ -772,9 +784,9 @@ fun SearchAllFeedCommand.toSearchAllFeedQuery(userIds: List<Long>): SearchAllFee
     )
 }
 
-fun FeedEntity.toFeedCard(userId: Long): FeedCard {
+fun FeedEntity.toFeedCard(userId: Long): FeedResult {
     val writer = this.userEntity!!
-    return FeedCard(
+    return FeedResult(
         id = this.id,
         imageUris = this.getImageUris(),
         contents = this.contents,
@@ -788,8 +800,8 @@ fun FeedEntity.toFeedCard(userId: Long): FeedCard {
     )
 }
 
-fun UserEntity.toFeedCardWriter(): FeedCard.Writer {
-    return FeedCard.Writer(
+fun UserEntity.toFeedCardWriter(): FeedResult.Writer {
+    return FeedResult.Writer(
         userName = this.name!!,
         crewName = this.crewEntity!!.name,
         profileImageUri = this.getProfileImageUri(),
@@ -841,12 +853,12 @@ fun BookmarkMarathonQuery.toMarathonBookmarkEntity(): MarathonBookmarkEntity {
 }
 
 // marathon
-fun List<Marathon>.toSearchAllMarathonResponse(): SearchAllMarathonResponse {
+fun List<MarathonResult>.toSearchAllMarathonResponse(): SearchAllMarathonResponse {
     val marathons = this.map { it.toSearchAllMarathonResponseMarathon() }
     return SearchAllMarathonResponse(marathons = marathons)
 }
 
-fun Marathon.toSearchAllMarathonResponseMarathon(): SearchAllMarathonResponse.Marathon {
+fun MarathonResult.toSearchAllMarathonResponseMarathon(): SearchAllMarathonResponse.Marathon {
     return SearchAllMarathonResponse.Marathon(
         id = this.id,
         title = this.title,
@@ -857,7 +869,7 @@ fun Marathon.toSearchAllMarathonResponseMarathon(): SearchAllMarathonResponse.Ma
     )
 }
 
-fun MarathonDetail.toSearchMarathonDetailResponse(): SearchMarathonDetailResponse {
+fun MarathonDetailResult.toSearchMarathonDetailResponse(): SearchMarathonDetailResponse {
     return SearchMarathonDetailResponse(
         id = this.id,
         title = this.title,
@@ -914,12 +926,12 @@ fun SearchAllMarathonCommand.toSearchMarathonQuery(): SearchMarathonQuery {
     )
 }
 
-fun List<MarathonEntity>.toMarathons(userId: Long): List<Marathon> {
+fun List<MarathonEntity>.toMarathons(userId: Long): List<MarathonResult> {
     return this.map { it.toMarathon(userId) }
 }
 
-fun MarathonEntity.toMarathon(userId: Long): Marathon {
-    return Marathon(
+fun MarathonEntity.toMarathon(userId: Long): MarathonResult {
+    return MarathonResult(
         id = this.id,
         title = this.title,
         schedule = this.schedule,
@@ -929,8 +941,8 @@ fun MarathonEntity.toMarathon(userId: Long): Marathon {
     )
 }
 
-fun MarathonEntity.toMarathonDetail(userId: Long): MarathonDetail {
-    return MarathonDetail(
+fun MarathonEntity.toMarathonDetail(userId: Long): MarathonDetailResult {
+    return MarathonDetailResult(
         id = this.id,
         title = this.title,
         owner = this.owner,
@@ -951,7 +963,7 @@ fun MarathonEntity.toMarathonDetail(userId: Long): MarathonDetail {
 }
 
 // object storage
-fun ObjectStorage.toUploadFileResponse(): UploadFileResponse {
+fun ObjectStorageResult.toUploadFileResponse(): UploadFileResponse {
     return UploadFileResponse(
         fileId = this.id,
         fileUri = this.fileUri
@@ -982,8 +994,8 @@ fun UploadObjectStorageCommand.toUploadObjectStorageQuery(): UploadObjectStorage
     )
 }
 
-fun ObjectStorageEntity.toObjectStorage(): ObjectStorage {
-    return ObjectStorage(
+fun ObjectStorageEntity.toObjectStorage(): ObjectStorageResult {
+    return ObjectStorageResult(
         id = this.id,
         userId = this.userId,
         fileUri = this.fileUri,
@@ -1030,7 +1042,7 @@ fun MinioRemoveAllEventModel.toRemoveAll(): RemoveAll {
 }
 
 // privacy
-fun UserPrivacy.toSearchUserPrivacyResponse(): SearchUserPrivacyResponse {
+fun UserPrivacyResult.toSearchUserPrivacyResponse(): SearchUserPrivacyResponse {
     return SearchUserPrivacyResponse(
         isInstagramIdPublic = this.isInstagramIdPublic
     )
@@ -1050,8 +1062,8 @@ fun ModifyUserPrivacyCommand.toModifyUserPrivacyQuery(): ModifyUserPrivacyQuery 
     )
 }
 
-fun UserPrivacyEntity.toUserPrivacy(): UserPrivacy {
-    return UserPrivacy(
+fun UserPrivacyEntity.toUserPrivacy(): UserPrivacyResult {
+    return UserPrivacyResult(
         id = this.id,
         userId = this.userId,
         isInstagramIdPublic = this.isInstagramIdPublic

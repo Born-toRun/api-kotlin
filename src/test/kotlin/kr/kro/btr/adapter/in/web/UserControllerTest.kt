@@ -12,7 +12,7 @@ import kr.kro.btr.adapter.`in`.web.proxy.UserProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.constant.ProviderType
 import kr.kro.btr.domain.constant.RoleType
-import kr.kro.btr.domain.port.model.BornToRunUser
+import kr.kro.btr.domain.port.model.result.BornToRunUser
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.BOOLEAN

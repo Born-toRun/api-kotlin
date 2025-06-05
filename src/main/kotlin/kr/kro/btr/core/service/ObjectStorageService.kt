@@ -4,7 +4,7 @@ import kr.kro.btr.base.extension.toObjectStorage
 import kr.kro.btr.base.extension.toRemoveObjectStorageQuery
 import kr.kro.btr.base.extension.toUploadObjectStorageQuery
 import kr.kro.btr.domain.port.ObjectStoragePort
-import kr.kro.btr.domain.port.model.ObjectStorage
+import kr.kro.btr.domain.port.model.result.ObjectStorageResult
 import kr.kro.btr.domain.port.model.RemoveObjectStorageCommand
 import kr.kro.btr.domain.port.model.UploadObjectStorageCommand
 import kr.kro.btr.infrastructure.ObjectStorageGateway
@@ -17,7 +17,7 @@ class ObjectStorageService(
 ) : ObjectStoragePort {
 
     @Transactional
-    override fun upload(command: UploadObjectStorageCommand): ObjectStorage {
+    override fun upload(command: UploadObjectStorageCommand): ObjectStorageResult {
         val query = command.toUploadObjectStorageQuery()
         val uploaded = objectStorageGateway.upload(query)
         return uploaded.toObjectStorage()

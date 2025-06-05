@@ -1,6 +1,6 @@
 package kr.kro.btr.domain.port
 
-import kr.kro.btr.domain.port.model.BornToRunUser
+import kr.kro.btr.domain.port.model.result.BornToRunUser
 import kr.kro.btr.domain.port.model.CreateUserCommand
 import kr.kro.btr.domain.port.model.ModifyUserCommand
 import kr.kro.btr.domain.port.model.SignUpCommand

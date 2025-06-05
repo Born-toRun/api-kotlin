@@ -1,8 +1,8 @@
-package kr.kro.btr.domain.port.model
+package kr.kro.btr.domain.port.model.result
 
 import java.time.LocalDateTime
 
-data class CommentDetail(
+data class CommentDetailResult(
     val id: Long,
     val parentId: Long? = null,
     val feedId: Long?,

@@ -5,8 +5,8 @@ import kr.kro.btr.adapter.`in`.web.payload.SignUpRequest
 import kr.kro.btr.base.extension.toModifyUserCommand
 import kr.kro.btr.base.extension.toSignUpCommand
 import kr.kro.btr.domain.port.UserPort
-import kr.kro.btr.domain.port.model.BornToRunUser
-import kr.kro.btr.domain.port.model.RefreshTokenResult
+import kr.kro.btr.domain.port.model.result.BornToRunUser
+import kr.kro.btr.domain.port.model.result.RefreshTokenResult
 import kr.kro.btr.support.TokenDetail
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict

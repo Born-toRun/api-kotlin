@@ -1,4 +1,4 @@
-package kr.kro.btr.domain.port.model
+package kr.kro.btr.domain.port.model.result
 
 import java.time.LocalDateTime
 

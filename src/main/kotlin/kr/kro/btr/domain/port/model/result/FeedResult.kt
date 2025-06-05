@@ -1,8 +1,8 @@
-package kr.kro.btr.domain.port.model
+package kr.kro.btr.domain.port.model.result
 
 import java.time.LocalDateTime
 
-data class FeedCard(
+data class FeedResult(
     val id: Long,
     val imageUris: List<String>? = null,
     val contents: String,

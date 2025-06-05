@@ -1,10 +1,10 @@
-package kr.kro.btr.domain.port.model
+package kr.kro.btr.domain.port.model.result
 
 import kr.kro.btr.domain.constant.FeedAccessLevel
 import kr.kro.btr.domain.constant.FeedCategory
 import java.time.LocalDateTime
 
-data class FeedResult(
+data class FeedDetailResult(
     val id: Long,
     val contents: String,
     val images: List<Image>? = null,

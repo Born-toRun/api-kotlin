@@ -8,8 +8,8 @@ import kr.kro.btr.base.extension.toSearchAllFeedQuery
 import kr.kro.btr.domain.entity.FeedImageMappingEntity
 import kr.kro.btr.domain.port.FeedPort
 import kr.kro.btr.domain.port.model.CreateFeedCommand
-import kr.kro.btr.domain.port.model.FeedCard
-import kr.kro.btr.domain.port.model.FeedResult
+import kr.kro.btr.domain.port.model.result.FeedResult
+import kr.kro.btr.domain.port.model.result.FeedDetailResult
 import kr.kro.btr.domain.port.model.ModifyFeedCommand
 import kr.kro.btr.domain.port.model.RemoveFeedCommand
 import kr.kro.btr.domain.port.model.SearchAllFeedCommand
@@ -31,13 +31,13 @@ class FeedService(
 ) : FeedPort {
 
     @Transactional(readOnly = true)
-    override fun searchDetail(command: SearchFeedDetailCommand): FeedResult {
+    override fun searchDetail(command: SearchFeedDetailCommand): FeedDetailResult {
         val feedEntity = feedGateway.search(command.feedId)
         return feedEntity.toFeedResult(command.my)
     }
 
     @Transactional(readOnly = true)
-    override fun searchAll(command: SearchAllFeedCommand, pageable: Pageable): Page<FeedCard> {
+    override fun searchAll(command: SearchAllFeedCommand, pageable: Pageable): Page<FeedResult> {
         val searchedUserIds: List<Long> = command.searchKeyword
             ?.let { keyword ->
                 userGateway.searchByUserName(keyword)

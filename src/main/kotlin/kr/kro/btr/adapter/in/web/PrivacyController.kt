@@ -5,7 +5,7 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchUserPrivacyResponse
 import kr.kro.btr.adapter.`in`.web.payload.SettingUserPrivacyRequest
 import kr.kro.btr.adapter.`in`.web.proxy.PrivacyProxy
 import kr.kro.btr.base.extension.toSearchUserPrivacyResponse
-import kr.kro.btr.domain.port.model.UserPrivacy
+import kr.kro.btr.domain.port.model.result.UserPrivacyResult
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
 import org.springframework.http.MediaType
@@ -26,8 +26,8 @@ class PrivacyController(
 
     @GetMapping("/users", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getUserPrivacy(@AuthUser my: TokenDetail): ResponseEntity<SearchUserPrivacyResponse> {
-        val userPrivacy: UserPrivacy = privacyProxy.searchUserPrivacy(my.id)
-        val response: SearchUserPrivacyResponse = userPrivacy.toSearchUserPrivacyResponse()
+        val userPrivacyResult: UserPrivacyResult = privacyProxy.searchUserPrivacy(my.id)
+        val response: SearchUserPrivacyResponse = userPrivacyResult.toSearchUserPrivacyResponse()
         return ResponseEntity.ok(response)
     }
 }

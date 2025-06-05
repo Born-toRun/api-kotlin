@@ -1,8 +1,8 @@
-package kr.kro.btr.domain.port.model
+package kr.kro.btr.domain.port.model.result
 
 import java.time.LocalDateTime
 
-data class MarathonDetail(
+data class MarathonDetailResult(
     val id: Long,
     val title: String?,
     val owner: String?,

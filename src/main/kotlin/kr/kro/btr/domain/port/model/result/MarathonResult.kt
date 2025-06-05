@@ -1,6 +1,6 @@
-package kr.kro.btr.domain.port.model
+package kr.kro.btr.domain.port.model.result
 
-data class Marathon(
+data class MarathonResult(
     val id: Long,
     val title: String?,
     val schedule: String?,

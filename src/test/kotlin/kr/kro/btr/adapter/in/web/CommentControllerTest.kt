@@ -12,8 +12,8 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchCommentDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCommentResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CommentProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.domain.port.model.CommentDetail
-import kr.kro.btr.domain.port.model.CommentResult
+import kr.kro.btr.domain.port.model.result.CommentDetailResult
+import kr.kro.btr.domain.port.model.result.CommentResult
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.ARRAY
 import kr.kro.btr.utils.restdocs.BOOLEAN
@@ -141,13 +141,13 @@ class CommentControllerTest (
     describe("GET : $baseUrl/detail/{commentId}") {
         val url = "$baseUrl/detail/{commentId}"
         val commentId = 0L
-        val commentDetail = CommentDetail(
+        val commentDetailResult = CommentDetailResult(
             id = 0,
             feedId = 0,
             contents = "contents",
             registeredAt = LocalDateTime.now(),
             updatedAt = LocalDateTime.now(),
-            writer = CommentDetail.Writer(
+            writer = CommentDetailResult.Writer(
                 userId = 0,
                 userName = "userName",
                 profileImageUri = "profileImageUri",
@@ -176,30 +176,30 @@ class CommentControllerTest (
             )
         )
         val response = SearchCommentDetailResponse(
-            id = commentDetail.id,
+            id = commentDetailResult.id,
             writer = SearchCommentDetailResponse.Writer(
-                userId = commentDetail.writer.userId,
-                userName = commentDetail.writer.userName,
-                profileImageUri = commentDetail.writer.profileImageUri,
-                crewName = commentDetail.writer.crewName,
-                isAdmin = commentDetail.writer.isAdmin,
-                isManager = commentDetail.writer.isManager,
+                userId = commentDetailResult.writer.userId,
+                userName = commentDetailResult.writer.userName,
+                profileImageUri = commentDetailResult.writer.profileImageUri,
+                crewName = commentDetailResult.writer.crewName,
+                isAdmin = commentDetailResult.writer.isAdmin,
+                isManager = commentDetailResult.writer.isManager,
             ),
-            contents = commentDetail.contents,
-            registeredAt = getDateTimeByFormat(commentDetail.registeredAt),
+            contents = commentDetailResult.contents,
+            registeredAt = getDateTimeByFormat(commentDetailResult.registeredAt),
             reComments = listOf(
                 SearchCommentDetailResponse.ReComment(
-                    id = commentDetail.reCommentResults[0].id,
-                    contents = commentDetail.reCommentResults[0].contents,
-                    registeredAt = getDateTimeByFormat(commentDetail.reCommentResults[0].registeredAt),
-                    isMyComment = commentDetail.reCommentResults[0].isMyComment,
+                    id = CommentResult.id,
+                    contents = CommentResult.contents,
+                    registeredAt = getDateTimeByFormat(CommentResult.registeredAt),
+                    isMyComment = CommentResult.isMyComment,
                     writer = SearchCommentDetailResponse.ReComment.Writer(
-                        userId = commentDetail.reCommentResults[0].writer.userId,
-                        userName = commentDetail.reCommentResults[0].writer.userName,
-                        profileImageUri = commentDetail.reCommentResults[0].writer.profileImageUri,
-                        crewName = commentDetail.reCommentResults[0].writer.crewName,
-                        isAdmin = commentDetail.reCommentResults[0].writer.isAdmin,
-                        isManager = commentDetail.reCommentResults[0].writer.isManager,
+                        userId = CommentResult.Writer.userId,
+                        userName = CommentResult.Writer.userName,
+                        profileImageUri = CommentResult.Writer.profileImageUri,
+                        crewName = CommentResult.Writer.crewName,
+                        isAdmin = CommentResult.Writer.isAdmin,
+                        isManager = CommentResult.Writer.isManager,
                     )
                 )
             )
@@ -210,7 +210,7 @@ class CommentControllerTest (
                 .contentType(APPLICATION_JSON)
 
             it("200 OK") {
-                every { proxy.detail(any(), any()) } returns commentDetail
+                every { proxy.detail(any(), any()) } returns commentDetailResult
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)

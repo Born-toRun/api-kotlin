@@ -15,8 +15,8 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchAllActivityRequest
 import kr.kro.btr.adapter.`in`.web.proxy.ActivityProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.constant.ActivityRecruitmentType
-import kr.kro.btr.domain.port.model.ActivityResult
-import kr.kro.btr.domain.port.model.ParticipantResult
+import kr.kro.btr.domain.port.model.result.ActivityResult
+import kr.kro.btr.domain.port.model.result.ParticipantResult
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.ARRAY
 import kr.kro.btr.utils.restdocs.BOOLEAN

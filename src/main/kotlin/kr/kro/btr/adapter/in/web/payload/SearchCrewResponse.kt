@@ -1,15 +1,19 @@
 package kr.kro.btr.adapter.`in`.web.payload
 
 data class SearchCrewResponse(
-    val crewDetails: List<CrewDetail>
+    val details: List<Detail>
 ) {
-    data class CrewDetail(
+    data class Detail(
         val id: Long,
         val crewName: String,
-        val contents: String = "안녕하세요. $crewName 입니다.",
+        val contents: String = createDefaultContents(crewName),
         val region: String,
         val imageUri: String?,
         val logoUri: String?,
         val crewSnsUri: String?
-    )
+    ) {
+        companion object {
+            private fun createDefaultContents(crewName: String) = "안녕하세요. $crewName 입니다."
+        }
+    }
 }

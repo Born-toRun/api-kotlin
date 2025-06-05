@@ -8,7 +8,7 @@ import kr.kro.btr.adapter.`in`.web.payload.UploadFileResponse
 import kr.kro.btr.adapter.`in`.web.proxy.ObjectStorageProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.constant.Bucket
-import kr.kro.btr.domain.port.model.ObjectStorage
+import kr.kro.btr.domain.port.model.result.ObjectStorageResult
 import kr.kro.btr.utils.CommonTestFixture.getMultipartFile
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.NUMBER
@@ -52,15 +52,15 @@ class ObjectStorageControllerTest (
         val url = "$baseUrl/{bucket}"
         val bucket = Bucket.FEED.name
         val file = getMultipartFile()
-        val objectStorage = ObjectStorage(
+        val objectStorageResult = ObjectStorageResult(
             id = 0,
             userId = 0,
             fileUri = "www.file.uri",
             uploadAt = LocalDateTime.now()
         )
         val response = UploadFileResponse(
-            fileId = objectStorage.id,
-            fileUri = objectStorage.fileUri
+            fileId = objectStorageResult.id,
+            fileUri = objectStorageResult.fileUri
         )
 
         context("파일 업로드 하면") {
@@ -70,7 +70,7 @@ class ObjectStorageControllerTest (
 
 
             it("200 OK") {
-                every { proxy.upload(any(), any(), any()) } returns objectStorage
+                every { proxy.upload(any(), any(), any()) } returns objectStorageResult
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)

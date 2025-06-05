@@ -1,6 +1,6 @@
-package kr.kro.btr.domain.port.model
+package kr.kro.btr.domain.port.model.result
 
-data class Crew(
+data class CrewResult(
     val id: Long,
     val name: String,
     val contents: String,
