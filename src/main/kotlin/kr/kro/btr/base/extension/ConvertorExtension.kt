@@ -5,6 +5,7 @@ import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.CreateCommentRequest
 import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
 import kr.kro.btr.adapter.`in`.web.payload.CreateFeedRequest
+import kr.kro.btr.adapter.`in`.web.payload.CreateYellowCardRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
 import kr.kro.btr.adapter.`in`.web.payload.DetailFeedResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
@@ -44,6 +45,7 @@ import kr.kro.btr.domain.entity.MarathonEntity
 import kr.kro.btr.domain.entity.ObjectStorageEntity
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.entity.UserPrivacyEntity
+import kr.kro.btr.domain.entity.YellowCardEntity
 import kr.kro.btr.domain.port.model.ActivityResult
 import kr.kro.btr.domain.port.model.AttendanceActivityCommand
 import kr.kro.btr.domain.port.model.BookmarkMarathonCommand
@@ -54,6 +56,7 @@ import kr.kro.btr.domain.port.model.CreateActivityCommand
 import kr.kro.btr.domain.port.model.CreateCommentCommand
 import kr.kro.btr.domain.port.model.CreateCrewCommand
 import kr.kro.btr.domain.port.model.CreateFeedCommand
+import kr.kro.btr.domain.port.model.CreateYellowCardCommand
 import kr.kro.btr.domain.port.model.Crew
 import kr.kro.btr.domain.port.model.FeedCard
 import kr.kro.btr.domain.port.model.FeedResult
@@ -81,6 +84,7 @@ import kr.kro.btr.infrastructure.model.CreateActivityQuery
 import kr.kro.btr.infrastructure.model.CreateCommentQuery
 import kr.kro.btr.infrastructure.model.CreateCrewQuery
 import kr.kro.btr.infrastructure.model.CreateFeedQuery
+import kr.kro.btr.infrastructure.model.CreateYellowCardQuery
 import kr.kro.btr.infrastructure.model.ModifyActivityQuery
 import kr.kro.btr.infrastructure.model.ModifyCommentQuery
 import kr.kro.btr.infrastructure.model.ModifyFeedQuery
@@ -1140,5 +1144,34 @@ fun UserPrivacyEntity.toUserPrivacy(): UserPrivacy {
         id = this.id,
         userId = this.userId,
         isInstagramIdPublic = this.isInstagramIdPublic
+    )
+}
+
+
+// yellowcard
+fun CreateYellowCardRequest.toCreateYellowCardCommand(userId: Long): CreateYellowCardCommand {
+    return CreateYellowCardCommand(
+        targetUserId = this.targetUserId,
+        sourceUserId = userId,
+        reason = this.reason,
+        basis = this.basis
+    )
+}
+
+fun CreateYellowCardCommand.toCreateYellowCardQuery(): CreateYellowCardQuery {
+    return CreateYellowCardQuery(
+        targetUserId = this.targetUserId,
+        sourceUserId = this.sourceUserId,
+        reason = this.reason,
+        basis = this.basis
+    )
+}
+
+fun CreateYellowCardQuery.toYellowCardEntity(): YellowCardEntity {
+    return YellowCardEntity(
+        targetUserId = this.targetUserId,
+        sourceUserId = this.sourceUserId,
+        reason = this.reason,
+        basis = this.basis
     )
 }
