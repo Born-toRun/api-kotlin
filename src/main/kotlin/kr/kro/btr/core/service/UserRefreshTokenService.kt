@@ -1,6 +1,6 @@
 package kr.kro.btr.core.service
 
-import kr.kro.btr.core.converter.UserRefreshTokenConverter
+import kr.kro.btr.base.extension.toCreateRefreshTokenQuery
 import kr.kro.btr.domain.entity.UserRefreshTokenEntity
 import kr.kro.btr.domain.port.UserRefreshTokenPort
 import kr.kro.btr.domain.port.model.CreateRefreshTokenCommand
@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional
 class UserRefreshTokenService(
     private val userRefreshTokenGateway: UserRefreshTokenGateway,
     private val userGateway: UserGateway,
-    private val userRefreshTokenConverter: UserRefreshTokenConverter
 ) : UserRefreshTokenPort {
 
     @Transactional(readOnly = true)
@@ -24,7 +23,7 @@ class UserRefreshTokenService(
     @Transactional
     override fun createAndFlush(command: CreateRefreshTokenCommand): UserRefreshTokenEntity {
         val userEntity = userGateway.searchById(command.userId)
-        val query = userRefreshTokenConverter.map(command, userEntity)
+        val query = command.toCreateRefreshTokenQuery(userEntity)
         return userRefreshTokenGateway.saveAndFlush(query)
     }
 }

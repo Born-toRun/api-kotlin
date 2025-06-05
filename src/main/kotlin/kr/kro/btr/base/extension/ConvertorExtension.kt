@@ -56,6 +56,7 @@ import kr.kro.btr.domain.port.model.CreateActivityCommand
 import kr.kro.btr.domain.port.model.CreateCommentCommand
 import kr.kro.btr.domain.port.model.CreateCrewCommand
 import kr.kro.btr.domain.port.model.CreateFeedCommand
+import kr.kro.btr.domain.port.model.CreateRefreshTokenCommand
 import kr.kro.btr.domain.port.model.CreateYellowCardCommand
 import kr.kro.btr.domain.port.model.Crew
 import kr.kro.btr.domain.port.model.FeedCard
@@ -84,6 +85,7 @@ import kr.kro.btr.infrastructure.model.CreateActivityQuery
 import kr.kro.btr.infrastructure.model.CreateCommentQuery
 import kr.kro.btr.infrastructure.model.CreateCrewQuery
 import kr.kro.btr.infrastructure.model.CreateFeedQuery
+import kr.kro.btr.infrastructure.model.CreateRefreshTokenQuery
 import kr.kro.btr.infrastructure.model.CreateYellowCardQuery
 import kr.kro.btr.infrastructure.model.ModifyActivityQuery
 import kr.kro.btr.infrastructure.model.ModifyCommentQuery
@@ -1147,6 +1149,14 @@ fun UserPrivacyEntity.toUserPrivacy(): UserPrivacy {
     )
 }
 
+// user refresh token
+fun CreateRefreshTokenCommand.toCreateRefreshTokenQuery(userEntity: UserEntity): CreateRefreshTokenQuery {
+    return CreateRefreshTokenQuery(
+        userId = this.userId,
+        refreshToken = this.refreshToken,
+        userEntity = userEntity,
+    )
+}
 
 // yellowcard
 fun CreateYellowCardRequest.toCreateYellowCardCommand(userId: Long): CreateYellowCardCommand {
