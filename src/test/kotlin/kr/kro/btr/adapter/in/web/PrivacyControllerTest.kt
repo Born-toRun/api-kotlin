@@ -8,7 +8,6 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchUserPrivacyResponse
 import kr.kro.btr.adapter.`in`.web.payload.SettingUserPrivacyRequest
 import kr.kro.btr.adapter.`in`.web.proxy.PrivacyProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.core.converter.PrivacyConverter
 import kr.kro.btr.domain.port.model.UserPrivacy
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.BOOLEAN
@@ -30,8 +29,6 @@ import org.springframework.web.context.WebApplicationContext
 
 @WebMvcTest(PrivacyController::class)
 class PrivacyControllerTest (
-    @MockkBean
-    private val converter: PrivacyConverter,
     @MockkBean
     private val proxy: PrivacyProxy,
     @Autowired
@@ -89,7 +86,6 @@ class PrivacyControllerTest (
 
             it("200 OK") {
                 every { proxy.searchUserPrivacy(any()) } returns userPrivacy
-                every { converter.map(any<UserPrivacy>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)

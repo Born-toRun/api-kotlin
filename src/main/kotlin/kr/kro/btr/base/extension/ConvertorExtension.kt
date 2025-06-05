@@ -24,6 +24,8 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchCrewResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchFeedResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonDetailResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchUserPrivacyResponse
+import kr.kro.btr.adapter.`in`.web.payload.SettingUserPrivacyRequest
 import kr.kro.btr.adapter.`in`.web.payload.UploadFileResponse
 import kr.kro.btr.adapter.out.thirdparty.model.Remove
 import kr.kro.btr.adapter.out.thirdparty.model.RemoveAll
@@ -41,6 +43,7 @@ import kr.kro.btr.domain.entity.MarathonBookmarkEntity
 import kr.kro.btr.domain.entity.MarathonEntity
 import kr.kro.btr.domain.entity.ObjectStorageEntity
 import kr.kro.btr.domain.entity.UserEntity
+import kr.kro.btr.domain.entity.UserPrivacyEntity
 import kr.kro.btr.domain.port.model.ActivityResult
 import kr.kro.btr.domain.port.model.AttendanceActivityCommand
 import kr.kro.btr.domain.port.model.BookmarkMarathonCommand
@@ -59,6 +62,7 @@ import kr.kro.btr.domain.port.model.MarathonDetail
 import kr.kro.btr.domain.port.model.ModifyActivityCommand
 import kr.kro.btr.domain.port.model.ModifyCommentCommand
 import kr.kro.btr.domain.port.model.ModifyFeedCommand
+import kr.kro.btr.domain.port.model.ModifyUserPrivacyCommand
 import kr.kro.btr.domain.port.model.ObjectStorage
 import kr.kro.btr.domain.port.model.ParticipantResult
 import kr.kro.btr.domain.port.model.ParticipateActivityCommand
@@ -70,6 +74,7 @@ import kr.kro.btr.domain.port.model.SearchAllMarathonCommand
 import kr.kro.btr.domain.port.model.SearchFeedDetailCommand
 import kr.kro.btr.domain.port.model.SearchMarathonDetailCommand
 import kr.kro.btr.domain.port.model.UploadObjectStorageCommand
+import kr.kro.btr.domain.port.model.UserPrivacy
 import kr.kro.btr.infrastructure.model.AttendanceActivityQuery
 import kr.kro.btr.infrastructure.model.BookmarkMarathonQuery
 import kr.kro.btr.infrastructure.model.CreateActivityQuery
@@ -80,6 +85,7 @@ import kr.kro.btr.infrastructure.model.ModifyActivityQuery
 import kr.kro.btr.infrastructure.model.ModifyCommentQuery
 import kr.kro.btr.infrastructure.model.ModifyFeedQuery
 import kr.kro.btr.infrastructure.model.ModifyObjectStorageQuery
+import kr.kro.btr.infrastructure.model.ModifyUserPrivacyQuery
 import kr.kro.btr.infrastructure.model.ParticipateActivityQuery
 import kr.kro.btr.infrastructure.model.RemoveObjectStorageQuery
 import kr.kro.btr.infrastructure.model.SearchAllActivityQuery
@@ -1105,5 +1111,34 @@ fun MinioRemoveAllEventModel.toRemoveAll(): RemoveAll {
     return RemoveAll(
         bucket = this.bucket,
         objectNames = this.objectNames
+    )
+}
+
+// privacy
+fun UserPrivacy.toSearchUserPrivacyResponse(): SearchUserPrivacyResponse {
+    return SearchUserPrivacyResponse(
+        isInstagramIdPublic = this.isInstagramIdPublic
+    )
+}
+
+fun SettingUserPrivacyRequest.toModifyUserPrivacyCommand(userId: Long): ModifyUserPrivacyCommand {
+    return ModifyUserPrivacyCommand(
+        myUserId = userId,
+        isInstagramIdPublic = this.isInstagramIdPublic
+    )
+}
+
+fun ModifyUserPrivacyCommand.toModifyUserPrivacyQuery(): ModifyUserPrivacyQuery {
+    return ModifyUserPrivacyQuery(
+        myUserId = this.myUserId,
+        isInstagramIdPublic = this.isInstagramIdPublic
+    )
+}
+
+fun UserPrivacyEntity.toUserPrivacy(): UserPrivacy {
+    return UserPrivacy(
+        id = this.id,
+        userId = this.userId,
+        isInstagramIdPublic = this.isInstagramIdPublic
     )
 }
