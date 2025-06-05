@@ -1,6 +1,6 @@
 package kr.kro.btr.core.service
 
-import kr.kro.btr.core.converter.MarathonBookmarkConverter
+import kr.kro.btr.base.extension.toBookmarkMarathonQuery
 import kr.kro.btr.core.converter.MarathonConverter
 import kr.kro.btr.domain.port.MarathonPort
 import kr.kro.btr.domain.port.model.BookmarkMarathonCommand
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class MarathonService(
     private val marathonConverter: MarathonConverter,
-    private val marathonBookmarkConverter: MarathonBookmarkConverter,
     private val marathonGateway: MarathonGateway
 ) : MarathonPort {
 
@@ -35,14 +34,14 @@ class MarathonService(
 
     @Transactional
     override fun bookmark(command: BookmarkMarathonCommand): Long {
-        val query = marathonBookmarkConverter.map(command)
+        val query = command.toBookmarkMarathonQuery()
         marathonGateway.bookmark(query)
         return command.marathonId
     }
 
     @Transactional
     override fun cancelBookmark(command: CancelBookmarkMarathonCommand): Long {
-        val query = marathonBookmarkConverter.map(command)
+        val query = command.toBookmarkMarathonQuery()
         marathonGateway.cancelBookmark(query)
         return command.marathonId
     }

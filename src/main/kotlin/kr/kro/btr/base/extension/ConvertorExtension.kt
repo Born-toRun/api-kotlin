@@ -27,9 +27,12 @@ import kr.kro.btr.domain.entity.ActivityParticipationEntity
 import kr.kro.btr.domain.entity.CommentEntity
 import kr.kro.btr.domain.entity.CrewEntity
 import kr.kro.btr.domain.entity.FeedEntity
+import kr.kro.btr.domain.entity.MarathonBookmarkEntity
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.port.model.ActivityResult
 import kr.kro.btr.domain.port.model.AttendanceActivityCommand
+import kr.kro.btr.domain.port.model.BookmarkMarathonCommand
+import kr.kro.btr.domain.port.model.CancelBookmarkMarathonCommand
 import kr.kro.btr.domain.port.model.CommentDetail
 import kr.kro.btr.domain.port.model.CommentResult
 import kr.kro.btr.domain.port.model.CreateActivityCommand
@@ -49,6 +52,7 @@ import kr.kro.btr.domain.port.model.SearchAllActivityCommand
 import kr.kro.btr.domain.port.model.SearchAllFeedCommand
 import kr.kro.btr.domain.port.model.SearchFeedDetailCommand
 import kr.kro.btr.infrastructure.model.AttendanceActivityQuery
+import kr.kro.btr.infrastructure.model.BookmarkMarathonQuery
 import kr.kro.btr.infrastructure.model.CreateActivityQuery
 import kr.kro.btr.infrastructure.model.CreateCommentQuery
 import kr.kro.btr.infrastructure.model.CreateCrewQuery
@@ -866,5 +870,27 @@ fun ModifyFeedCommand.toModifyFeedQuery(): ModifyFeedQuery {
         contents = this.contents,
         category = this.category,
         accessLevel = this.accessLevel
+    )
+}
+
+// marathon bookmark
+fun BookmarkMarathonCommand.toBookmarkMarathonQuery(): BookmarkMarathonQuery {
+    return BookmarkMarathonQuery(
+        marathonId = this.marathonId,
+        myUserId = this.myUserId
+    )
+}
+
+fun CancelBookmarkMarathonCommand.toBookmarkMarathonQuery(): BookmarkMarathonQuery {
+    return BookmarkMarathonQuery(
+        marathonId = this.marathonId,
+        myUserId = this.myUserId
+    )
+}
+
+fun BookmarkMarathonQuery.toMarathonBookmarkEntity(): MarathonBookmarkEntity {
+    return MarathonBookmarkEntity(
+        userId = this.myUserId,
+        marathonId = this.marathonId
     )
 }

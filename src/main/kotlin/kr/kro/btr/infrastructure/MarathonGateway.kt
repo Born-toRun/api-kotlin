@@ -2,7 +2,7 @@ package kr.kro.btr.infrastructure
 
 import kr.kro.btr.adapter.out.persistence.MarathonBookmarkRepository
 import kr.kro.btr.adapter.out.persistence.MarathonRepository
-import kr.kro.btr.core.converter.MarathonBookmarkConverter
+import kr.kro.btr.base.extension.toMarathonBookmarkEntity
 import kr.kro.btr.domain.entity.MarathonEntity
 import kr.kro.btr.infrastructure.model.BookmarkMarathonQuery
 import kr.kro.btr.infrastructure.model.SearchMarathonQuery
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class MarathonGateway(
-    private val marathonBookmarkConverter: MarathonBookmarkConverter,
     private val marathonRepository: MarathonRepository,
     private val marathonBookmarkRepository: MarathonBookmarkRepository
 ) {
@@ -26,7 +25,7 @@ class MarathonGateway(
 
     fun bookmark(query: BookmarkMarathonQuery) {
         val bookmark = marathonBookmarkRepository.findByUserIdAndMarathonId(query.myUserId, query.marathonId)
-            ?: marathonBookmarkConverter.map(query)
+            ?: query.toMarathonBookmarkEntity()
         marathonBookmarkRepository.save(bookmark)
     }
 
