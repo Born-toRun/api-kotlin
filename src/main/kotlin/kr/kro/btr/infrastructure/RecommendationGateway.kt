@@ -1,7 +1,7 @@
 package kr.kro.btr.infrastructure
 
 import kr.kro.btr.adapter.out.persistence.RecommendationRepository
-import kr.kro.btr.core.converter.RecommendationConverter
+import kr.kro.btr.base.extension.toRecommendationEntity
 import kr.kro.btr.domain.entity.RecommendationEntity
 import kr.kro.btr.infrastructure.model.CreateRecommendationQuery
 import kr.kro.btr.infrastructure.model.RemoveRecommendationQuery
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component
 @Component
 class RecommendationGateway(
     private val recommendationRepository: RecommendationRepository,
-    private val recommendationConverter: RecommendationConverter
 ) {
 
     fun searchAll(query: SearchAllRecommendationQuery): List<RecommendationEntity> {
@@ -28,7 +27,7 @@ class RecommendationGateway(
                 query.myUserId,
                 query.recommendationType,
                 query.contentId
-            ) ?: recommendationConverter.map(query)
+            ) ?: query.toRecommendationEntity()
 
         recommendationRepository.save(recommendationEntity)
     }

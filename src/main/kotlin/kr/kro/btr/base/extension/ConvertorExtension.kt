@@ -35,6 +35,7 @@ import kr.kro.btr.core.event.model.MinioRemoveAllEventModel
 import kr.kro.btr.core.event.model.MinioRemoveEventModel
 import kr.kro.btr.domain.constant.ActivityRecruitmentType
 import kr.kro.btr.domain.constant.Bucket
+import kr.kro.btr.domain.constant.RecommendationType
 import kr.kro.btr.domain.entity.ActivityEntity
 import kr.kro.btr.domain.entity.ActivityParticipationEntity
 import kr.kro.btr.domain.entity.CommentEntity
@@ -43,6 +44,7 @@ import kr.kro.btr.domain.entity.FeedEntity
 import kr.kro.btr.domain.entity.MarathonBookmarkEntity
 import kr.kro.btr.domain.entity.MarathonEntity
 import kr.kro.btr.domain.entity.ObjectStorageEntity
+import kr.kro.btr.domain.entity.RecommendationEntity
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.entity.UserPrivacyEntity
 import kr.kro.btr.domain.entity.YellowCardEntity
@@ -56,6 +58,7 @@ import kr.kro.btr.domain.port.model.CreateActivityCommand
 import kr.kro.btr.domain.port.model.CreateCommentCommand
 import kr.kro.btr.domain.port.model.CreateCrewCommand
 import kr.kro.btr.domain.port.model.CreateFeedCommand
+import kr.kro.btr.domain.port.model.CreateRecommendationCommand
 import kr.kro.btr.domain.port.model.CreateRefreshTokenCommand
 import kr.kro.btr.domain.port.model.CreateYellowCardCommand
 import kr.kro.btr.domain.port.model.Crew
@@ -72,6 +75,7 @@ import kr.kro.btr.domain.port.model.ParticipantResult
 import kr.kro.btr.domain.port.model.ParticipateActivityCommand
 import kr.kro.btr.domain.port.model.RemoveFeedCommand
 import kr.kro.btr.domain.port.model.RemoveObjectStorageCommand
+import kr.kro.btr.domain.port.model.RemoveRecommendationCommand
 import kr.kro.btr.domain.port.model.SearchAllActivityCommand
 import kr.kro.btr.domain.port.model.SearchAllFeedCommand
 import kr.kro.btr.domain.port.model.SearchAllMarathonCommand
@@ -85,6 +89,7 @@ import kr.kro.btr.infrastructure.model.CreateActivityQuery
 import kr.kro.btr.infrastructure.model.CreateCommentQuery
 import kr.kro.btr.infrastructure.model.CreateCrewQuery
 import kr.kro.btr.infrastructure.model.CreateFeedQuery
+import kr.kro.btr.infrastructure.model.CreateRecommendationQuery
 import kr.kro.btr.infrastructure.model.CreateRefreshTokenQuery
 import kr.kro.btr.infrastructure.model.CreateYellowCardQuery
 import kr.kro.btr.infrastructure.model.ModifyActivityQuery
@@ -94,6 +99,7 @@ import kr.kro.btr.infrastructure.model.ModifyObjectStorageQuery
 import kr.kro.btr.infrastructure.model.ModifyUserPrivacyQuery
 import kr.kro.btr.infrastructure.model.ParticipateActivityQuery
 import kr.kro.btr.infrastructure.model.RemoveObjectStorageQuery
+import kr.kro.btr.infrastructure.model.RemoveRecommendationQuery
 import kr.kro.btr.infrastructure.model.SearchAllActivityQuery
 import kr.kro.btr.infrastructure.model.SearchAllFeedQuery
 import kr.kro.btr.infrastructure.model.SearchMarathonQuery
@@ -1146,6 +1152,47 @@ fun UserPrivacyEntity.toUserPrivacy(): UserPrivacy {
         id = this.id,
         userId = this.userId,
         isInstagramIdPublic = this.isInstagramIdPublic
+    )
+}
+
+// recommandation
+fun TokenDetail.toCreateRecommendationCommand(recommendationType: RecommendationType, contentId: Long): CreateRecommendationCommand {
+    return CreateRecommendationCommand(
+        recommendationType = recommendationType,
+        contentId = contentId,
+        myUserId = this.id
+    )
+}
+
+fun TokenDetail.toRemoveRecommendationCommand(recommendationType: RecommendationType, contentId: Long): RemoveRecommendationCommand {
+    return RemoveRecommendationCommand(
+        recommendationType = recommendationType,
+        contentId = contentId,
+        myUserId = this.id
+    )
+}
+
+fun CreateRecommendationCommand.toCreateRecommendationQuery(): CreateRecommendationQuery {
+    return CreateRecommendationQuery(
+        recommendationType = this.recommendationType,
+        contentId = this.contentId,
+        myUserId = this.myUserId
+    )
+}
+
+fun RemoveRecommendationCommand.toRemoveRecommendationQuery(): RemoveRecommendationQuery {
+    return RemoveRecommendationQuery(
+        recommendationType = this.recommendationType,
+        contentId = this.contentId,
+        myUserId = this.myUserId
+    )
+}
+
+fun CreateRecommendationQuery.toRecommendationEntity(): RecommendationEntity {
+    return RecommendationEntity(
+        userId = this.myUserId,
+        contentId = this.contentId,
+        recommendationType = this.recommendationType
     )
 }
 
