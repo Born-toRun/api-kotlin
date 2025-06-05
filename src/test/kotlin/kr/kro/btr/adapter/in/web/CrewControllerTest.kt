@@ -81,13 +81,13 @@ class CrewControllerTest (
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
                     .andExpectData(
-                        jsonPath("$.crewDetails[0].id") shouldBe response.details[0].id,
-                        jsonPath("$.crewDetails[0].crewName") shouldBe response.details[0].crewName,
-                        jsonPath("$.crewDetails[0].contents") shouldBe response.details[0].contents,
-                        jsonPath("$.crewDetails[0].region") shouldBe response.details[0].region,
-                        jsonPath("$.crewDetails[0].imageUri") shouldBe response.details[0].imageUri,
-                        jsonPath("$.crewDetails[0].logoUri") shouldBe response.details[0].logoUri,
-                        jsonPath("$.crewDetails[0].crewSnsUri") shouldBe response.details[0].crewSnsUri
+                        jsonPath("$.details[0].id") shouldBe response.details[0].id,
+                        jsonPath("$.details[0].crewName") shouldBe response.details[0].crewName,
+                        jsonPath("$.details[0].contents") shouldBe response.details[0].contents,
+                        jsonPath("$.details[0].region") shouldBe response.details[0].region,
+                        jsonPath("$.details[0].imageUri") shouldBe response.details[0].imageUri,
+                        jsonPath("$.details[0].logoUri") shouldBe response.details[0].logoUri,
+                        jsonPath("$.details[0].crewSnsUri") shouldBe response.details[0].crewSnsUri
                     )
                     .andDocument(
                         "search-crews",

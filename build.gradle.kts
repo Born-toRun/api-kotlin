@@ -90,6 +90,7 @@ dependencies {
     implementation("com.querydsl:querydsl-jpa:$querydslVersion:jakarta")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.6")
+    implementation("club.minnced:discord-webhooks:0.8.4")
 
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

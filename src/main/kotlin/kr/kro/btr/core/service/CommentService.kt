@@ -7,12 +7,12 @@ import kr.kro.btr.base.extension.toCreateCommentQuery
 import kr.kro.btr.base.extension.toModifyCommentQuery
 import kr.kro.btr.domain.entity.CommentEntity
 import kr.kro.btr.domain.port.CommentPort
-import kr.kro.btr.domain.port.model.result.CommentDetailResult
-import kr.kro.btr.domain.port.model.result.CommentResult
 import kr.kro.btr.domain.port.model.CreateCommentCommand
 import kr.kro.btr.domain.port.model.DetailCommentCommand
 import kr.kro.btr.domain.port.model.ModifyCommentCommand
 import kr.kro.btr.domain.port.model.SearchAllCommentCommand
+import kr.kro.btr.domain.port.model.result.CommentDetailResult
+import kr.kro.btr.domain.port.model.result.CommentResult
 import kr.kro.btr.infrastructure.CommentGateway
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -43,7 +43,7 @@ class CommentService(
         val parentComment = commentGateway.search(command.commentId)
         val reCommentResults = parentComment.child
             .map { it.toCommentResult(command.myUserId) }
-            .sortedByDescending { CommentResult.id }
+            .sortedByDescending { it.id }
 
         return parentComment.toCommentDetail(reCommentResults)
     }

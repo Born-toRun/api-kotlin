@@ -70,8 +70,8 @@ class ActivityController(
 
     @PutMapping("/open/{activityId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun open(@PathVariable activityId: Long): ResponseEntity<OpenActivityResponse> {
-        val activity = activityProxy.open(activityId)
-        val response = activity.toOpenActivityResponse()
+        val activityResult = activityProxy.open(activityId)
+        val response = activityResult.toOpenActivityResponse()
         return ResponseEntity.ok(response)
     }
 

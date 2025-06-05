@@ -189,17 +189,17 @@ class CommentControllerTest (
             registeredAt = getDateTimeByFormat(commentDetailResult.registeredAt),
             reComments = listOf(
                 SearchCommentDetailResponse.ReComment(
-                    id = CommentResult.id,
-                    contents = CommentResult.contents,
-                    registeredAt = getDateTimeByFormat(CommentResult.registeredAt),
-                    isMyComment = CommentResult.isMyComment,
+                    id = commentDetailResult.reCommentResults[0].id,
+                    contents = commentDetailResult.reCommentResults[0].contents,
+                    registeredAt = getDateTimeByFormat(commentDetailResult.reCommentResults[0].registeredAt),
+                    isMyComment = commentDetailResult.reCommentResults[0].isMyComment,
                     writer = SearchCommentDetailResponse.ReComment.Writer(
-                        userId = CommentResult.Writer.userId,
-                        userName = CommentResult.Writer.userName,
-                        profileImageUri = CommentResult.Writer.profileImageUri,
-                        crewName = CommentResult.Writer.crewName,
-                        isAdmin = CommentResult.Writer.isAdmin,
-                        isManager = CommentResult.Writer.isManager,
+                        userId = commentDetailResult.reCommentResults[0].writer.userId,
+                        userName = commentDetailResult.reCommentResults[0].writer.userName,
+                        profileImageUri = commentDetailResult.reCommentResults[0].writer.profileImageUri,
+                        crewName = commentDetailResult.reCommentResults[0].writer.crewName,
+                        isAdmin = commentDetailResult.reCommentResults[0].writer.isAdmin,
+                        isManager = commentDetailResult.reCommentResults[0].writer.isManager,
                     )
                 )
             )

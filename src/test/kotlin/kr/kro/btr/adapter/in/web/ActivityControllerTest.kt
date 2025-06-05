@@ -471,6 +471,7 @@ class ActivityControllerTest (
             course = "course",
             courseDetail = "courseDetail",
             path = "path",
+            attendanceCode = 123,
             isOpen = true,
             updatedAt = LocalDateTime.now(),
             registeredAt = LocalDateTime.now(),
@@ -487,7 +488,7 @@ class ActivityControllerTest (
         )
         val response = OpenActivityResponse(
             activityId = activityResult.id,
-            attendanceCode = 123
+            attendanceCode = activityResult.attendanceCode
         )
 
         context("오픈을 하면") {

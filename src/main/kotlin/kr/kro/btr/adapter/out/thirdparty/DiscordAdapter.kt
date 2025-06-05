@@ -1,26 +1,28 @@
 package kr.kro.btr.adapter.out.thirdparty
 
+import club.minnced.discord.webhook.WebhookClient
+import club.minnced.discord.webhook.send.WebhookEmbedBuilder
 import io.github.oshai.kotlinlogging.KotlinLogging
-import kr.kro.btr.config.properties.DiscordProperties
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
-import org.springframework.util.LinkedMultiValueMap
-import org.springframework.util.MultiValueMap
-import org.springframework.web.reactive.function.BodyInserters
-import org.springframework.web.reactive.function.client.WebClient
-import java.time.Duration
 
 @Component
 class DiscordAdapter(
-    private val discordProperties: DiscordProperties,
-    private val discordConnector: WebClient
+    private val discordConnector: WebhookClient
 ) {
+
     @Async
-    fun send(message: String?) {
-        if (message.isNullOrEmpty()) return
+    fun send(message: String) {
+        if (message.isNotBlank()) {
+            log.debug { "discord message: $message" }
 
-        log.info { "discord error message: $message" }
+            sliceMessage(message).forEach { part ->
+                sendMessageToDiscord(part)
+            }
+        }
+    }
 
+    private fun sliceMessage(message: String): List<String> {
         val slicedMessage = mutableListOf<String>()
         var index = 0
 
@@ -32,31 +34,39 @@ class DiscordAdapter(
                 length = MESSAGE_MAX_SIZE - 1
             }
 
-            slicedMessage.add(message.substring(index, index + length))
+            slicedMessage.add(message.substring(index, index + length).trim())
             index += length
         }
 
-        try {
-            for (m in slicedMessage.map { it.trim() }.filter { it.isNotEmpty() }) {
-                val body: MultiValueMap<String, String> = LinkedMultiValueMap()
-                body.add(MESSAGE, m)
+        return slicedMessage.filter { it.isNotEmpty() }
+    }
 
-                discordConnector.post()
-                    .uri { uriBuilder -> uriBuilder.path(discordProperties.webhookPath).build() }
-                    .body(BodyInserters.fromFormData(body))
-                    .retrieve()
-                    .toEntity(Void::class.java)
-                    .delayElement(Duration.ofSeconds(1))
-                    .block()
+    private fun sendMessageToDiscord(message: String) {
+        try {
+            discordConnector.send(message).thenAccept { response ->
+                log.info { "discord 알림이 발송 되었습니다. [${response.id}]" }
             }
         } catch (e: Exception) {
-            log.error(e) { "Discord notify failed" }
+            log.error(e) { "Discord notify failed!" }
+        }
+    }
+
+    @Async
+    fun send(webhookEmbedBuilder: WebhookEmbedBuilder) {
+        val embed = webhookEmbedBuilder.setColor(0xFF006E).build()
+        log.debug { "discord message: ${embed.description}" }
+
+        try {
+            discordConnector.send(embed).thenAccept { message ->
+                log.info { "discord 알림이 발송 되었습니다. [${message.id}]" }
+            }
+        } catch (e: Exception) {
+            log.error(e) { "Discord notify failed!" }
         }
     }
 
     companion object {
         private const val MESSAGE_MAX_SIZE = 2000
-        private const val MESSAGE = "content"
         private val log = KotlinLogging.logger {}
     }
 }
