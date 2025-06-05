@@ -90,4 +90,4 @@ jobs:
                 }
               ]
       with:
-        args: '${{ EVENT_PAYLOAD.repository.full_name }} 배포 완료.'
+        args: '${{ github.repository }} 배포 완료.'
