@@ -7,7 +7,6 @@ import io.mockk.runs
 import kr.kro.btr.adapter.`in`.web.payload.UploadFileResponse
 import kr.kro.btr.adapter.`in`.web.proxy.ObjectStorageProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.core.converter.ObjectStorageConverter
 import kr.kro.btr.domain.constant.Bucket
 import kr.kro.btr.domain.port.model.ObjectStorage
 import kr.kro.btr.utils.CommonTestFixture.getMultipartFile
@@ -36,8 +35,6 @@ import java.time.LocalDateTime
 
 @WebMvcTest(ObjectStorageController::class)
 class ObjectStorageControllerTest (
-    @MockkBean
-    private val converter: ObjectStorageConverter,
     @MockkBean
     private val proxy: ObjectStorageProxy,
     @Autowired
@@ -74,7 +71,6 @@ class ObjectStorageControllerTest (
 
             it("200 OK") {
                 every { proxy.upload(any(), any(), any()) } returns objectStorage
-                every { converter.map(any<ObjectStorage>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)

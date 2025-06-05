@@ -7,7 +7,6 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchAllMarathonResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonDetailResponse
 import kr.kro.btr.adapter.`in`.web.proxy.MarathonProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.core.converter.MarathonConverter
 import kr.kro.btr.domain.port.model.Marathon
 import kr.kro.btr.domain.port.model.MarathonDetail
 import kr.kro.btr.utils.andExpectData
@@ -38,8 +37,6 @@ import java.time.LocalDateTime
 
 @WebMvcTest(MarathonController::class)
 class MarathonControllerTest (
-    @MockkBean
-    private val converter: MarathonConverter,
     @MockkBean
     private val proxy: MarathonProxy,
     @Autowired
@@ -81,7 +78,6 @@ class MarathonControllerTest (
 
             it("200 OK") {
                 every { proxy.search(any(), any()) } returns marathons
-                every { converter.map(any<List<Marathon>>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -150,7 +146,6 @@ class MarathonControllerTest (
 
             it("200 OK") {
                 every { proxy.detail(any(), any()) } returns marathonDetail
-                every { converter.map(any<MarathonDetail>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)

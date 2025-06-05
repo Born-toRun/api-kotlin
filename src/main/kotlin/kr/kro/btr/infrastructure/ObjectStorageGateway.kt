@@ -2,8 +2,8 @@ package kr.kro.btr.infrastructure
 
 import kr.kro.btr.adapter.out.persistence.ObjectStorageRepository
 import kr.kro.btr.base.extension.findByIdOrThrow
+import kr.kro.btr.base.extension.toUpload
 import kr.kro.btr.config.properties.MinioProperties
-import kr.kro.btr.core.converter.ObjectStorageConverter
 import kr.kro.btr.core.event.model.MinioRemoveAllEventModel
 import kr.kro.btr.core.event.model.MinioRemoveEventModel
 import kr.kro.btr.domain.entity.ObjectStorageEntity
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class ObjectStorageGateway(
-    private val objectStorageConverter: ObjectStorageConverter,
     private val minioProperties: MinioProperties,
     private val objectStorageRepository: ObjectStorageRepository,
     private val minioGateway: MinioGateway,
@@ -25,7 +24,7 @@ class ObjectStorageGateway(
 ) {
 
     fun upload(query: UploadObjectStorageQuery): ObjectStorageEntity {
-        val uploadedFileName = minioGateway.uploadObject(objectStorageConverter.map(query))
+        val uploadedFileName = minioGateway.uploadObject(query.toUpload())
 
         val cdnUri = "${minioProperties.cdnHost}/${query.bucket.name}/$uploadedFileName"
 
@@ -91,7 +90,7 @@ class ObjectStorageGateway(
             }
         }
 
-        val uploadedFileName = minioGateway.uploadObject(objectStorageConverter.map(query))
+        val uploadedFileName = minioGateway.uploadObject(query.toUpload())
         val targetCdnUri = objectStorage.fileUri
         val cdnUri = "${minioProperties.cdnHost}/${query.bucket}/$uploadedFileName"
 

@@ -1,7 +1,9 @@
 package kr.kro.btr.core.service
 
 import kr.kro.btr.base.extension.toBookmarkMarathonQuery
-import kr.kro.btr.core.converter.MarathonConverter
+import kr.kro.btr.base.extension.toMarathonDetail
+import kr.kro.btr.base.extension.toMarathons
+import kr.kro.btr.base.extension.toSearchMarathonQuery
 import kr.kro.btr.domain.port.MarathonPort
 import kr.kro.btr.domain.port.model.BookmarkMarathonCommand
 import kr.kro.btr.domain.port.model.CancelBookmarkMarathonCommand
@@ -15,21 +17,20 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class MarathonService(
-    private val marathonConverter: MarathonConverter,
     private val marathonGateway: MarathonGateway
 ) : MarathonPort {
 
     @Transactional(readOnly = true)
     override fun search(command: SearchAllMarathonCommand): List<Marathon> {
-        val query = marathonConverter.map(command)
+        val query = command.toSearchMarathonQuery()
         val marathonEntities = marathonGateway.search(query)
-        return marathonConverter.map(marathonEntities, command.myUserId)
+        return marathonEntities.toMarathons(command.myUserId)
     }
 
     @Transactional(readOnly = true)
     override fun detail(command: SearchMarathonDetailCommand): MarathonDetail {
         val marathonEntity = marathonGateway.detail(command.marathonId)
-        return marathonConverter.map(marathonEntity, command.myUserId)
+        return marathonEntity.toMarathonDetail(command.myUserId)
     }
 
     @Transactional

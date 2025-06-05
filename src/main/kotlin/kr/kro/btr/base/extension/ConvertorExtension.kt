@@ -16,18 +16,30 @@ import kr.kro.btr.adapter.`in`.web.payload.ParticipationActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchAllActivityRequest
+import kr.kro.btr.adapter.`in`.web.payload.SearchAllMarathonRequest
+import kr.kro.btr.adapter.`in`.web.payload.SearchAllMarathonResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCommentDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCommentResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchFeedResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonDetailResponse
+import kr.kro.btr.adapter.`in`.web.payload.UploadFileResponse
+import kr.kro.btr.adapter.out.thirdparty.model.Remove
+import kr.kro.btr.adapter.out.thirdparty.model.RemoveAll
+import kr.kro.btr.adapter.out.thirdparty.model.Upload
+import kr.kro.btr.core.event.model.MinioRemoveAllEventModel
+import kr.kro.btr.core.event.model.MinioRemoveEventModel
 import kr.kro.btr.domain.constant.ActivityRecruitmentType
+import kr.kro.btr.domain.constant.Bucket
 import kr.kro.btr.domain.entity.ActivityEntity
 import kr.kro.btr.domain.entity.ActivityParticipationEntity
 import kr.kro.btr.domain.entity.CommentEntity
 import kr.kro.btr.domain.entity.CrewEntity
 import kr.kro.btr.domain.entity.FeedEntity
 import kr.kro.btr.domain.entity.MarathonBookmarkEntity
+import kr.kro.btr.domain.entity.MarathonEntity
+import kr.kro.btr.domain.entity.ObjectStorageEntity
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.port.model.ActivityResult
 import kr.kro.btr.domain.port.model.AttendanceActivityCommand
@@ -42,15 +54,22 @@ import kr.kro.btr.domain.port.model.CreateFeedCommand
 import kr.kro.btr.domain.port.model.Crew
 import kr.kro.btr.domain.port.model.FeedCard
 import kr.kro.btr.domain.port.model.FeedResult
+import kr.kro.btr.domain.port.model.Marathon
+import kr.kro.btr.domain.port.model.MarathonDetail
 import kr.kro.btr.domain.port.model.ModifyActivityCommand
 import kr.kro.btr.domain.port.model.ModifyCommentCommand
 import kr.kro.btr.domain.port.model.ModifyFeedCommand
+import kr.kro.btr.domain.port.model.ObjectStorage
 import kr.kro.btr.domain.port.model.ParticipantResult
 import kr.kro.btr.domain.port.model.ParticipateActivityCommand
 import kr.kro.btr.domain.port.model.RemoveFeedCommand
+import kr.kro.btr.domain.port.model.RemoveObjectStorageCommand
 import kr.kro.btr.domain.port.model.SearchAllActivityCommand
 import kr.kro.btr.domain.port.model.SearchAllFeedCommand
+import kr.kro.btr.domain.port.model.SearchAllMarathonCommand
 import kr.kro.btr.domain.port.model.SearchFeedDetailCommand
+import kr.kro.btr.domain.port.model.SearchMarathonDetailCommand
+import kr.kro.btr.domain.port.model.UploadObjectStorageCommand
 import kr.kro.btr.infrastructure.model.AttendanceActivityQuery
 import kr.kro.btr.infrastructure.model.BookmarkMarathonQuery
 import kr.kro.btr.infrastructure.model.CreateActivityQuery
@@ -60,10 +79,15 @@ import kr.kro.btr.infrastructure.model.CreateFeedQuery
 import kr.kro.btr.infrastructure.model.ModifyActivityQuery
 import kr.kro.btr.infrastructure.model.ModifyCommentQuery
 import kr.kro.btr.infrastructure.model.ModifyFeedQuery
+import kr.kro.btr.infrastructure.model.ModifyObjectStorageQuery
 import kr.kro.btr.infrastructure.model.ParticipateActivityQuery
+import kr.kro.btr.infrastructure.model.RemoveObjectStorageQuery
 import kr.kro.btr.infrastructure.model.SearchAllActivityQuery
 import kr.kro.btr.infrastructure.model.SearchAllFeedQuery
+import kr.kro.btr.infrastructure.model.SearchMarathonQuery
+import kr.kro.btr.infrastructure.model.UploadObjectStorageQuery
 import kr.kro.btr.support.TokenDetail
+import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 
 // activity
@@ -892,5 +916,194 @@ fun BookmarkMarathonQuery.toMarathonBookmarkEntity(): MarathonBookmarkEntity {
     return MarathonBookmarkEntity(
         userId = this.myUserId,
         marathonId = this.marathonId
+    )
+}
+
+// marathon
+fun List<Marathon>.toSearchAllMarathonResponse(): SearchAllMarathonResponse {
+    val marathons = this.map { it.toSearchAllMarathonResponseMarathon() }
+    return SearchAllMarathonResponse(marathons = marathons)
+}
+
+fun Marathon.toSearchAllMarathonResponseMarathon(): SearchAllMarathonResponse.Marathon {
+    return SearchAllMarathonResponse.Marathon(
+        id = this.id,
+        title = this.title,
+        schedule = this.schedule,
+        venue = this.venue,
+        course = this.course,
+        isBookmarking = this.isBookmarking == true
+    )
+}
+
+fun MarathonDetail.toSearchMarathonDetailResponse(): SearchMarathonDetailResponse {
+    return SearchMarathonDetailResponse(
+        id = this.id,
+        title = this.title,
+        owner = this.owner,
+        email = this.email,
+        schedule = this.schedule,
+        contact = this.contact,
+        course = this.course,
+        location = this.location,
+        venue = this.venue,
+        host = this.host,
+        duration = this.duration,
+        homepage = this.homepage,
+        venueDetail = this.venueDetail,
+        remark = this.remark,
+        registeredAt = this.registeredAt,
+        isBookmarking = this.isBookmarking
+    )
+}
+
+fun SearchAllMarathonRequest.toSearchAllMarathonCommand(userId: Long): SearchAllMarathonCommand {
+    return SearchAllMarathonCommand(
+        locations = this.locations,
+        courses = this.courses,
+        myUserId = userId
+    )
+}
+
+fun TokenDetail.toSearchMarathonDetailCommand(marathonId: Long): SearchMarathonDetailCommand {
+    return SearchMarathonDetailCommand(
+        marathonId = marathonId,
+        myUserId = this.id
+    )
+}
+
+fun TokenDetail.toBookmarkMarathonCommand(marathonId: Long): BookmarkMarathonCommand {
+    return BookmarkMarathonCommand(
+        marathonId = marathonId,
+        myUserId = this.id
+    )
+}
+
+fun TokenDetail.toCancelBookmarkMarathonCommand(marathonId: Long): CancelBookmarkMarathonCommand {
+    return CancelBookmarkMarathonCommand(
+        marathonId = marathonId,
+        myUserId = this.id
+    )
+}
+
+fun SearchAllMarathonCommand.toSearchMarathonQuery(): SearchMarathonQuery {
+    return SearchMarathonQuery(
+        locations = this.locations,
+        courses = this.courses
+    )
+}
+
+fun List<MarathonEntity>.toMarathons(userId: Long): List<Marathon> {
+    return this.map { it.toMarathon(userId) }
+}
+
+fun MarathonEntity.toMarathon(userId: Long): Marathon {
+    return Marathon(
+        id = this.id,
+        title = this.title,
+        schedule = this.schedule,
+        venue = this.venue,
+        course = this.course,
+        isBookmarking = this.marathonBookmarkEntities.any { userId == it.userId }
+    )
+}
+
+fun MarathonEntity.toMarathonDetail(userId: Long): MarathonDetail {
+    return MarathonDetail(
+        id = this.id,
+        title = this.title,
+        owner = this.owner,
+        email = this.email,
+        schedule = this.schedule,
+        contact = this.contact,
+        course = this.course,
+        location = this.location,
+        venue = this.venue,
+        host = this.host,
+        duration = this.duration,
+        homepage = this.homepage,
+        venueDetail = this.venueDetail,
+        remark = this.remark,
+        registeredAt = this.registeredAt,
+        isBookmarking = this.marathonBookmarkEntities.any { userId == it.userId }
+    )
+}
+
+// object storage
+fun ObjectStorage.toUploadFileResponse(): UploadFileResponse {
+    return UploadFileResponse(
+        fileId = this.id,
+        fileUri = this.fileUri
+    )
+}
+
+fun TokenDetail.toUploadObjectStorageCommand(file: MultipartFile, bucket: Bucket): UploadObjectStorageCommand {
+    return UploadObjectStorageCommand(
+        myUserId = this.id,
+        file = file,
+        bucket = bucket
+    )
+}
+
+fun TokenDetail.toRemoveObjectStorageCommand(fileId: Long, bucket: Bucket): RemoveObjectStorageCommand {
+    return RemoveObjectStorageCommand(
+        my = this,
+        targetFileId = fileId,
+        bucket = bucket
+    )
+}
+
+fun UploadObjectStorageCommand.toUploadObjectStorageQuery(): UploadObjectStorageQuery {
+    return UploadObjectStorageQuery(
+        myUserId = this.myUserId,
+        file = this.file,
+        bucket = this.bucket
+    )
+}
+
+fun ObjectStorageEntity.toObjectStorage(): ObjectStorage {
+    return ObjectStorage(
+        id = this.id,
+        userId = this.userId,
+        fileUri = this.fileUri,
+        uploadAt = this.uploadAt
+    )
+}
+
+fun RemoveObjectStorageCommand.toRemoveObjectStorageQuery(): RemoveObjectStorageQuery {
+    return RemoveObjectStorageQuery(
+        my = this.my,
+        targetFileId = this.targetFileId,
+        bucket = this.bucket
+    )
+}
+
+fun UploadObjectStorageQuery.toUpload(): Upload {
+    return Upload(
+        file = this.file,
+        myUserId = this.myUserId,
+        bucket = this.bucket
+    )
+}
+
+fun ModifyObjectStorageQuery.toUpload(): Upload {
+    return Upload(
+        file = this.file,
+        myUserId = this.my.id,
+        bucket = this.bucket
+    )
+}
+
+fun MinioRemoveEventModel.toRemove(): Remove {
+    return Remove(
+        bucket = this.bucket,
+        objectName = this.objectName
+    )
+}
+
+fun MinioRemoveAllEventModel.toRemoveAll(): RemoveAll {
+    return RemoveAll(
+        bucket = this.bucket,
+        objectNames = this.objectNames
     )
 }
