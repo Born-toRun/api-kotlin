@@ -59,11 +59,35 @@ jobs:
       uses: Ilshidur/action-discord@master
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        DISCORD_EMBEDS: |
+            [
+                { 
+                  "title": "🚀 GitHub Actions 빌드 결과",
+                  "color": 10609311,
+                  "description": "${{ github.event.issue.html_url }}",
+                  "fields": [
+                    {
+                      "name": "📂 리포지토리",
+                      "value": "${{ github.repository }}",
+                      "inline": true
+                    },
+                    {
+                      "name": "🌿 브랜치",
+                      "value": "${{ github.ref }}",
+                      "inline": true
+                    },
+                    {
+                      "name": "✅ 상태",
+                      "value": "${{ job.status }}",
+                      "inline": true
+                    },
+                    {
+                      "name": "🔗 빌드 로그",
+                      "value": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                      "inline": true
+                    }
+                  ]
+                }
+              ]
       with:
-        args: |
-          🚀 GitHub Actions 빌드 결과
-          - 📂 리포지토리: `${{ github.repository }}`
-          - 🌿 브랜치: `${{ github.ref }}`
-          - 🔗 커밋: `${{ github.sha }}`
-          - ✅ 상태: `${{ job.status }}`
-          - 🔗 [빌드 로그 보기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+        args: '${{ EVENT_PAYLOAD.repository.full_name }} 배포 완료.'
