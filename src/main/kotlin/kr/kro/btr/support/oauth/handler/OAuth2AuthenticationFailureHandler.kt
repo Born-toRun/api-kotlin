@@ -16,10 +16,6 @@ class OAuth2AuthenticationFailureHandler(
     private val authorizationRequestRepository: OAuth2AuthorizationRequestBasedOnCookieRepository
 ) : SimpleUrlAuthenticationFailureHandler() {
 
-    companion object {
-        private val log = KotlinLogging.logger {}
-    }
-
     override fun onAuthenticationFailure(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -38,5 +34,9 @@ class OAuth2AuthenticationFailureHandler(
         redirectStrategy.sendRedirect(request, response, targetUrl)
 
         log.info { "Authentication failed! $exception.message" }
+    }
+
+    companion object {
+        private val log = KotlinLogging.logger {}
     }
 }

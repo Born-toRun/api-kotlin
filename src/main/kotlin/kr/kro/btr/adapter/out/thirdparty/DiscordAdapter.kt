@@ -15,12 +15,6 @@ class DiscordAdapter(
     private val discordProperties: DiscordProperties,
     private val discordConnector: WebClient
 ) {
-    companion object {
-        private const val MESSAGE_MAX_SIZE = 2000
-        private const val MESSAGE = "content"
-        private val log = KotlinLogging.logger {}
-    }
-
     @Async
     fun send(message: String?) {
         if (message.isNullOrEmpty()) return
@@ -58,5 +52,11 @@ class DiscordAdapter(
         } catch (e: Exception) {
             log.error(e) { "Discord notify failed" }
         }
+    }
+
+    companion object {
+        private const val MESSAGE_MAX_SIZE = 2000
+        private const val MESSAGE = "content"
+        private val log = KotlinLogging.logger {}
     }
 }

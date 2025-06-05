@@ -11,10 +11,6 @@ class RecentSearchKeywordService(
     private val redisClient: RedisClient
 ) : RecentSearchKeywordPort {
 
-    companion object {
-        private const val RECENT_SEARCH_KEYWORD_KEY_PREFIX = "recentSearch:"
-    }
-
     @Async
     @Transactional
     override fun removeAll(userId: Long) {
@@ -44,5 +40,9 @@ class RecentSearchKeywordService(
     @Transactional(readOnly = true)
     override fun search(userId: Long): List<Any> {
         return redisClient.getList("$RECENT_SEARCH_KEYWORD_KEY_PREFIX$userId")
+    }
+
+    companion object {
+        private const val RECENT_SEARCH_KEYWORD_KEY_PREFIX = "recentSearch:"
     }
 }

@@ -9,10 +9,6 @@ import com.hazelcast.map.listener.MapEvictedListener
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 class HazelcastMapEventLogger : EntryListener<Any, Any>, MapClearedListener, MapEvictedListener {
-    companion object {
-        private val log = KotlinLogging.logger {}
-    }
-
     override fun entryAdded(event: EntryEvent<Any, Any>) {
         log(event)
     }
@@ -43,5 +39,9 @@ class HazelcastMapEventLogger : EntryListener<Any, Any>, MapClearedListener, Map
 
     private fun log(event: AbstractIMapEvent) {
         log.debug {event.toString()}
+    }
+
+    companion object {
+        private val log = KotlinLogging.logger {}
     }
 }

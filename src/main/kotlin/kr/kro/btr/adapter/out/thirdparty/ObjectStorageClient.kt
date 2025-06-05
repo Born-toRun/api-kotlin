@@ -21,10 +21,6 @@ import java.util.*
 class ObjectStorageClient(
     private val minioClient: MinioClient
 ) {
-    companion object {
-        private val log = KotlinLogging.logger {}
-    }
-
     private fun getFileExtension(fileName: String?): String {
         val name = fileName ?: throw InvalidException("확장자가 없는 파일은 업로드 할 수 없습니다.")
         val dotIndex = name.lastIndexOf('.')
@@ -126,6 +122,10 @@ class ObjectStorageClient(
                 .objects(resource.objectNames.map { DeleteObject(it) })
                 .build()
         )
+    }
+
+    companion object {
+        private val log = KotlinLogging.logger {}
     }
 }
 

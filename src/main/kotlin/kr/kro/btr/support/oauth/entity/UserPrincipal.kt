@@ -11,14 +11,27 @@ import org.springframework.security.oauth2.core.user.OAuth2User
 
 class UserPrincipal(
     val userId: Long,
-    private val userName: String?,  // 변경: 'name' -> 'userName'
+    private val userName: String?,
     private val password: String?,
     val providerType: ProviderType?,
     val roleType: RoleType,
-    private val grantedAuthorities: Collection<GrantedAuthority> // 변경: 'authorities' -> 'grantedAuthorities'
+    private val grantedAuthorities: Collection<GrantedAuthority>
 ) : OAuth2User, UserDetails, OidcUser {
 
-    private var attributeMap: Map<String, Any>? = null  // 변경: 'attributes' -> 'attributeMap'
+    private var attributeMap: Map<String, Any>? = null
+
+    override fun getAttributes(): Map<String, Any>? = attributeMap
+    override fun getUsername(): String = userId.toString()
+    override fun getPassword(): String? = password
+    override fun isAccountNonExpired(): Boolean = true
+    override fun isAccountNonLocked(): Boolean = true
+    override fun isCredentialsNonExpired(): Boolean = true
+    override fun isEnabled(): Boolean = true
+    override fun getAuthorities(): Collection<GrantedAuthority> = grantedAuthorities
+    override fun getClaims(): Map<String, Any>? = null
+    override fun getUserInfo(): OidcUserInfo? = null
+    override fun getIdToken(): OidcIdToken? = null
+    override fun getName(): String? = userName
 
     companion object {
         fun create(user: UserEntity): UserPrincipal {
@@ -33,35 +46,9 @@ class UserPrincipal(
         }
 
         fun create(user: UserEntity, attributes: Map<String, Any>): UserPrincipal {
-            val userPrincipal = create(user)
-            userPrincipal.attributeMap = attributes
-            return userPrincipal
+            return create(user).apply {
+                attributeMap = attributes
+            }
         }
-    }
-
-    override fun getAttributes(): Map<String, Any>? {
-        return attributeMap
-    }
-
-    override fun getUsername(): String {
-        return userId.toString()
-    }
-
-    override fun getPassword(): String? {
-        return password
-    }
-
-    override fun isAccountNonExpired(): Boolean = true
-    override fun isAccountNonLocked(): Boolean = true
-    override fun isCredentialsNonExpired(): Boolean = true
-    override fun isEnabled(): Boolean = true
-
-    override fun getAuthorities(): Collection<GrantedAuthority> = grantedAuthorities
-    override fun getClaims(): Map<String, Any>? = null
-    override fun getUserInfo(): OidcUserInfo? = null
-    override fun getIdToken(): OidcIdToken? = null
-
-    override fun getName(): String? {
-        return userName
     }
 }

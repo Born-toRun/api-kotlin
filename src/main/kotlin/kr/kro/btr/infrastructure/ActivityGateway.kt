@@ -30,10 +30,6 @@ class ActivityGateway(
     private val redisClient: RedisClient
 ) {
 
-    companion object {
-        private const val ACCESS_CODE_KEY_PREFIX = "accessCode"
-    }
-
     fun create(query: CreateActivityQuery) {
         val activityEntity = activityRepository.findByStartAtAndUserId(query.startAt, query.myUserId) ?: query.toActivityEntity()
         activityRepository.save(activityEntity)
@@ -142,6 +138,10 @@ class ActivityGateway(
 
     fun searchParticipation(activityId: Long): List<ActivityParticipationEntity> {
         return activityParticipationRepository.findAllByActivityId(activityId)
+    }
+
+    companion object {
+        private const val ACCESS_CODE_KEY_PREFIX = "accessCode"
     }
 }
 

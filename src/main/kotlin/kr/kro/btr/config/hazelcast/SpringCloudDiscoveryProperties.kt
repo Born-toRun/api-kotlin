@@ -8,10 +8,10 @@ import com.hazelcast.config.properties.ValueValidator
 class SpringCloudDiscoveryProperties private constructor() {
 
     companion object {
-        val SERVICE_ID: PropertyDefinition = property("serviceId", PropertyTypeConverter.STRING)
-        val PORT: PropertyDefinition = property("port", PropertyTypeConverter.INTEGER)
+        val SERVICE_ID = createProperty("serviceId", PropertyTypeConverter.STRING)
+        val PORT = createProperty("port", PropertyTypeConverter.INTEGER)
 
-        private fun property(
+        private fun createProperty(
             key: String,
             typeConverter: PropertyTypeConverter,
             valueValidator: ValueValidator<Comparable<Any>>? = null

@@ -8,10 +8,6 @@ import org.springframework.security.web.AuthenticationEntryPoint
 
 class RestAuthenticationEntryPoint : AuthenticationEntryPoint {
 
-    companion object {
-        private val log = KotlinLogging.logger {}
-    }
-
     override fun commence(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -23,5 +19,9 @@ class RestAuthenticationEntryPoint : AuthenticationEntryPoint {
             HttpServletResponse.SC_UNAUTHORIZED,
             authException.localizedMessage
         )
+    }
+
+    companion object {
+        private val log = KotlinLogging.logger {}
     }
 }

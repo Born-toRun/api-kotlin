@@ -39,38 +39,6 @@ class AuthToken(
         key = key
     )
 
-    companion object {
-        private val log = KotlinLogging.logger {}
-        const val AUTHORITIES_KEY = "role"
-        const val USER_NAME_KEY = "userName"
-        const val CREW_ID_KEY = "crewId"
-
-        fun from(token: String, key: SecretKey): AuthToken {
-            return AuthToken(token, key)
-        }
-
-        fun create(id: Long, expiry: Date, key: SecretKey): AuthToken {
-            val token = Jwts.builder()
-                .subject(id.toString())
-                .signWith(key, Jwts.SIG.HS512)
-                .expiration(expiry)
-                .compact()
-            return AuthToken(token, key)
-        }
-
-        fun create(id: Long, userName: String, crewId: Long?, role: String, expiry: Date, key: SecretKey): AuthToken {
-            val token = Jwts.builder()
-                .subject(id.toString())
-                .claim(AUTHORITIES_KEY, role)
-                .claim(USER_NAME_KEY, userName)
-                .claim(CREW_ID_KEY, crewId)
-                .signWith(key, Jwts.SIG.HS512)
-                .expiration(expiry)
-                .compact()
-            return AuthToken(token, key)
-        }
-    }
-
     fun isValidate(): Boolean {
         return try {
             validate()
@@ -124,6 +92,38 @@ class AuthToken(
         } catch (e: IllegalArgumentException) {
             log.warn {"JWT token compact of handler are invalid." }
             null
+        }
+    }
+
+    companion object {
+        private val log = KotlinLogging.logger {}
+        const val AUTHORITIES_KEY = "role"
+        const val USER_NAME_KEY = "userName"
+        const val CREW_ID_KEY = "crewId"
+
+        fun from(token: String, key: SecretKey): AuthToken {
+            return AuthToken(token, key)
+        }
+
+        fun create(id: Long, expiry: Date, key: SecretKey): AuthToken {
+            val token = Jwts.builder()
+                .subject(id.toString())
+                .signWith(key, Jwts.SIG.HS512)
+                .expiration(expiry)
+                .compact()
+            return AuthToken(token, key)
+        }
+
+        fun create(id: Long, userName: String, crewId: Long?, role: String, expiry: Date, key: SecretKey): AuthToken {
+            val token = Jwts.builder()
+                .subject(id.toString())
+                .claim(AUTHORITIES_KEY, role)
+                .claim(USER_NAME_KEY, userName)
+                .claim(CREW_ID_KEY, crewId)
+                .signWith(key, Jwts.SIG.HS512)
+                .expiration(expiry)
+                .compact()
+            return AuthToken(token, key)
         }
     }
 }

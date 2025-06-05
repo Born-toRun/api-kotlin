@@ -14,10 +14,6 @@ import org.springframework.transaction.event.TransactionalEventListener
 class MinioEventHandler(
     private val minioGateway: MinioGateway,
 ) {
-    companion object {
-        private val log = KotlinLogging.logger {}
-    }
-
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     fun onObjectStorageRemoved(event: MinioRemoveEventModel) {
         log.info { "${event.bucket.bucketName} Bucket에서 ${event.objectName} 파일을 제거합니다." }
@@ -28,5 +24,9 @@ class MinioEventHandler(
     fun onObjectStorageRemoved(event: MinioRemoveAllEventModel) {
         log.info { "${event.bucket.bucketName} Bucket에서 ${event.objectNames} 파일들을 제거합니다." }
         minioGateway.removeObjects(event.toRemoveAll())
+    }
+
+    companion object {
+        private val log = KotlinLogging.logger {}
     }
 }

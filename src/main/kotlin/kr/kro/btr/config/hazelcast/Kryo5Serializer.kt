@@ -43,10 +43,6 @@ class Kryo5Serializer : StreamSerializer<Any> {
         pool.clean()
     }
 
-    companion object {
-        private val pool = KryoPool()
-    }
-
     private class KryoPool : Pool<Kryo>(true, true) {
         // TODO: resolver setting
         private val classResolver = ClassResolver()
@@ -73,5 +69,9 @@ class Kryo5Serializer : StreamSerializer<Any> {
                 null
             }
         }
+    }
+
+    companion object {
+        private val pool = KryoPool()
     }
 }

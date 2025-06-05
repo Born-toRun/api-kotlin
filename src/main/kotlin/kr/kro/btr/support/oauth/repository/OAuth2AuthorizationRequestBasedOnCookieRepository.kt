@@ -14,11 +14,6 @@ import org.springframework.stereotype.Component
 class OAuth2AuthorizationRequestBasedOnCookieRepository :
     AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
-    companion object {
-        private const val OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request"
-        private const val COOKIE_EXPIRE_SECONDS = 180
-    }
-
     override fun loadAuthorizationRequest(request: HttpServletRequest): OAuth2AuthorizationRequest? {
         return CookieSupport.getCookie(request, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME)
             ?.let { CookieSupport.deserialize(it, OAuth2AuthorizationRequest::class.java) }
@@ -61,6 +56,11 @@ class OAuth2AuthorizationRequestBasedOnCookieRepository :
         CookieSupport.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME)
         CookieSupport.deleteCookie(request, response, REDIRECT_URI)
         CookieSupport.deleteCookie(request, response, REFRESH_TOKEN)
+    }
+
+    companion object {
+        private const val OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request"
+        private const val COOKIE_EXPIRE_SECONDS = 180
     }
 }
 
