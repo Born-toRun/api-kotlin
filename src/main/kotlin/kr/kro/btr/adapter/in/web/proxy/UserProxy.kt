@@ -2,7 +2,8 @@ package kr.kro.btr.adapter.`in`.web.proxy
 
 import kr.kro.btr.adapter.`in`.web.payload.ModifyUserRequest
 import kr.kro.btr.adapter.`in`.web.payload.SignUpRequest
-import kr.kro.btr.core.converter.UserConverter
+import kr.kro.btr.base.extension.toModifyUserCommand
+import kr.kro.btr.base.extension.toSignUpCommand
 import kr.kro.btr.domain.port.UserPort
 import kr.kro.btr.domain.port.model.BornToRunUser
 import kr.kro.btr.domain.port.model.RefreshTokenResult
@@ -15,13 +16,12 @@ import org.springframework.stereotype.Component
 @Component
 @CacheConfig(cacheNames = ["user"])
 class UserProxy(
-    private val userConverter: UserConverter,
     private val userPort: UserPort
 ) {
 
     @CacheEvict(allEntries = true)
     fun signUp(my: TokenDetail, request: SignUpRequest): String {
-        val command = userConverter.map(request, my.id)
+        val command = request.toSignUpCommand(my.id)
         return userPort.signUp(command)
     }
 
@@ -47,7 +47,7 @@ class UserProxy(
 
     @CacheEvict(allEntries = true)
     fun modify(my: TokenDetail, request: ModifyUserRequest): BornToRunUser {
-        val command = userConverter.map(request, my.id)
+        val command = request.toModifyUserCommand(my.id)
         return userPort.modify(command)
     }
 }

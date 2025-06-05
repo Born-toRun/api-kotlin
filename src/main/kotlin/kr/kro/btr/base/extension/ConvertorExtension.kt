@@ -12,6 +12,8 @@ import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyFeedRequest
+import kr.kro.btr.adapter.`in`.web.payload.ModifyUserRequest
+import kr.kro.btr.adapter.`in`.web.payload.ModifyUserResponse
 import kr.kro.btr.adapter.`in`.web.payload.OpenActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.ParticipationActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivityDetailResponse
@@ -27,7 +29,9 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchFeedResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchUserPrivacyResponse
 import kr.kro.btr.adapter.`in`.web.payload.SettingUserPrivacyRequest
+import kr.kro.btr.adapter.`in`.web.payload.SignUpRequest
 import kr.kro.btr.adapter.`in`.web.payload.UploadFileResponse
+import kr.kro.btr.adapter.`in`.web.payload.UserDetailResponse
 import kr.kro.btr.adapter.out.thirdparty.model.Remove
 import kr.kro.btr.adapter.out.thirdparty.model.RemoveAll
 import kr.kro.btr.adapter.out.thirdparty.model.Upload
@@ -51,6 +55,7 @@ import kr.kro.btr.domain.entity.YellowCardEntity
 import kr.kro.btr.domain.port.model.ActivityResult
 import kr.kro.btr.domain.port.model.AttendanceActivityCommand
 import kr.kro.btr.domain.port.model.BookmarkMarathonCommand
+import kr.kro.btr.domain.port.model.BornToRunUser
 import kr.kro.btr.domain.port.model.CancelBookmarkMarathonCommand
 import kr.kro.btr.domain.port.model.CommentDetail
 import kr.kro.btr.domain.port.model.CommentResult
@@ -60,6 +65,7 @@ import kr.kro.btr.domain.port.model.CreateCrewCommand
 import kr.kro.btr.domain.port.model.CreateFeedCommand
 import kr.kro.btr.domain.port.model.CreateRecommendationCommand
 import kr.kro.btr.domain.port.model.CreateRefreshTokenCommand
+import kr.kro.btr.domain.port.model.CreateUserCommand
 import kr.kro.btr.domain.port.model.CreateYellowCardCommand
 import kr.kro.btr.domain.port.model.Crew
 import kr.kro.btr.domain.port.model.FeedCard
@@ -69,6 +75,7 @@ import kr.kro.btr.domain.port.model.MarathonDetail
 import kr.kro.btr.domain.port.model.ModifyActivityCommand
 import kr.kro.btr.domain.port.model.ModifyCommentCommand
 import kr.kro.btr.domain.port.model.ModifyFeedCommand
+import kr.kro.btr.domain.port.model.ModifyUserCommand
 import kr.kro.btr.domain.port.model.ModifyUserPrivacyCommand
 import kr.kro.btr.domain.port.model.ObjectStorage
 import kr.kro.btr.domain.port.model.ParticipantResult
@@ -81,6 +88,7 @@ import kr.kro.btr.domain.port.model.SearchAllFeedCommand
 import kr.kro.btr.domain.port.model.SearchAllMarathonCommand
 import kr.kro.btr.domain.port.model.SearchFeedDetailCommand
 import kr.kro.btr.domain.port.model.SearchMarathonDetailCommand
+import kr.kro.btr.domain.port.model.SignUpCommand
 import kr.kro.btr.domain.port.model.UploadObjectStorageCommand
 import kr.kro.btr.domain.port.model.UserPrivacy
 import kr.kro.btr.infrastructure.model.AttendanceActivityQuery
@@ -91,18 +99,21 @@ import kr.kro.btr.infrastructure.model.CreateCrewQuery
 import kr.kro.btr.infrastructure.model.CreateFeedQuery
 import kr.kro.btr.infrastructure.model.CreateRecommendationQuery
 import kr.kro.btr.infrastructure.model.CreateRefreshTokenQuery
+import kr.kro.btr.infrastructure.model.CreateUserQuery
 import kr.kro.btr.infrastructure.model.CreateYellowCardQuery
 import kr.kro.btr.infrastructure.model.ModifyActivityQuery
 import kr.kro.btr.infrastructure.model.ModifyCommentQuery
 import kr.kro.btr.infrastructure.model.ModifyFeedQuery
 import kr.kro.btr.infrastructure.model.ModifyObjectStorageQuery
 import kr.kro.btr.infrastructure.model.ModifyUserPrivacyQuery
+import kr.kro.btr.infrastructure.model.ModifyUserQuery
 import kr.kro.btr.infrastructure.model.ParticipateActivityQuery
 import kr.kro.btr.infrastructure.model.RemoveObjectStorageQuery
 import kr.kro.btr.infrastructure.model.RemoveRecommendationQuery
 import kr.kro.btr.infrastructure.model.SearchAllActivityQuery
 import kr.kro.btr.infrastructure.model.SearchAllFeedQuery
 import kr.kro.btr.infrastructure.model.SearchMarathonQuery
+import kr.kro.btr.infrastructure.model.SignUpUserQuery
 import kr.kro.btr.infrastructure.model.UploadObjectStorageQuery
 import kr.kro.btr.support.TokenDetail
 import org.springframework.web.multipart.MultipartFile
@@ -1193,6 +1204,100 @@ fun CreateRecommendationQuery.toRecommendationEntity(): RecommendationEntity {
         userId = this.myUserId,
         contentId = this.contentId,
         recommendationType = this.recommendationType
+    )
+}
+
+// user
+fun BornToRunUser.toUserDetailResponse(): UserDetailResponse {
+    return UserDetailResponse(
+        userId = this.userId,
+        userName = this.userName,
+        crewName = this.crewName,
+        profileImageUri = this.profileImageUri,
+        isAdmin = this.isAdmin,
+        isManager = this.isManager,
+        yellowCardQty = this.yellowCardQty,
+        instagramId = this.instagramId,
+        isInstagramIdPublic = this.isInstagramIdPublic
+    )
+}
+
+fun BornToRunUser.toModifyUserResponse(): ModifyUserResponse {
+    return ModifyUserResponse(
+        userName = this.userName,
+        crewName = this.crewName,
+        instagramId = this.instagramId,
+        profileImageUri = this.profileImageUri
+    )
+}
+
+fun SignUpRequest.toSignUpCommand(userId: Long): SignUpCommand {
+    return SignUpCommand(
+        userId = userId,
+        userName = this.userName,
+        crewId = this.crewId,
+        instagramId = this.instagramId
+    )
+}
+
+fun ModifyUserRequest.toModifyUserCommand(userId: Long): ModifyUserCommand {
+    return ModifyUserCommand(
+        userId = userId,
+        profileImageId = this.profileImageId,
+        instagramId = this.instagramId
+    )
+}
+
+fun SignUpCommand.toSignUpUserQuery(): SignUpUserQuery {
+    return SignUpUserQuery(
+        userId = this.userId,
+        userName = this.userName,
+        crewId = this.crewId,
+        instagramId = this.instagramId
+    )
+}
+
+fun ModifyUserCommand.toModifyUserQuery(): ModifyUserQuery {
+    return ModifyUserQuery(
+        userId = this.userId,
+        profileImageId = this.profileImageId,
+        instagramId = this.instagramId
+    )
+}
+
+fun CreateUserCommand.toCreateUserQuery(): CreateUserQuery {
+    return CreateUserQuery(
+        socialId = this.socialId,
+        providerType = this.providerType,
+        roleType = this.roleType
+    )
+}
+
+fun CreateUserQuery.toUserEntity(): UserEntity {
+    return UserEntity(
+        socialId = this.socialId,
+        providerType = this.providerType,
+        roleType = this.roleType
+    )
+}
+
+fun UserEntity.toBornToRunUser(): BornToRunUser {
+    return BornToRunUser(
+        userId = this.id,
+        socialId = this.socialId,
+        providerType = this.providerType,
+        roleType = this.roleType,
+        userName = this.name,
+        crewId = this.crewId,
+        crewName = this.crewEntity?.name,
+        instagramId = this.instagramId,
+        imageId = this.imageId,
+        profileImageUri = this.getProfileImageUri(),
+        lastLoginAt = this.lastLoginAt,
+        isAdmin = this.getIsAdmin(),
+        isManager = this.getIsManager(),
+        yellowCardQty = this.yellowCardQty,
+        isInstagramIdPublic = this.userPrivacyEntity?.isInstagramIdPublic
     )
 }
 

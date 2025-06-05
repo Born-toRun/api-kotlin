@@ -3,7 +3,7 @@ package kr.kro.btr.infrastructure
 import kr.kro.btr.adapter.out.persistence.UserPrivacyRepository
 import kr.kro.btr.adapter.out.persistence.UserRepository
 import kr.kro.btr.base.extension.findByIdOrThrow
-import kr.kro.btr.core.converter.UserConverter
+import kr.kro.btr.base.extension.toUserEntity
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.entity.UserPrivacyEntity
 import kr.kro.btr.infrastructure.model.CreateUserQuery
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component
 class UserGateway(
     private val userRepository: UserRepository,
     private val userPrivacyRepository: UserPrivacyRepository,
-    private val userConverter: UserConverter
 ) {
 
     fun searchBySocialId(socialId: String): UserEntity {
@@ -52,7 +51,7 @@ class UserGateway(
     }
 
     fun createAndFlush(query: CreateUserQuery): UserEntity {
-        val userEntity = userConverter.map(query)
+        val userEntity = query.toUserEntity()
 
         userRepository.save(userEntity)
 

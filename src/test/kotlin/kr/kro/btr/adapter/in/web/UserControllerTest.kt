@@ -10,7 +10,6 @@ import kr.kro.btr.adapter.`in`.web.payload.SignUpRequest
 import kr.kro.btr.adapter.`in`.web.payload.UserDetailResponse
 import kr.kro.btr.adapter.`in`.web.proxy.UserProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.core.converter.UserConverter
 import kr.kro.btr.domain.constant.ProviderType
 import kr.kro.btr.domain.constant.RoleType
 import kr.kro.btr.domain.port.model.BornToRunUser
@@ -41,8 +40,6 @@ import java.time.LocalDateTime
 
 @WebMvcTest(UserController::class)
 class UserControllerTest (
-    @MockkBean
-    private val converter: UserConverter,
     @MockkBean
     private val proxy: UserProxy,
     @Autowired
@@ -150,7 +147,6 @@ class UserControllerTest (
 
             it("200 OK") {
                 every { proxy.search(any<TokenDetail>()) } returns user
-                every { converter.map(any<BornToRunUser>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -211,7 +207,6 @@ class UserControllerTest (
 
             it("200 OK") {
                 every { proxy.search(anyLong()) } returns user
-                every { converter.map(any<BornToRunUser>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -275,7 +270,6 @@ class UserControllerTest (
 
             it("201 Created") {
                 every { proxy.modify(any(), any<ModifyUserRequest>()) } returns user
-                every { converter.mapToModifyUserResponse(any<BornToRunUser>()) } returns response
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)

@@ -8,7 +8,8 @@ import kr.kro.btr.adapter.`in`.web.payload.SignUpRequest
 import kr.kro.btr.adapter.`in`.web.payload.SignUpResponse
 import kr.kro.btr.adapter.`in`.web.payload.UserDetailResponse
 import kr.kro.btr.adapter.`in`.web.proxy.UserProxy
-import kr.kro.btr.core.converter.UserConverter
+import kr.kro.btr.base.extension.toModifyUserResponse
+import kr.kro.btr.base.extension.toUserDetailResponse
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
 import org.springframework.http.MediaType
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/users")
 class UserController(
-    private val userConverter: UserConverter,
     private val userProxy: UserProxy,
 ) {
 
@@ -43,20 +43,21 @@ class UserController(
     @GetMapping("/my", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun detail(@AuthUser my: TokenDetail): ResponseEntity<UserDetailResponse> {
         val user = userProxy.search(my)
-        return ResponseEntity.ok(userConverter.map(user))
+        val response = user.toUserDetailResponse()
+        return ResponseEntity.ok(response)
     }
 
     @GetMapping("/{userId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun detail(@PathVariable userId: Long): ResponseEntity<UserDetailResponse> {
         val user = userProxy.search(userId)
-        val userDetailResponse = userConverter.map(user)
-        return ResponseEntity.ok(userDetailResponse)
+        val response = user.toUserDetailResponse()
+        return ResponseEntity.ok(response)
     }
 
     @PutMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun modify(@AuthUser my: TokenDetail, @RequestBody @Valid request: ModifyUserRequest): ResponseEntity<ModifyUserResponse> {
         val modifiedUser = userProxy.modify(my, request)
-        val modifyUserResponse = userConverter.mapToModifyUserResponse(modifiedUser)
-        return ResponseEntity.ok(modifyUserResponse)
+        val response = modifiedUser.toModifyUserResponse()
+        return ResponseEntity.ok(response)
     }
 }

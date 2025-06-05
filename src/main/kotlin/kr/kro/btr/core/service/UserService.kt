@@ -1,6 +1,9 @@
 package kr.kro.btr.core.service
 
-import kr.kro.btr.core.converter.UserConverter
+import kr.kro.btr.base.extension.toBornToRunUser
+import kr.kro.btr.base.extension.toCreateUserQuery
+import kr.kro.btr.base.extension.toModifyUserQuery
+import kr.kro.btr.base.extension.toSignUpUserQuery
 import kr.kro.btr.domain.port.UserPort
 import kr.kro.btr.domain.port.model.BornToRunUser
 import kr.kro.btr.domain.port.model.CreateUserCommand
@@ -12,13 +15,12 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserService(
-    private val userConverter: UserConverter,
     private val userGateway: UserGateway
 ) : UserPort {
 
     @Transactional
     override fun signUp(command: SignUpCommand): String {
-        val query = userConverter.map(command)
+        val query = command.toSignUpUserQuery()
         return userGateway.signUp(query)
     }
 
@@ -36,27 +38,27 @@ class UserService(
     @Transactional(readOnly = true)
     override fun searchById(userId: Long): BornToRunUser {
         val userEntity = userGateway.searchById(userId)
-        return userConverter.map(userEntity)
+        return userEntity.toBornToRunUser()
     }
 
     @Transactional(readOnly = true)
     override fun searchBySocialId(socialId: String): BornToRunUser {
         val userEntity = userGateway.searchBySocialId(socialId)
-        return userConverter.map(userEntity)
+        return userEntity.toBornToRunUser()
     }
 
     @Transactional
     override fun modify(command: ModifyUserCommand): BornToRunUser {
-        val query = userConverter.map(command)
+        val query = command.toModifyUserQuery()
         val modifiedUser = userGateway.modify(query)
-        return userConverter.map(modifiedUser)
+        return modifiedUser.toBornToRunUser()
     }
 
     @Transactional
     override fun createAndFlush(command: CreateUserCommand): BornToRunUser {
-        val query = userConverter.map(command)
+        val query = command.toCreateUserQuery()
         val guest = userGateway.createAndFlush(query)
-        return userConverter.map(guest)
+        return guest.toBornToRunUser()
     }
 
     @Transactional(readOnly = true)
