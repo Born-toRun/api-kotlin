@@ -44,7 +44,7 @@ repositories {
 
 swaggerSources {
     create("swaggerSource") {
-        setInputFile(file("${openapi3.outputDirectory}/openapi3.yaml")) // 올바른 함수 사용
+        setInputFile(file("${openapi3.outputDirectory}/openapi3.yaml"))
     }
 }
 
@@ -81,7 +81,6 @@ dependencies {
     implementation("io.minio:minio:8.5.17")
 
     implementation("org.hibernate.validator:hibernate-validator")
-    implementation("org.mapstruct:mapstruct:1.6.3")
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
     implementation("io.jsonwebtoken:jjwt-jackson:0.12.6")
@@ -107,14 +106,11 @@ dependencies {
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
     annotationProcessor("jakarta.annotation:jakarta.annotation-api")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 
     kapt("com.querydsl:querydsl-apt:$querydslVersion:jakarta")
-    kapt("org.mapstruct:mapstruct-processor:1.6.3")
-    kaptTest("org.mapstruct:mapstruct-processor:1.6.3")
     asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
     swaggerUI("org.webjars:swagger-ui:5.22.0")
 }
@@ -138,25 +134,6 @@ openapi3 {
     outputDirectory = openapi3.outputDirectory
 }
 
-tasks.withType<GenerateSwaggerUI> {
-    dependsOn("openapi3")
-    doFirst {
-        val swaggerUIFile = file("${openapi3.outputDirectory}/openapi3.yaml")
-        val securitySchemesContent = """
-            securitySchemes:
-                Authorization:
-                  type: apiKey
-                  name: Authorization
-                  scheme: bearer
-                  bearerFormat: JWT
-                  in: header
-          security:
-            - Authorization: []
-        """.trimIndent()
-        swaggerUIFile.appendText(securitySchemesContent)
-    }
-}
-
 tasks {
     test {
         useJUnitPlatform()
@@ -170,21 +147,39 @@ tasks {
         baseDirFollowsSourceFile()
     }
 
+    withType<GenerateSwaggerUI> {
+        dependsOn("openapi3")
+        doFirst {
+            val swaggerUIFile = file("${openapi3.outputDirectory}/openapi3.yaml")
+            val securitySchemesContent = """
+            securitySchemes:
+                Authorization:
+                  type: apiKey
+                  name: Authorization
+                  scheme: bearer
+                  bearerFormat: JWT
+                  in: header
+          security:
+            - Authorization: []
+        """.trimIndent()
+            swaggerUIFile.appendText(securitySchemesContent)
+        }
+    }
+
     build {
-        dependsOn(asciidoctor)
-        dependsOn(generateSwaggerUI)
+        dependsOn(asciidoctor, generateSwaggerUI)
 
         doFirst {
             delete("src/main/resources/static")
         }
         doLast {
             copy {
-                from("build/docs/asciidoc")
-                into("src/main/resources/static/docs")
-            }
-            copy {
                 from("build/swagger-ui-swaggerSource")
                 into("src/main/resources/static/docs/swagger")
+            }
+            copy {
+                from("build/docs/asciidoc")
+                into("src/main/resources/static/docs")
             }
         }
     }
