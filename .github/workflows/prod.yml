@@ -90,4 +90,4 @@ jobs:
                 }
               ]
       with:
-        args: '${{ github.repository }} 배포 완료.'
+        args: '${{ github.repository }} GitHub Actions 빌드 완료.'
