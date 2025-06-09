@@ -339,10 +339,6 @@ class CommentControllerTest (
                 isManager = false
             ),
         )
-        val response = ModifyCommentResponse(
-            id = commentResult.id,
-            contents = commentResult.contents
-        )
 
         context("수정을 하면") {
             val requestJson = toJson(requestBody)

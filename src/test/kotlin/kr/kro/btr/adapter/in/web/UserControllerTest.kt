@@ -5,9 +5,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
 import kr.kro.btr.adapter.`in`.web.payload.ModifyUserRequest
-import kr.kro.btr.adapter.`in`.web.payload.ModifyUserResponse
 import kr.kro.btr.adapter.`in`.web.payload.SignUpRequest
-import kr.kro.btr.adapter.`in`.web.payload.UserDetailResponse
 import kr.kro.btr.adapter.`in`.web.proxy.UserProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.constant.ProviderType
@@ -129,17 +127,6 @@ class UserControllerTest (
             yellowCardQty = 1,
             isInstagramIdPublic = true,
         )
-        val response = UserDetailResponse(
-            userId = user.userId,
-            userName = user.userName,
-            crewName = user.crewName,
-            profileImageUri = user.profileImageUri,
-            isAdmin = user.isAdmin,
-            isManager = user.isManager,
-            yellowCardQty = user.yellowCardQty,
-            isInstagramIdPublic = user.isInstagramIdPublic,
-            instagramId = user.instagramId
-        )
 
         context("내 정보를 조회 하면") {
             val request = request(HttpMethod.GET, url)
@@ -188,17 +175,6 @@ class UserControllerTest (
             isManager = false,
             yellowCardQty = 1,
             isInstagramIdPublic = true,
-        )
-        val response = UserDetailResponse(
-            userId = user.userId,
-            userName = user.userName,
-            crewName = user.crewName,
-            profileImageUri = user.profileImageUri,
-            isAdmin = user.isAdmin,
-            isManager = user.isManager,
-            yellowCardQty = user.yellowCardQty,
-            isInstagramIdPublic = user.isInstagramIdPublic,
-            instagramId = user.instagramId
         )
 
         context("유저 정보를 조회 하면") {
@@ -254,12 +230,6 @@ class UserControllerTest (
             isManager = false,
             yellowCardQty = 1,
             isInstagramIdPublic = true,
-        )
-        val response = ModifyUserResponse(
-            userName = "userName",
-            crewName = "crewName",
-            instagramId = requestBody.instagramId,
-            profileImageUri = "profileImageUri"
         )
 
         context("정보를 수정 하면") {
