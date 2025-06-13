@@ -46,6 +46,7 @@ class SecurityConfig(
     ): SecurityFilterChain {
         val usersBased = "/api/v1/users"
         val feedsBased = "/api/v1/feeds"
+        val crewsBased = "/api/v1/crews"
         val marathonBookmarkBased = "/api/v1/marathons/bookmark"
         val commentBased = "/api/v1/comments"
         val objectStorageBased = "/api/v1/object-storage"
@@ -54,6 +55,7 @@ class SecurityConfig(
         val recentSearchKeywordBased = "/api/v1/recent-search-keywords"
         val privacyBased = "/api/v1/privacy"
         val yellowCardBased = "/api/v1/yellow-cards"
+        val announceBased = "/api/v1/announces"
 
         return httpSecurity
             .headers { headers ->
@@ -74,8 +76,18 @@ class SecurityConfig(
             )
             .authorizeHttpRequests { auth ->
                 auth.requestMatchers(HttpMethod.POST,
-                    "/api/v1/crews")
+                    crewsBased,
+                    announceBased)
                     .hasAnyAuthority(RoleType.ADMIN.code)
+
+                    .requestMatchers(HttpMethod.PUT,
+                        announceBased)
+                    .hasAnyAuthority(RoleType.ADMIN.code)
+
+                    .requestMatchers(HttpMethod.DELETE,
+                        announceBased)
+                    .hasAnyAuthority(RoleType.ADMIN.code)
+
                     .requestMatchers(HttpMethod.POST,
                         "/api/v1/auth/sign-out",
                         "/api/v1/auth/refresh",
@@ -90,7 +102,8 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.GET,
                         "$privacyBased/users",
                         "$usersBased/my",
-                        "$activityBased/**")
+                        "$activityBased/**",
+                        "$announceBased/**")
                     .authenticated()
                     .requestMatchers(HttpMethod.PUT,
                         "$usersBased/sign-up",

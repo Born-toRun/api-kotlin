@@ -7,6 +7,7 @@ import kr.kro.btr.domain.constant.*
 import kr.kro.btr.domain.entity.*
 import kr.kro.btr.domain.port.model.*
 import kr.kro.btr.domain.port.model.result.ActivityResult
+import kr.kro.btr.domain.port.model.result.AnnounceResult
 import kr.kro.btr.domain.port.model.result.BornToRunUser
 import kr.kro.btr.domain.port.model.result.CommentDetailResult
 import kr.kro.btr.domain.port.model.result.CommentResult
@@ -1239,5 +1240,87 @@ fun CreateYellowCardQuery.toYellowCardEntity(): YellowCardEntity {
         sourceUserId = this.sourceUserId,
         reason = this.reason,
         basis = this.basis
+    )
+}
+
+// announce
+fun CreateAnnounceRequest.toCreateAnnounceCommand(userId: Long): CreateAnnounceCommand {
+    return CreateAnnounceCommand(
+        title = this.title,
+        contents = this.contents,
+        postedAt = this.postedAt,
+        userId = userId
+    )
+}
+
+fun CreateAnnounceCommand.toCreateAnnounceQuery(): CreateAnnounceQuery {
+    return CreateAnnounceQuery(
+        title = this.title,
+        contents = this.contents,
+        postedAt = this.postedAt,
+        myUserId = this.userId
+    )
+}
+
+fun CreateAnnounceQuery.toAnnounceEntity(): AnnounceEntity {
+    return AnnounceEntity(
+        title = this.title,
+        contents = this.contents,
+        postedAt = this.postedAt,
+        userId = this.myUserId
+    )
+}
+
+fun ModifyAnnounceRequest.toModifyAnnounceCommand(announceId: Long): ModifyAnnounceCommand {
+    return ModifyAnnounceCommand(
+        id = announceId,
+        title = this.title,
+        contents = this.contents,
+        postedAt = this.postedAt
+    )
+}
+
+fun ModifyAnnounceCommand.toModifyAnnounceQuery(): ModifyAnnounceQuery {
+    return ModifyAnnounceQuery(
+        id = this.id,
+        title = this.title,
+        contents = this.contents,
+        postedAt = this.postedAt
+    )
+}
+
+fun AnnounceEntity.toAnnounceResult(): AnnounceResult {
+    return AnnounceResult(
+        id = this.id,
+        title = this.title,
+        contents = this.contents,
+        writer = AnnounceResult.Writer(
+            userId = this.userId,
+            name = this.userEntity!!.name!!
+        )
+    )
+}
+
+fun List<AnnounceEntity>.toAnnounceResults(): List<AnnounceResult> {
+    return this.map { it.toAnnounceResult() }
+}
+
+fun AnnounceResult.toDetailAnnounceResponse(): DetailAnnounceResponse {
+    return DetailAnnounceResponse(
+        id = this.id,
+        title = this.title,
+        contents = this.contents,
+        writer = DetailAnnounceResponse.Writer(
+            userId = this.writer.userId,
+            name = this.writer.name
+        )
+    )
+}
+
+fun AnnounceResult.toModifyAnnounceResponse(): ModifyAnnounceResponse {
+    return ModifyAnnounceResponse(
+        id = this.id,
+        title = this.title,
+        contents = this.contents
     )
 }
