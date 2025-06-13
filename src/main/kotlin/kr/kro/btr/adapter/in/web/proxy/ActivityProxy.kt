@@ -3,7 +3,7 @@ package kr.kro.btr.adapter.`in`.web.proxy
 import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
-import kr.kro.btr.adapter.`in`.web.payload.SearchAllActivityRequest
+import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesRequest
 import kr.kro.btr.base.extension.toAttendanceActivityCommand
 import kr.kro.btr.base.extension.toCreateActivityCommand
 import kr.kro.btr.base.extension.toModifyActivityCommand
@@ -53,7 +53,7 @@ class ActivityProxy(
     }
 
     @Cacheable(key = "'searchAll: ' + #my.id + #request.hashCode()")
-    fun searchAll(request: SearchAllActivityRequest, my: TokenDetail): List<ActivityResult> {
+    fun searchAll(request: SearchActivitiesRequest, my: TokenDetail): List<ActivityResult> {
         val command = request.toSearchAllActivityCommand(my)
         return activityPort.searchAll(command)
     }

@@ -9,7 +9,7 @@ import kr.kro.btr.adapter.`in`.web.payload.DetailFeedResponse
 import kr.kro.btr.adapter.`in`.web.payload.DetailFeedResponse.Image
 import kr.kro.btr.adapter.`in`.web.payload.ModifyFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchFeedRequest
-import kr.kro.btr.adapter.`in`.web.payload.SearchFeedResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchFeedsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.FeedProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.constant.FeedAccessLevel
@@ -293,7 +293,7 @@ class FeedControllerTest (
             hasRecommendation = true,
             hasComment = true
         )
-        val response = SearchFeedResponse(
+        val response = SearchFeedsResponse(
             id = feedResult.id,
             imageUris = feedResult.imageUris,
             contents = feedResult.contents,
@@ -301,14 +301,14 @@ class FeedControllerTest (
             recommendationQty = feedResult.recommendationQty,
             commentQty = feedResult.commentQty,
             registeredAt = getDateTimeByFormat(feedResult.registeredAt),
-            writer = SearchFeedResponse.Writer(
+            writer = SearchFeedsResponse.Writer(
                 userName = feedResult.writer.userName,
                 crewName = feedResult.writer.crewName,
                 profileImageUri = feedResult.writer.profileImageUri,
                 isAdmin = feedResult.writer.isAdmin,
                 isManager = feedResult.writer.isManager
             ),
-            viewer = SearchFeedResponse.Viewer(
+            viewer = SearchFeedsResponse.Viewer(
                 hasMyRecommendation = feedResult.hasRecommendation,
                 hasMyComment = feedResult.hasComment
             )

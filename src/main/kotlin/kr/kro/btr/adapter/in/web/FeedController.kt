@@ -5,7 +5,7 @@ import kr.kro.btr.adapter.`in`.web.payload.CreateFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailFeedResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchFeedRequest
-import kr.kro.btr.adapter.`in`.web.payload.SearchFeedResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchFeedsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.FeedProxy
 import kr.kro.btr.base.extension.toDetailFeedResponse
 import kr.kro.btr.base.extension.toSearchFeedResponse
@@ -58,7 +58,7 @@ class FeedController(
         @Valid @ModelAttribute request: SearchFeedRequest,
         @RequestParam(defaultValue = "0") lastFeedId: Long,
         @RequestParam(defaultValue = "10") size: Int
-    ): ResponseEntity<Page<SearchFeedResponse>> {
+    ): ResponseEntity<Page<SearchFeedsResponse>> {
         val feedPage: Page<FeedResult> = feedProxy.searchAll(request, my, lastFeedId, PageRequest.of(0, size))
         return ResponseEntity.ok(feedPage.map { it.toSearchFeedResponse() })
     }

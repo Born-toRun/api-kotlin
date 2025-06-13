@@ -5,8 +5,8 @@ import kr.kro.btr.adapter.`in`.web.payload.CreateCommentRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentResponse
 import kr.kro.btr.adapter.`in`.web.payload.QtyCommentResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchCommentDetailResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchCommentResponse
+import kr.kro.btr.adapter.`in`.web.payload.DetailCommentResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchCommentsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CommentProxy
 import kr.kro.btr.base.extension.toModifyCommentResponse
 import kr.kro.btr.base.extension.toSearchCommentDetailResponse
@@ -30,7 +30,7 @@ class CommentController(
     fun searchAll(
         @AuthUser my: TokenDetail,
         @PathVariable feedId: Long
-    ): ResponseEntity<SearchCommentResponse> {
+    ): ResponseEntity<SearchCommentsResponse> {
         val commentResults: List<CommentResult> = commentProxy.searchAll(feedId, my)
         val response = commentResults.toSearchCommentResponse()
         return ResponseEntity.ok(response)
@@ -40,7 +40,7 @@ class CommentController(
     fun detail(
         @AuthUser my: TokenDetail,
         @PathVariable commentId: Long
-    ): ResponseEntity<SearchCommentDetailResponse> {
+    ): ResponseEntity<DetailCommentResponse> {
         val commentDetailResult: CommentDetailResult = commentProxy.detail(commentId, my)
         val response = commentDetailResult.toSearchCommentDetailResponse()
         return ResponseEntity.ok(response)

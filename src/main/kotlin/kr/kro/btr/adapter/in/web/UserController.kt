@@ -6,7 +6,7 @@ import kr.kro.btr.adapter.`in`.web.payload.ModifyUserRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyUserResponse
 import kr.kro.btr.adapter.`in`.web.payload.SignUpRequest
 import kr.kro.btr.adapter.`in`.web.payload.SignUpResponse
-import kr.kro.btr.adapter.`in`.web.payload.UserDetailResponse
+import kr.kro.btr.adapter.`in`.web.payload.DetailUserResponse
 import kr.kro.btr.adapter.`in`.web.proxy.UserProxy
 import kr.kro.btr.base.extension.toModifyUserResponse
 import kr.kro.btr.base.extension.toUserDetailResponse
@@ -41,14 +41,14 @@ class UserController(
     }
 
     @GetMapping("/my", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun detail(@AuthUser my: TokenDetail): ResponseEntity<UserDetailResponse> {
+    fun detail(@AuthUser my: TokenDetail): ResponseEntity<DetailUserResponse> {
         val user = userProxy.search(my)
         val response = user.toUserDetailResponse()
         return ResponseEntity.ok(response)
     }
 
     @GetMapping("/{userId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun detail(@PathVariable userId: Long): ResponseEntity<UserDetailResponse> {
+    fun detail(@PathVariable userId: Long): ResponseEntity<DetailUserResponse> {
         val user = userProxy.search(userId)
         val response = user.toUserDetailResponse()
         return ResponseEntity.ok(response)

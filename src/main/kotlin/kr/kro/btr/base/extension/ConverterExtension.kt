@@ -25,12 +25,12 @@ import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 
 // activity
-fun List<ActivityResult>.toSearchActivityResponse(): SearchActivityResponse {
+fun List<ActivityResult>.toSearchActivityResponse(): SearchActivitiesResponse {
     val activities = this.map { activityResult ->
-        SearchActivityResponse.Activity(
+        SearchActivitiesResponse.Activity(
             id = activityResult.id,
             title = activityResult.title,
-            host = SearchActivityResponse.Host(
+            host = SearchActivitiesResponse.Host(
                 userId = activityResult.host.userId,
                 crewId = activityResult.host.crewId,
                 userProfileUri = activityResult.host.userProfileUri,
@@ -50,11 +50,11 @@ fun List<ActivityResult>.toSearchActivityResponse(): SearchActivityResponse {
         )
     }
 
-    return SearchActivityResponse(activities)
+    return SearchActivitiesResponse(activities)
 }
 
-fun ActivityResult.toSearchActivityDetailResponse(): SearchActivityDetailResponse {
-    return SearchActivityDetailResponse(
+fun ActivityResult.toSearchActivityDetailResponse(): DetailActivityResponse {
+    return DetailActivityResponse(
         id = this.id,
         title = this.title,
         contents = this.contents,
@@ -70,7 +70,7 @@ fun ActivityResult.toSearchActivityDetailResponse(): SearchActivityDetailRespons
         isOpen = this.isOpen,
         updatedAt = this.updatedAt,
         registeredAt = this.registeredAt,
-        host = SearchActivityDetailResponse.Host(
+        host = DetailActivityResponse.Host(
             userId = this.host.userId,
             crewId = this.host.crewId,
             userProfileUri = this.host.userProfileUri,
@@ -142,7 +142,7 @@ fun ModifyActivityRequest.toModifyActivityCommand(activityId: Long): ModifyActiv
     )
 }
 
-fun SearchAllActivityRequest.toSearchAllActivityCommand(my: TokenDetail): SearchAllActivityCommand {
+fun SearchActivitiesRequest.toSearchAllActivityCommand(my: TokenDetail): SearchAllActivityCommand {
     return SearchAllActivityCommand(
         courses = this.courses,
         recruitmentType = this.recruitmentType,
@@ -350,13 +350,13 @@ fun ActivityEntity.convertRecruitmentType(myUserId: Long): ActivityRecruitmentTy
 }
 
 // comment
-fun List<CommentResult>.toSearchCommentResponse(): SearchCommentResponse {
+fun List<CommentResult>.toSearchCommentResponse(): SearchCommentsResponse {
     val comments = this.map { it.toSearchCommentResponseComment() }
-    return SearchCommentResponse(comments)
+    return SearchCommentsResponse(comments)
 }
 
-fun CommentResult.toSearchCommentResponseComment(): SearchCommentResponse.Comment {
-    return SearchCommentResponse.Comment(
+fun CommentResult.toSearchCommentResponseComment(): SearchCommentsResponse.Comment {
+    return SearchCommentsResponse.Comment(
         id = this.id,
         parentId = this.parentId,
         reCommentQty = this.reCommentQty,
@@ -367,8 +367,8 @@ fun CommentResult.toSearchCommentResponseComment(): SearchCommentResponse.Commen
     )
 }
 
-fun CommentDetailResult.toSearchCommentDetailResponse(): SearchCommentDetailResponse {
-    return SearchCommentDetailResponse(
+fun CommentDetailResult.toSearchCommentDetailResponse(): DetailCommentResponse {
+    return DetailCommentResponse(
         id = this.id,
         writer = this.writer.toSearchCommentDetailResponseWriter(),
         contents = this.contents,
@@ -384,8 +384,8 @@ fun CommentResult.toModifyCommentResponse(): ModifyCommentResponse {
     )
 }
 
-fun CommentResult.Writer.toSearchCommentResponseWriter(): SearchCommentResponse.Writer {
-    return SearchCommentResponse.Writer(
+fun CommentResult.Writer.toSearchCommentResponseWriter(): SearchCommentsResponse.Writer {
+    return SearchCommentsResponse.Writer(
         userId = this.userId,
         userName = this.userName,
         profileImageUri = this.profileImageUri,
@@ -395,8 +395,8 @@ fun CommentResult.Writer.toSearchCommentResponseWriter(): SearchCommentResponse.
     )
 }
 
-fun CommentDetailResult.Writer.toSearchCommentDetailResponseWriter(): SearchCommentDetailResponse.Writer {
-    return SearchCommentDetailResponse.Writer(
+fun CommentDetailResult.Writer.toSearchCommentDetailResponseWriter(): DetailCommentResponse.Writer {
+    return DetailCommentResponse.Writer(
         userId = this.userId,
         userName = this.userName,
         profileImageUri = this.profileImageUri,
@@ -406,8 +406,8 @@ fun CommentDetailResult.Writer.toSearchCommentDetailResponseWriter(): SearchComm
     )
 }
 
-fun CommentResult.Writer.toReCommentWriter(): SearchCommentDetailResponse.ReComment.Writer {
-    return SearchCommentDetailResponse.ReComment.Writer(
+fun CommentResult.Writer.toReCommentWriter(): DetailCommentResponse.ReComment.Writer {
+    return DetailCommentResponse.ReComment.Writer(
         userId = this.userId,
         userName = this.userName,
         profileImageUri = this.profileImageUri,
@@ -417,12 +417,12 @@ fun CommentResult.Writer.toReCommentWriter(): SearchCommentDetailResponse.ReComm
     )
 }
 
-fun List<CommentResult>.toReComments(): List<SearchCommentDetailResponse.ReComment> {
+fun List<CommentResult>.toReComments(): List<DetailCommentResponse.ReComment> {
     return this.map { it.toReComment() }
 }
 
-fun CommentResult.toReComment(): SearchCommentDetailResponse.ReComment {
-    return SearchCommentDetailResponse.ReComment(
+fun CommentResult.toReComment(): DetailCommentResponse.ReComment {
+    return DetailCommentResponse.ReComment(
         id = this.id,
         contents = this.contents,
         registeredAt = this.registeredAt,
@@ -541,13 +541,13 @@ fun UserEntity.toCommentDetailWriter(): CommentDetailResult.Writer {
 }
 
 // crew
-fun List<CrewResult>.toSearchCrewResponse(): SearchCrewResponse {
+fun List<CrewResult>.toSearchCrewResponse(): SearchCrewsResponse {
     val crewDetails = this.map { it.toCrewDetail() }
-    return SearchCrewResponse(crewDetails)
+    return SearchCrewsResponse(crewDetails)
 }
 
-fun CrewResult.toCrewDetail(): SearchCrewResponse.Detail {
-    return SearchCrewResponse.Detail(
+fun CrewResult.toCrewDetail(): SearchCrewsResponse.Detail {
+    return SearchCrewsResponse.Detail(
         id = this.id,
         crewName = this.name,
         contents = this.contents,
@@ -655,8 +655,8 @@ fun FeedDetailResult.Image.toDetailFeedResponseImage(): DetailFeedResponse.Image
     )
 }
 
-fun FeedResult.toSearchFeedResponse(): SearchFeedResponse {
-    return SearchFeedResponse(
+fun FeedResult.toSearchFeedResponse(): SearchFeedsResponse {
+    return SearchFeedsResponse(
         id = this.id,
         imageUris = this.imageUris,
         contents = this.contents,
@@ -665,15 +665,15 @@ fun FeedResult.toSearchFeedResponse(): SearchFeedResponse {
         commentQty = this.commentQty,
         registeredAt = this.registeredAt,
         writer = this.writer.toSearchFeedResponseWriter(),
-        viewer = SearchFeedResponse.Viewer(
+        viewer = SearchFeedsResponse.Viewer(
             hasMyRecommendation = this.hasRecommendation,
             hasMyComment = this.hasComment
         )
     )
 }
 
-fun FeedResult.Writer.toSearchFeedResponseWriter(): SearchFeedResponse.Writer {
-    return SearchFeedResponse.Writer(
+fun FeedResult.Writer.toSearchFeedResponseWriter(): SearchFeedsResponse.Writer {
+    return SearchFeedsResponse.Writer(
         userName = this.userName,
         crewName = this.crewName,
         profileImageUri = this.profileImageUri,
@@ -854,13 +854,13 @@ fun BookmarkMarathonQuery.toMarathonBookmarkEntity(): MarathonBookmarkEntity {
 }
 
 // marathon
-fun List<MarathonResult>.toSearchAllMarathonResponse(): SearchAllMarathonResponse {
+fun List<MarathonResult>.toSearchAllMarathonResponse(): SearchMarathonsResponse {
     val marathons = this.map { it.toSearchAllMarathonResponseMarathon() }
-    return SearchAllMarathonResponse(marathons = marathons)
+    return SearchMarathonsResponse(marathons = marathons)
 }
 
-fun MarathonResult.toSearchAllMarathonResponseMarathon(): SearchAllMarathonResponse.Marathon {
-    return SearchAllMarathonResponse.Marathon(
+fun MarathonResult.toSearchAllMarathonResponseMarathon(): SearchMarathonsResponse.Marathon {
+    return SearchMarathonsResponse.Marathon(
         id = this.id,
         title = this.title,
         schedule = this.schedule,
@@ -870,8 +870,8 @@ fun MarathonResult.toSearchAllMarathonResponseMarathon(): SearchAllMarathonRespo
     )
 }
 
-fun MarathonDetailResult.toSearchMarathonDetailResponse(): SearchMarathonDetailResponse {
-    return SearchMarathonDetailResponse(
+fun MarathonDetailResult.toSearchMarathonDetailResponse(): DetailMarathonResponse {
+    return DetailMarathonResponse(
         id = this.id,
         title = this.title,
         owner = this.owner,
@@ -891,7 +891,7 @@ fun MarathonDetailResult.toSearchMarathonDetailResponse(): SearchMarathonDetailR
     )
 }
 
-fun SearchAllMarathonRequest.toSearchAllMarathonCommand(userId: Long): SearchAllMarathonCommand {
+fun SearchMarathonsRequest.toSearchAllMarathonCommand(userId: Long): SearchAllMarathonCommand {
     return SearchAllMarathonCommand(
         locations = this.locations,
         courses = this.courses,
@@ -1043,8 +1043,8 @@ fun MinioRemoveAllEventModel.toRemoveAll(): RemoveAll {
 }
 
 // privacy
-fun UserPrivacyResult.toSearchUserPrivacyResponse(): SearchUserPrivacyResponse {
-    return SearchUserPrivacyResponse(
+fun UserPrivacyResult.toSearchUserPrivacyResponse(): DetailUserPrivacyResponse {
+    return DetailUserPrivacyResponse(
         isInstagramIdPublic = this.isInstagramIdPublic
     )
 }
@@ -1113,8 +1113,8 @@ fun CreateRecommendationQuery.toRecommendationEntity(): RecommendationEntity {
 }
 
 // user
-fun BornToRunUser.toUserDetailResponse(): UserDetailResponse {
-    return UserDetailResponse(
+fun BornToRunUser.toUserDetailResponse(): DetailUserResponse {
+    return DetailUserResponse(
         userId = this.userId,
         userName = this.userName,
         crewName = this.crewName,

@@ -3,7 +3,7 @@ package kr.kro.btr.adapter.`in`.web.payload
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDateTime
 
-data class SearchActivityDetailResponse(
+data class DetailActivityResponse(
     val id: Long,
     val title: String,
     val contents: String,

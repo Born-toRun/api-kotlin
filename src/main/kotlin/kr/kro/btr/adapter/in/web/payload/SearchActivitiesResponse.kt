@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import kr.kro.btr.domain.constant.ActivityRecruitmentType
 import java.time.LocalDateTime
 
-data class SearchActivityResponse(
+data class SearchActivitiesResponse(
     val activities: List<Activity>
 ) {
 

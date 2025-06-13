@@ -3,7 +3,7 @@ package kr.kro.btr.adapter.`in`.web.payload
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDateTime
 
-data class SearchCommentResponse(
+data class SearchCommentsResponse(
     val comments: List<Comment>
 ) {
     data class Comment(

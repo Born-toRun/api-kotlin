@@ -2,7 +2,7 @@ package kr.kro.btr.adapter.`in`.web.payload
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 
-data class UserDetailResponse(
+data class DetailUserResponse(
     val userId: Long,
     val userName: String?,
     val crewName: String?,

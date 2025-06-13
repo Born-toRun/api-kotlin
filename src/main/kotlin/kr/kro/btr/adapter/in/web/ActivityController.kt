@@ -6,9 +6,9 @@ import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.OpenActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.ParticipationActivityResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchActivityDetailResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchActivityResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchAllActivityRequest
+import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesRequest
+import kr.kro.btr.adapter.`in`.web.payload.DetailActivityResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesResponse
 import kr.kro.btr.adapter.`in`.web.proxy.ActivityProxy
 import kr.kro.btr.base.extension.toOpenActivityResponse
 import kr.kro.btr.base.extension.toParticipationActivityResponse
@@ -51,8 +51,8 @@ class ActivityController(
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun searchAll(
         @AuthUser my: TokenDetail,
-        @Valid @ModelAttribute request: SearchAllActivityRequest
-    ): ResponseEntity<SearchActivityResponse> {
+        @Valid @ModelAttribute request: SearchActivitiesRequest
+    ): ResponseEntity<SearchActivitiesResponse> {
         val activities = activityProxy.searchAll(request, my)
         val response = activities.toSearchActivityResponse()
         return ResponseEntity.ok(response)
@@ -62,7 +62,7 @@ class ActivityController(
     fun search(
         @AuthUser my: TokenDetail,
         @PathVariable activityId: Long
-    ): ResponseEntity<SearchActivityDetailResponse> {
+    ): ResponseEntity<DetailActivityResponse> {
         val activity = activityProxy.search(activityId, my)
         val response = activity.toSearchActivityDetailResponse()
         return ResponseEntity.ok(response)

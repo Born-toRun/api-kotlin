@@ -3,7 +3,7 @@ package kr.kro.btr.adapter.`in`.web.payload
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDateTime
 
-data class SearchFeedResponse(
+data class SearchFeedsResponse(
     val id: Long,
     val imageUris: List<String>? = null,
     val contents: String,

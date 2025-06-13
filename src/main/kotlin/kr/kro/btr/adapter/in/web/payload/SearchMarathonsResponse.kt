@@ -1,6 +1,6 @@
 package kr.kro.btr.adapter.`in`.web.payload
 
-data class SearchAllMarathonResponse(
+data class SearchMarathonsResponse(
     val marathons: List<Marathon>
 ) {
     data class Marathon(

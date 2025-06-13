@@ -6,10 +6,9 @@ import io.mockk.just
 import io.mockk.runs
 import kr.kro.btr.adapter.`in`.web.payload.CreateCommentRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentRequest
-import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentResponse
 import kr.kro.btr.adapter.`in`.web.payload.QtyCommentResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchCommentDetailResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchCommentResponse
+import kr.kro.btr.adapter.`in`.web.payload.DetailCommentResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchCommentsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CommentProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.port.model.result.CommentDetailResult
@@ -80,16 +79,16 @@ class CommentControllerTest (
                 ),
             )
         )
-        val response = SearchCommentResponse(
+        val response = SearchCommentsResponse(
             comments = listOf(
-                SearchCommentResponse.Comment(
+                SearchCommentsResponse.Comment(
                     id = commentResults[0].id,
                     parentId = commentResults[0].parentId,
                     reCommentQty = commentResults[0].reCommentQty,
                     contents = commentResults[0].contents,
                     registeredAt = getDateTimeByFormat(commentResults[0].registeredAt),
                     isMyComment = commentResults[0].isMyComment,
-                    writer = SearchCommentResponse.Writer(
+                    writer = SearchCommentsResponse.Writer(
                         userId = commentResults[0].writer.userId,
                         userName = commentResults[0].writer.userName,
                         profileImageUri = commentResults[0].writer.profileImageUri,
@@ -175,9 +174,9 @@ class CommentControllerTest (
                 )
             )
         )
-        val response = SearchCommentDetailResponse(
+        val response = DetailCommentResponse(
             id = commentDetailResult.id,
-            writer = SearchCommentDetailResponse.Writer(
+            writer = DetailCommentResponse.Writer(
                 userId = commentDetailResult.writer.userId,
                 userName = commentDetailResult.writer.userName,
                 profileImageUri = commentDetailResult.writer.profileImageUri,
@@ -188,12 +187,12 @@ class CommentControllerTest (
             contents = commentDetailResult.contents,
             registeredAt = getDateTimeByFormat(commentDetailResult.registeredAt),
             reComments = listOf(
-                SearchCommentDetailResponse.ReComment(
+                DetailCommentResponse.ReComment(
                     id = commentDetailResult.reCommentResults[0].id,
                     contents = commentDetailResult.reCommentResults[0].contents,
                     registeredAt = getDateTimeByFormat(commentDetailResult.reCommentResults[0].registeredAt),
                     isMyComment = commentDetailResult.reCommentResults[0].isMyComment,
-                    writer = SearchCommentDetailResponse.ReComment.Writer(
+                    writer = DetailCommentResponse.ReComment.Writer(
                         userId = commentDetailResult.reCommentResults[0].writer.userId,
                         userName = commentDetailResult.reCommentResults[0].writer.userName,
                         profileImageUri = commentDetailResult.reCommentResults[0].writer.profileImageUri,

@@ -1,5 +1,5 @@
 package kr.kro.btr.adapter.`in`.web.payload
 
-data class SearchUserPrivacyResponse(
+data class DetailUserPrivacyResponse(
     val isInstagramIdPublic: Boolean
 )

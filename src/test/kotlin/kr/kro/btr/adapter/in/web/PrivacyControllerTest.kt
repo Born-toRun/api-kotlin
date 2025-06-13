@@ -4,7 +4,7 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
-import kr.kro.btr.adapter.`in`.web.payload.SearchUserPrivacyResponse
+import kr.kro.btr.adapter.`in`.web.payload.DetailUserPrivacyResponse
 import kr.kro.btr.adapter.`in`.web.payload.SettingUserPrivacyRequest
 import kr.kro.btr.adapter.`in`.web.proxy.PrivacyProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
@@ -76,7 +76,7 @@ class PrivacyControllerTest (
             userId = 0,
             isInstagramIdPublic = true
         )
-        val response = SearchUserPrivacyResponse(
+        val response = DetailUserPrivacyResponse(
             isInstagramIdPublic = userPrivacyResult.isInstagramIdPublic
         )
 

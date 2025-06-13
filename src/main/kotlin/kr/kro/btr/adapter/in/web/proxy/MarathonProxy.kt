@@ -1,6 +1,6 @@
 package kr.kro.btr.adapter.`in`.web.proxy
 
-import kr.kro.btr.adapter.`in`.web.payload.SearchAllMarathonRequest
+import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonsRequest
 import kr.kro.btr.base.extension.toBookmarkMarathonCommand
 import kr.kro.btr.base.extension.toCancelBookmarkMarathonCommand
 import kr.kro.btr.base.extension.toSearchAllMarathonCommand
@@ -21,7 +21,7 @@ class MarathonProxy(
 ) {
 
     @Cacheable(key = "'searchAll: ' + #request.hashCode() + #my.id")
-    fun search(request: SearchAllMarathonRequest, my: TokenDetail): List<MarathonResult> {
+    fun search(request: SearchMarathonsRequest, my: TokenDetail): List<MarathonResult> {
         val command = request.toSearchAllMarathonCommand(my.id)
         return marathonPort.search(command)
     }

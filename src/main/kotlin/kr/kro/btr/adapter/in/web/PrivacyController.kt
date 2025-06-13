@@ -1,7 +1,7 @@
 package kr.kro.btr.adapter.`in`.web
 
 import jakarta.validation.Valid
-import kr.kro.btr.adapter.`in`.web.payload.SearchUserPrivacyResponse
+import kr.kro.btr.adapter.`in`.web.payload.DetailUserPrivacyResponse
 import kr.kro.btr.adapter.`in`.web.payload.SettingUserPrivacyRequest
 import kr.kro.btr.adapter.`in`.web.proxy.PrivacyProxy
 import kr.kro.btr.base.extension.toSearchUserPrivacyResponse
@@ -25,9 +25,9 @@ class PrivacyController(
     }
 
     @GetMapping("/users", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getUserPrivacy(@AuthUser my: TokenDetail): ResponseEntity<SearchUserPrivacyResponse> {
+    fun getUserPrivacy(@AuthUser my: TokenDetail): ResponseEntity<DetailUserPrivacyResponse> {
         val userPrivacyResult: UserPrivacyResult = privacyProxy.searchUserPrivacy(my.id)
-        val response: SearchUserPrivacyResponse = userPrivacyResult.toSearchUserPrivacyResponse()
+        val response: DetailUserPrivacyResponse = userPrivacyResult.toSearchUserPrivacyResponse()
         return ResponseEntity.ok(response)
     }
 }

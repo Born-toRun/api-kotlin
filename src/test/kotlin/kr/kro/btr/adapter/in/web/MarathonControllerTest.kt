@@ -3,8 +3,8 @@ package kr.kro.btr.adapter.`in`.web
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import kr.kro.btr.adapter.`in`.web.payload.BookmarkMarathonResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchAllMarathonResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonDetailResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonsResponse
+import kr.kro.btr.adapter.`in`.web.payload.DetailMarathonResponse
 import kr.kro.btr.adapter.`in`.web.proxy.MarathonProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.port.model.result.MarathonResult
@@ -60,9 +60,9 @@ class MarathonControllerTest (
             course = "course",
             isBookmarking = true
         ))
-        val response = SearchAllMarathonResponse(
+        val response = SearchMarathonsResponse(
             marathons = listOf(
-                SearchAllMarathonResponse.Marathon(
+                SearchMarathonsResponse.Marathon(
                     id = marathonResults[0].id,
                     title = marathonResults[0].title,
                     schedule = marathonResults[0].schedule,
@@ -121,7 +121,7 @@ class MarathonControllerTest (
             registeredAt = LocalDateTime.now(),
             isBookmarking = true
         )
-        val response = SearchMarathonDetailResponse(
+        val response = DetailMarathonResponse(
             id = marathonDetailResult.id,
             title = marathonDetailResult.title,
             owner = marathonDetailResult.owner,

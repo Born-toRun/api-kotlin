@@ -3,7 +3,7 @@ package kr.kro.btr.adapter.`in`.web
 import jakarta.validation.Valid
 import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchCrewResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchCrewsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.base.extension.toDetailCrewResponse
 import kr.kro.btr.base.extension.toSearchCrewResponse
@@ -20,7 +20,7 @@ class CrewController(
 ) {
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun searchAll(): ResponseEntity<SearchCrewResponse> {
+    fun searchAll(): ResponseEntity<SearchCrewsResponse> {
         val crewResults: List<CrewResult> = crewProxy.searchAll()
         val response = crewResults.toSearchCrewResponse()
         return ResponseEntity.ok(response)

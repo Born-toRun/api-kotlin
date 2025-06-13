@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer
 import java.time.LocalDateTime
 
-data class SearchCommentDetailResponse(
+data class DetailCommentResponse(
     val id: Long,
     val writer: Writer,
     val contents: String,

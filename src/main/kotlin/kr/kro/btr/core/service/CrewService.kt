@@ -22,6 +22,7 @@ class CrewService(
         return crewEntities.toCrews()
     }
 
+    @Transactional(readOnly = true)
     override fun detail(crewId: Long): CrewResult {
         val crewEntity = crewGateway.searchById(crewId)
         return crewEntity.toCrew()

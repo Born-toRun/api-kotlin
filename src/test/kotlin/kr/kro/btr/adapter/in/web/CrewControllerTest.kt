@@ -6,7 +6,7 @@ import io.mockk.just
 import io.mockk.runs
 import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchCrewResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchCrewsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.port.model.result.CrewResult
@@ -61,7 +61,7 @@ class CrewControllerTest (
             sns = "crewSnsUri"
         )
         val crews = listOf(crewResult)
-        val response = SearchCrewResponse(listOf(SearchCrewResponse.Detail(
+        val response = SearchCrewsResponse(listOf(SearchCrewsResponse.Detail(
             id = crewResult.id,
             crewName = crewResult.name,
             contents = crewResult.contents,

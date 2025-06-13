@@ -1,6 +1,6 @@
 package kr.kro.btr.adapter.`in`.web.payload
 
-data class SearchCrewResponse(
+data class SearchCrewsResponse(
     val details: List<Detail>
 ) {
     data class Detail(

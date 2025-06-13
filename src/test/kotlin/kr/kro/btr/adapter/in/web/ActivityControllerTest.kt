@@ -9,9 +9,9 @@ import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.OpenActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.ParticipationActivityResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchActivityDetailResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchActivityResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchAllActivityRequest
+import kr.kro.btr.adapter.`in`.web.payload.DetailActivityResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesRequest
 import kr.kro.btr.adapter.`in`.web.proxy.ActivityProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.constant.ActivityRecruitmentType
@@ -226,7 +226,7 @@ class ActivityControllerTest (
 
     describe("GET : $baseUrl") {
         val url = baseUrl
-        val queryParam = SearchAllActivityRequest(
+        val queryParam = SearchActivitiesRequest(
             courses = listOf("course1", "course2"),
             recruitmentType = ActivityRecruitmentType.RECRUITING
         )
@@ -259,12 +259,12 @@ class ActivityControllerTest (
                 ),
             )
         )
-        val response = SearchActivityResponse(
+        val response = SearchActivitiesResponse(
             activities = listOf(
-                SearchActivityResponse.Activity(
+                SearchActivitiesResponse.Activity(
                     id = activityResults[0].id,
                     title = activityResults[0].title,
-                    host = SearchActivityResponse.Host(
+                    host = SearchActivitiesResponse.Host(
                         userId = activityResults[0].host.userId,
                         crewId = activityResults[0].host.crewId,
                         userProfileUri = activityResults[0].host.userProfileUri,
@@ -360,7 +360,7 @@ class ActivityControllerTest (
                 isAdmin = false
             ),
         )
-        val response = SearchActivityDetailResponse(
+        val response = DetailActivityResponse(
             id = activityResult.id,
             title = activityResult.title,
             contents = activityResult.contents,
@@ -373,7 +373,7 @@ class ActivityControllerTest (
             course = activityResult.course,
             courseDetail = activityResult.courseDetail,
             path = activityResult.path,
-            host = SearchActivityDetailResponse.Host(
+            host = DetailActivityResponse.Host(
                 userId = activityResult.host.userId,
                 crewId = activityResult.host.crewId,
                 userProfileUri = activityResult.host.userProfileUri,
