@@ -5,9 +5,11 @@ import kr.kro.btr.adapter.`in`.web.payload.CreateAnnounceRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailAnnounceResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyAnnounceRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyAnnounceResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchAnnouncesResponse
 import kr.kro.btr.adapter.`in`.web.proxy.AnnounceProxy
 import kr.kro.btr.base.extension.toDetailAnnounceResponse
 import kr.kro.btr.base.extension.toModifyAnnounceResponse
+import kr.kro.btr.base.extension.toSearchAnnouncesResponse
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
 import org.springframework.http.HttpStatus.CREATED
@@ -35,9 +37,10 @@ class AnnounceController(
     }
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun searchAll(): ResponseEntity<Void> {
-        proxy.searchAll()
-        return ResponseEntity(CREATED)
+    fun searchAll(): ResponseEntity<SearchAnnouncesResponse> {
+        val announceResults = proxy.searchAll()
+        val response = announceResults.toSearchAnnouncesResponse()
+        return ResponseEntity.ok(response)
     }
 
     @GetMapping("/{announceId}", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -55,7 +58,7 @@ class AnnounceController(
     }
 
     @DeleteMapping("/{announceId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun modify(@PathVariable announceId: Long): ResponseEntity<Void> {
+    fun remove(@PathVariable announceId: Long): ResponseEntity<Void> {
         proxy.remove(announceId)
         return ResponseEntity.ok().build()
     }

@@ -1324,3 +1324,20 @@ fun AnnounceResult.toModifyAnnounceResponse(): ModifyAnnounceResponse {
         contents = this.contents
     )
 }
+
+fun AnnounceResult.toSearchAnnouncesResponseDetail(): SearchAnnouncesResponse.Detail {
+    return SearchAnnouncesResponse.Detail(
+        id = this.id,
+        title = this.title,
+        contents = this.contents,
+        writer = SearchAnnouncesResponse.Writer(
+            userId = this.writer.userId,
+            name = this.writer.name
+        )
+    )
+}
+
+fun List<AnnounceResult>.toSearchAnnouncesResponse(): SearchAnnouncesResponse {
+    val details =  this.map { it.toSearchAnnouncesResponseDetail() }
+    return SearchAnnouncesResponse(details)
+}
