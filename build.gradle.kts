@@ -1,4 +1,3 @@
-
 import groovy.lang.Closure
 import io.swagger.v3.oas.models.servers.Server
 import org.hidetake.gradle.swagger.generator.GenerateSwaggerUI
@@ -14,8 +13,6 @@ plugins {
     id("org.asciidoctor.jvm.convert") version "3.3.2"
     id("com.epages.restdocs-api-spec") version "0.19.4"
     id("org.hidetake.swagger.generator") version "2.19.2"
-
-//    id("org.asciidoctor.convert") version "2.4.0"
 }
 
 noArg {
@@ -122,7 +119,7 @@ openapi3 {
     } as Closure<Server>
 
     val dev = closureOf<Server> {
-        url("https://api.born-to-run.kro.kr:8443")
+        url("https://born-to-run.kro.kr:8443")
         description("dev Server")
     } as Closure<Server>
 

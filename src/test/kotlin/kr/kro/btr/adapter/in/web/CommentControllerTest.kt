@@ -5,9 +5,9 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
 import kr.kro.btr.adapter.`in`.web.payload.CreateCommentRequest
+import kr.kro.btr.adapter.`in`.web.payload.DetailCommentResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentRequest
 import kr.kro.btr.adapter.`in`.web.payload.QtyCommentResponse
-import kr.kro.btr.adapter.`in`.web.payload.DetailCommentResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCommentsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CommentProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
@@ -80,7 +80,7 @@ class CommentControllerTest (
             )
         )
         val response = SearchCommentsResponse(
-            comments = listOf(
+            details = listOf(
                 SearchCommentsResponse.Comment(
                     id = commentResults[0].id,
                     parentId = commentResults[0].parentId,
@@ -110,18 +110,18 @@ class CommentControllerTest (
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
                     .andExpectData(
-                        jsonPath("$.comments[0].id") shouldBe response.comments[0].id,
-                        jsonPath("$.comments[0].reCommentQty") shouldBe response.comments[0].reCommentQty,
-                        jsonPath("$.comments[0].contents") shouldBe response.comments[0].contents,
-                        jsonPath("$.comments[0].registeredAt") shouldBe response.comments[0].registeredAt,
-                        jsonPath("$.comments[0].isMyComment") shouldBe response.comments[0].isMyComment,
-                        jsonPath("$.comments[0].isReComment") shouldBe response.comments[0].isReComment(),
-                        jsonPath("$.comments[0].writer.userId") shouldBe response.comments[0].writer.userId,
-                        jsonPath("$.comments[0].writer.userName") shouldBe response.comments[0].writer.userName,
-                        jsonPath("$.comments[0].writer.profileImageUri") shouldBe response.comments[0].writer.profileImageUri,
-                        jsonPath("$.comments[0].writer.crewName") shouldBe response.comments[0].writer.crewName,
-                        jsonPath("$.comments[0].writer.isAdmin") shouldBe response.comments[0].writer.isAdmin,
-                        jsonPath("$.comments[0].writer.isManager") shouldBe response.comments[0].writer.isManager,
+                        jsonPath("$.details[0].id") shouldBe response.details[0].id,
+                        jsonPath("$.details[0].reCommentQty") shouldBe response.details[0].reCommentQty,
+                        jsonPath("$.details[0].contents") shouldBe response.details[0].contents,
+                        jsonPath("$.details[0].registeredAt") shouldBe response.details[0].registeredAt,
+                        jsonPath("$.details[0].isMyComment") shouldBe response.details[0].isMyComment,
+                        jsonPath("$.details[0].isReComment") shouldBe response.details[0].isReComment(),
+                        jsonPath("$.details[0].writer.userId") shouldBe response.details[0].writer.userId,
+                        jsonPath("$.details[0].writer.userName") shouldBe response.details[0].writer.userName,
+                        jsonPath("$.details[0].writer.profileImageUri") shouldBe response.details[0].writer.profileImageUri,
+                        jsonPath("$.details[0].writer.crewName") shouldBe response.details[0].writer.crewName,
+                        jsonPath("$.details[0].writer.isAdmin") shouldBe response.details[0].writer.isAdmin,
+                        jsonPath("$.details[0].writer.isManager") shouldBe response.details[0].writer.isManager,
                     )
                     .andDocument(
                         "search-comments",
@@ -129,9 +129,9 @@ class CommentControllerTest (
                             "feedId" isRequired true pathMeans "조회할 피드 식별자"
                         ),
                         responseBody(
-                            "comments" type ARRAY means "댓글 목록" isRequired true,
+                            "details" type ARRAY means "댓글 목록" isRequired true,
                         )
-                            .andWithPrefix("comments[]", getCommentsResponseSnippet())
+                            .andWithPrefix("details[]", getCommentsResponseSnippet())
                     )
             }
         }

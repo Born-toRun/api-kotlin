@@ -11,6 +11,7 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "feed")
 @DynamicInsert
+// TODO: private consttructor
 class FeedEntity(
 
     @Id

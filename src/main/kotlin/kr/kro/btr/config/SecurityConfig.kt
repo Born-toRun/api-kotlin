@@ -76,7 +76,6 @@ class SecurityConfig(
             )
             .authorizeHttpRequests { auth ->
                 auth.requestMatchers(HttpMethod.POST,
-                    crewsBased,
                     announceBased)
                     .hasAnyAuthority(RoleType.ADMIN.code)
 

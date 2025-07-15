@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.lang.Void
 
 @RestController
 @RequestMapping("/api/v1/crews")
@@ -33,7 +34,6 @@ class CrewController(
         return ResponseEntity.ok(response)
     }
 
-    // TODO: 관리자 권한
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun create(@RequestBody @Valid request: CreateCrewRequest): ResponseEntity<Void> {
         crewProxy.create(request)

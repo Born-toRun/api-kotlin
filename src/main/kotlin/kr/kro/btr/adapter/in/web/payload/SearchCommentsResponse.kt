@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDateTime
 
 data class SearchCommentsResponse(
-    val comments: List<Comment>
+    val details: List<Comment>
 ) {
     data class Comment(
         val id: Long,

@@ -3,12 +3,12 @@ package kr.kro.btr.adapter.`in`.web
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import kr.kro.btr.adapter.`in`.web.payload.BookmarkMarathonResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonsResponse
 import kr.kro.btr.adapter.`in`.web.payload.DetailMarathonResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.MarathonProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.domain.port.model.result.MarathonResult
 import kr.kro.btr.domain.port.model.result.MarathonDetailResult
+import kr.kro.btr.domain.port.model.result.MarathonResult
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.ARRAY
 import kr.kro.btr.utils.restdocs.BOOLEAN
@@ -61,7 +61,7 @@ class MarathonControllerTest (
             isBookmarking = true
         ))
         val response = SearchMarathonsResponse(
-            marathons = listOf(
+            details = listOf(
                 SearchMarathonsResponse.Marathon(
                     id = marathonResults[0].id,
                     title = marathonResults[0].title,
@@ -82,19 +82,19 @@ class MarathonControllerTest (
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
                     .andExpectData(
-                        jsonPath("$.marathons[0].id") shouldBe response.marathons[0].id,
-                        jsonPath("$.marathons[0].title") shouldBe response.marathons[0].title,
-                        jsonPath("$.marathons[0].schedule") shouldBe response.marathons[0].schedule,
-                        jsonPath("$.marathons[0].venue") shouldBe response.marathons[0].venue,
-                        jsonPath("$.marathons[0].course") shouldBe response.marathons[0].course,
-                        jsonPath("$.marathons[0].isBookmarking") shouldBe response.marathons[0].isBookmarking,
+                        jsonPath("$.details[0].id") shouldBe response.details[0].id,
+                        jsonPath("$.details[0].title") shouldBe response.details[0].title,
+                        jsonPath("$.details[0].schedule") shouldBe response.details[0].schedule,
+                        jsonPath("$.details[0].venue") shouldBe response.details[0].venue,
+                        jsonPath("$.details[0].course") shouldBe response.details[0].course,
+                        jsonPath("$.details[0].isBookmarking") shouldBe response.details[0].isBookmarking,
                     )
                     .andDocument(
                         "search-marathons",
                         responseBody(
-                            "marathons" type ARRAY means "대회 목록" isRequired true
+                            "details" type ARRAY means "대회 목록" isRequired true
                         )
-                            .andWithPrefix("marathons[].", getMarathonsResponseSnippet())
+                            .andWithPrefix("details[].", getMarathonsResponseSnippet())
                     )
             }
         }

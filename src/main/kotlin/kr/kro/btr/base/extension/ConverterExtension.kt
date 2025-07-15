@@ -856,7 +856,7 @@ fun BookmarkMarathonQuery.toMarathonBookmarkEntity(): MarathonBookmarkEntity {
 // marathon
 fun List<MarathonResult>.toSearchAllMarathonResponse(): SearchMarathonsResponse {
     val marathons = this.map { it.toSearchAllMarathonResponseMarathon() }
-    return SearchMarathonsResponse(marathons = marathons)
+    return SearchMarathonsResponse(details = marathons)
 }
 
 fun MarathonResult.toSearchAllMarathonResponseMarathon(): SearchMarathonsResponse.Marathon {

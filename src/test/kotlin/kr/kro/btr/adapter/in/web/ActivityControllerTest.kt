@@ -6,12 +6,12 @@ import io.mockk.just
 import io.mockk.runs
 import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
+import kr.kro.btr.adapter.`in`.web.payload.DetailActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.OpenActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.ParticipationActivityResponse
-import kr.kro.btr.adapter.`in`.web.payload.DetailActivityResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesRequest
+import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesResponse
 import kr.kro.btr.adapter.`in`.web.proxy.ActivityProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.constant.ActivityRecruitmentType
@@ -260,7 +260,7 @@ class ActivityControllerTest (
             )
         )
         val response = SearchActivitiesResponse(
-            activities = listOf(
+            details = listOf(
                 SearchActivitiesResponse.Activity(
                     id = activityResults[0].id,
                     title = activityResults[0].title,
@@ -297,23 +297,23 @@ class ActivityControllerTest (
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
                     .andExpectData(
-                        jsonPath("$.activities[0].id") shouldBe response.activities[0].id,
-                        jsonPath("$.activities[0].title") shouldBe response.activities[0].title,
-                        jsonPath("$.activities[0].startAt") shouldBe response.activities[0].startAt,
-                        jsonPath("$.activities[0].course") shouldBe response.activities[0].course,
-                        jsonPath("$.activities[0].participantsLimit") shouldBe response.activities[0].participantsLimit,
-                        jsonPath("$.activities[0].participantsQty") shouldBe response.activities[0].participantsQty,
-                        jsonPath("$.activities[0].updatedAt") shouldBe response.activities[0].updatedAt,
-                        jsonPath("$.activities[0].registeredAt") shouldBe response.activities[0].registeredAt,
-                        jsonPath("$.activities[0].isOpen") shouldBe response.activities[0].isOpen,
-                        jsonPath("$.activities[0].recruitmentType") shouldBe response.activities[0].recruitmentType,
-                        jsonPath("$.activities[0].host.userId") shouldBe response.activities[0].host.userId,
-                        jsonPath("$.activities[0].host.crewId") shouldBe response.activities[0].host.crewId,
-                        jsonPath("$.activities[0].host.userProfileUri") shouldBe response.activities[0].host.userProfileUri,
-                        jsonPath("$.activities[0].host.userName") shouldBe response.activities[0].host.userName,
-                        jsonPath("$.activities[0].host.crewName") shouldBe response.activities[0].host.crewName,
-                        jsonPath("$.activities[0].host.isManager") shouldBe response.activities[0].host.isManager,
-                        jsonPath("$.activities[0].host.isAdmin") shouldBe response.activities[0].host.isAdmin,
+                        jsonPath("$.details[0].id") shouldBe response.details[0].id,
+                        jsonPath("$.details[0].title") shouldBe response.details[0].title,
+                        jsonPath("$.details[0].startAt") shouldBe response.details[0].startAt,
+                        jsonPath("$.details[0].course") shouldBe response.details[0].course,
+                        jsonPath("$.details[0].participantsLimit") shouldBe response.details[0].participantsLimit,
+                        jsonPath("$.details[0].participantsQty") shouldBe response.details[0].participantsQty,
+                        jsonPath("$.details[0].updatedAt") shouldBe response.details[0].updatedAt,
+                        jsonPath("$.details[0].registeredAt") shouldBe response.details[0].registeredAt,
+                        jsonPath("$.details[0].isOpen") shouldBe response.details[0].isOpen,
+                        jsonPath("$.details[0].recruitmentType") shouldBe response.details[0].recruitmentType,
+                        jsonPath("$.details[0].host.userId") shouldBe response.details[0].host.userId,
+                        jsonPath("$.details[0].host.crewId") shouldBe response.details[0].host.crewId,
+                        jsonPath("$.details[0].host.userProfileUri") shouldBe response.details[0].host.userProfileUri,
+                        jsonPath("$.details[0].host.userName") shouldBe response.details[0].host.userName,
+                        jsonPath("$.details[0].host.crewName") shouldBe response.details[0].host.crewName,
+                        jsonPath("$.details[0].host.isManager") shouldBe response.details[0].host.isManager,
+                        jsonPath("$.details[0].host.isAdmin") shouldBe response.details[0].host.isAdmin,
                     )
                     .andDocument(
                         "search-activities",
@@ -322,9 +322,9 @@ class ActivityControllerTest (
                             "recruitmentType" isRequired false pathMeans "상태"
                         ),
                         responseBody(
-                            "activities" type ARRAY means "행사 목록" isRequired true,
+                            "details" type ARRAY means "행사 목록" isRequired true,
                         )
-                            .andWithPrefix("activities[]", getActivitiesResponseSnippet())
+                            .andWithPrefix("details[]", getActivitiesResponseSnippet())
                     )
             }
         }

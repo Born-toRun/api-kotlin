@@ -5,7 +5,7 @@ import kr.kro.btr.domain.constant.ActivityRecruitmentType
 import java.time.LocalDateTime
 
 data class SearchActivitiesResponse(
-    val activities: List<Activity>
+    val details: List<Activity>
 ) {
 
     data class Host(
