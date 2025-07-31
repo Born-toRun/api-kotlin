@@ -1207,11 +1207,10 @@ fun UserEntity.toBornToRunUser(): BornToRunUser {
 }
 
 // user refresh token
-fun CreateRefreshTokenCommand.toCreateRefreshTokenQuery(userEntity: UserEntity): CreateRefreshTokenQuery {
+fun CreateRefreshTokenCommand.toCreateRefreshTokenQuery(): CreateRefreshTokenQuery {
     return CreateRefreshTokenQuery(
         userId = this.userId,
-        refreshToken = this.refreshToken,
-        userEntity = userEntity,
+        refreshToken = this.refreshToken
     )
 }
 

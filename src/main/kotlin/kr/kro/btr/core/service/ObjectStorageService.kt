@@ -4,9 +4,9 @@ import kr.kro.btr.base.extension.toObjectStorage
 import kr.kro.btr.base.extension.toRemoveObjectStorageQuery
 import kr.kro.btr.base.extension.toUploadObjectStorageQuery
 import kr.kro.btr.domain.port.ObjectStoragePort
-import kr.kro.btr.domain.port.model.result.ObjectStorageResult
 import kr.kro.btr.domain.port.model.RemoveObjectStorageCommand
 import kr.kro.btr.domain.port.model.UploadObjectStorageCommand
+import kr.kro.btr.domain.port.model.result.ObjectStorageResult
 import kr.kro.btr.infrastructure.ObjectStorageGateway
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

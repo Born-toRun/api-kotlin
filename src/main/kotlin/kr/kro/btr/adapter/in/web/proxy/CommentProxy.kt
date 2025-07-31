@@ -5,10 +5,10 @@ import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentRequest
 import kr.kro.btr.base.extension.toCreateCommentCommand
 import kr.kro.btr.base.extension.toModifyCommentCommand
 import kr.kro.btr.domain.port.CommentPort
-import kr.kro.btr.domain.port.model.result.CommentDetailResult
-import kr.kro.btr.domain.port.model.result.CommentResult
 import kr.kro.btr.domain.port.model.DetailCommentCommand
 import kr.kro.btr.domain.port.model.SearchAllCommentCommand
+import kr.kro.btr.domain.port.model.result.CommentDetailResult
+import kr.kro.btr.domain.port.model.result.CommentResult
 import kr.kro.btr.support.TokenDetail
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict

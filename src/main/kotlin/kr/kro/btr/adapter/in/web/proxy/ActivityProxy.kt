@@ -9,9 +9,9 @@ import kr.kro.btr.base.extension.toCreateActivityCommand
 import kr.kro.btr.base.extension.toModifyActivityCommand
 import kr.kro.btr.base.extension.toSearchAllActivityCommand
 import kr.kro.btr.domain.port.ActivityPort
+import kr.kro.btr.domain.port.model.ParticipateActivityCommand
 import kr.kro.btr.domain.port.model.result.ActivityResult
 import kr.kro.btr.domain.port.model.result.ParticipantResult
-import kr.kro.btr.domain.port.model.ParticipateActivityCommand
 import kr.kro.btr.support.TokenDetail
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict

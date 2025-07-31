@@ -1,19 +1,21 @@
 package kr.kro.btr.adapter.`in`.web
 
-import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
+import kr.kro.btr.adapter.`in`.web.payload.DetailUserResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyUserRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyUserResponse
+import kr.kro.btr.adapter.`in`.web.payload.RefreshTokenResponse
 import kr.kro.btr.adapter.`in`.web.payload.SignUpRequest
 import kr.kro.btr.adapter.`in`.web.payload.SignUpResponse
-import kr.kro.btr.adapter.`in`.web.payload.DetailUserResponse
 import kr.kro.btr.adapter.`in`.web.proxy.UserProxy
 import kr.kro.btr.base.extension.toModifyUserResponse
 import kr.kro.btr.base.extension.toUserDetailResponse
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REFRESH_TOKEN
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -23,9 +25,12 @@ class UserController(
 ) {
 
     @PostMapping("/refresh", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun refresh(request: HttpServletRequest): ResponseEntity<Void> {
-        // TODO
-        return ResponseEntity.noContent().build()
+    fun refresh(
+        @RequestHeader(HttpHeaders.AUTHORIZATION) accessToken: String,
+        @CookieValue(REFRESH_TOKEN) refreshToken: String
+    ): ResponseEntity<RefreshTokenResponse> {
+        val newAccessToken = userProxy.refreshToken(accessToken, refreshToken)
+        return ResponseEntity.ok(RefreshTokenResponse(newAccessToken))
     }
 
     @PutMapping("/sign-up", produces = [MediaType.APPLICATION_JSON_VALUE])

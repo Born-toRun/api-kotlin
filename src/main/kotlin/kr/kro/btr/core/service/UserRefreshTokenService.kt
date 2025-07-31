@@ -21,9 +21,8 @@ class UserRefreshTokenService(
     }
 
     @Transactional
-    override fun createAndFlush(command: CreateRefreshTokenCommand): UserRefreshTokenEntity {
-        val userEntity = userGateway.searchById(command.userId)
-        val query = command.toCreateRefreshTokenQuery(userEntity)
-        return userRefreshTokenGateway.saveAndFlush(query)
+    override fun create(command: CreateRefreshTokenCommand): UserRefreshTokenEntity {
+        val query = command.toCreateRefreshTokenQuery()
+        return userRefreshTokenGateway.save(query)
     }
 }

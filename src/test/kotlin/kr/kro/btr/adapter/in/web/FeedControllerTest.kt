@@ -14,8 +14,8 @@ import kr.kro.btr.adapter.`in`.web.proxy.FeedProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.constant.FeedAccessLevel
 import kr.kro.btr.domain.constant.FeedCategory
-import kr.kro.btr.domain.port.model.result.FeedResult
 import kr.kro.btr.domain.port.model.result.FeedDetailResult
+import kr.kro.btr.domain.port.model.result.FeedResult
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.ARRAY
 import kr.kro.btr.utils.restdocs.BOOLEAN

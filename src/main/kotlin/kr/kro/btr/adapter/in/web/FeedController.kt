@@ -9,8 +9,8 @@ import kr.kro.btr.adapter.`in`.web.payload.SearchFeedsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.FeedProxy
 import kr.kro.btr.base.extension.toDetailFeedResponse
 import kr.kro.btr.base.extension.toSearchFeedResponse
-import kr.kro.btr.domain.port.model.result.FeedResult
 import kr.kro.btr.domain.port.model.result.FeedDetailResult
+import kr.kro.btr.domain.port.model.result.FeedResult
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
 import org.springframework.data.domain.Page

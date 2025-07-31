@@ -1,9 +1,9 @@
 package kr.kro.btr.adapter.`in`.web
 
 import kr.kro.btr.adapter.`in`.web.payload.BookmarkMarathonResponse
+import kr.kro.btr.adapter.`in`.web.payload.DetailMarathonResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonsRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchMarathonsResponse
-import kr.kro.btr.adapter.`in`.web.payload.DetailMarathonResponse
 import kr.kro.btr.adapter.`in`.web.proxy.MarathonProxy
 import kr.kro.btr.base.extension.toSearchAllMarathonResponse
 import kr.kro.btr.base.extension.toSearchMarathonDetailResponse

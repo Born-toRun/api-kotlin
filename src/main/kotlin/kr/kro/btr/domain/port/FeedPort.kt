@@ -1,12 +1,12 @@
 package kr.kro.btr.domain.port
 
 import kr.kro.btr.domain.port.model.CreateFeedCommand
-import kr.kro.btr.domain.port.model.result.FeedResult
-import kr.kro.btr.domain.port.model.result.FeedDetailResult
 import kr.kro.btr.domain.port.model.ModifyFeedCommand
 import kr.kro.btr.domain.port.model.RemoveFeedCommand
 import kr.kro.btr.domain.port.model.SearchAllFeedCommand
 import kr.kro.btr.domain.port.model.SearchFeedDetailCommand
+import kr.kro.btr.domain.port.model.result.FeedDetailResult
+import kr.kro.btr.domain.port.model.result.FeedResult
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 

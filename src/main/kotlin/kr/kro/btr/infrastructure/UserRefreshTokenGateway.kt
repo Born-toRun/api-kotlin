@@ -14,14 +14,14 @@ class UserRefreshTokenGateway(
         return userRefreshTokenRepository.findByUserId(userId)
     }
 
-    fun saveAndFlush(query: CreateRefreshTokenQuery): UserRefreshTokenEntity {
-        val userRefreshTokenEntity = UserRefreshTokenEntity(
+    fun save(query: CreateRefreshTokenQuery): UserRefreshTokenEntity {
+        val userRefreshTokenEntity = searchByUserId(query.userId)?.apply {
+            refreshToken = query.refreshToken
+        } ?: UserRefreshTokenEntity(
             userId = query.userId,
             refreshToken = query.refreshToken
         )
 
-        userRefreshTokenEntity.add(query.userEntity)
-
-        return userRefreshTokenRepository.saveAndFlush(userRefreshTokenEntity)
+        return userRefreshTokenRepository.save(userRefreshTokenEntity)
     }
 }

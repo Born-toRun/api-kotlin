@@ -3,11 +3,11 @@ package kr.kro.btr.adapter.`in`.web
 import jakarta.validation.Valid
 import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
+import kr.kro.btr.adapter.`in`.web.payload.DetailActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.OpenActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.ParticipationActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesRequest
-import kr.kro.btr.adapter.`in`.web.payload.DetailActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesResponse
 import kr.kro.btr.adapter.`in`.web.proxy.ActivityProxy
 import kr.kro.btr.base.extension.toOpenActivityResponse

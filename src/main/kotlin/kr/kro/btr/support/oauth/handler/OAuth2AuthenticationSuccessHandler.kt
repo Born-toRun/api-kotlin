@@ -7,9 +7,9 @@ import kr.kro.btr.domain.constant.ProviderType
 import kr.kro.btr.domain.constant.RoleType
 import kr.kro.btr.domain.port.UserPort
 import kr.kro.btr.domain.port.UserRefreshTokenPort
-import kr.kro.btr.domain.port.model.result.BornToRunUser
 import kr.kro.btr.domain.port.model.CreateRefreshTokenCommand
 import kr.kro.btr.domain.port.model.CreateUserCommand
+import kr.kro.btr.domain.port.model.result.BornToRunUser
 import kr.kro.btr.support.CookieSupport
 import kr.kro.btr.support.exception.InternalServerException
 import kr.kro.btr.support.oauth.info.OAuth2UserInfoFactory
@@ -97,13 +97,8 @@ class OAuth2AuthenticationSuccessHandler(
             Date(now.time + refreshTokenExpiry)
         )
 
-        val userRefreshTokenEntity = userRefreshTokenPort.searchByUserId(bornToRunUser.userId)
-        if (userRefreshTokenEntity != null) {
-            userRefreshTokenEntity.refreshToken = refreshToken.token
-        } else {
-            val command = CreateRefreshTokenCommand(bornToRunUser.userId, refreshToken.token)
-            userRefreshTokenPort.createAndFlush(command)
-        }
+        val command = CreateRefreshTokenCommand(bornToRunUser.userId, refreshToken.token)
+        userRefreshTokenPort.create(command)
 
         val cookieMaxAge = (refreshTokenExpiry / 60).toInt()
 

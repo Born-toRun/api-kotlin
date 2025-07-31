@@ -4,18 +4,26 @@ import kr.kro.btr.base.extension.toBornToRunUser
 import kr.kro.btr.base.extension.toCreateUserQuery
 import kr.kro.btr.base.extension.toModifyUserQuery
 import kr.kro.btr.base.extension.toSignUpUserQuery
+import kr.kro.btr.config.properties.AppProperties
 import kr.kro.btr.domain.port.UserPort
-import kr.kro.btr.domain.port.model.result.BornToRunUser
 import kr.kro.btr.domain.port.model.CreateUserCommand
 import kr.kro.btr.domain.port.model.ModifyUserCommand
 import kr.kro.btr.domain.port.model.SignUpCommand
+import kr.kro.btr.domain.port.model.result.BornToRunUser
 import kr.kro.btr.infrastructure.UserGateway
+import kr.kro.btr.infrastructure.UserRefreshTokenGateway
+import kr.kro.btr.support.exception.InvalidTokenException
+import kr.kro.btr.support.oauth.token.AuthTokenProvider
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @Service
 class UserService(
-    private val userGateway: UserGateway
+    private val userGateway: UserGateway,
+    private val userRefreshTokenGateway: UserRefreshTokenGateway,
+    private val tokenProvider: AuthTokenProvider,
+    private val appProperties: AppProperties
 ) : UserPort {
 
     @Transactional
@@ -25,9 +33,38 @@ class UserService(
     }
 
     @Transactional
-    override fun getRefreshToken(accessToken: String): String {
-        // TODO
-        return ""
+    override fun refreshToken(accessToken: String, refreshToken: String): String {
+        val authToken = tokenProvider.convertAuthToken(accessToken)
+        val claims = authToken.getExpiredTokenClaims()
+            ?: throw InvalidTokenException("다시 로그인해주세요.")
+
+        val userId = claims.subject.toLong()
+        val user = userGateway.searchById(userId)
+
+        val refreshTokenEntity = userRefreshTokenGateway.searchByUserId(userId)
+            ?: throw InvalidTokenException("다시 로그인해주세요.")
+
+        if (refreshTokenEntity.refreshToken != refreshToken) {
+            throw InvalidTokenException("다시 로그인해주세요.")
+        }
+
+        val refreshTokenAuthToken = tokenProvider.convertAuthToken(refreshToken)
+        try {
+            refreshTokenAuthToken.validate()
+        } catch (e: InvalidTokenException) {
+            throw InvalidTokenException("다시 로그인해주세요.")
+        }
+
+        val now = Date()
+        val newAccessToken = tokenProvider.createAuthToken(
+            user.id,
+            user.name,
+            user.crewId,
+            user.roleType.code,
+            Date(now.time + appProperties.auth.tokenExpiry)
+        )
+
+        return newAccessToken.token
     }
 
     @Transactional

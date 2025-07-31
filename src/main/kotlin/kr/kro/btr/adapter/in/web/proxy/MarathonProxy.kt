@@ -6,8 +6,8 @@ import kr.kro.btr.base.extension.toCancelBookmarkMarathonCommand
 import kr.kro.btr.base.extension.toSearchAllMarathonCommand
 import kr.kro.btr.base.extension.toSearchMarathonDetailCommand
 import kr.kro.btr.domain.port.MarathonPort
-import kr.kro.btr.domain.port.model.result.MarathonResult
 import kr.kro.btr.domain.port.model.result.MarathonDetailResult
+import kr.kro.btr.domain.port.model.result.MarathonResult
 import kr.kro.btr.support.TokenDetail
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict

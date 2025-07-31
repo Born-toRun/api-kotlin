@@ -4,6 +4,7 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
+import jakarta.servlet.http.Cookie
 import kr.kro.btr.adapter.`in`.web.payload.ModifyUserRequest
 import kr.kro.btr.adapter.`in`.web.payload.SignUpRequest
 import kr.kro.btr.adapter.`in`.web.proxy.UserProxy
@@ -17,9 +18,13 @@ import kr.kro.btr.utils.restdocs.BOOLEAN
 import kr.kro.btr.utils.restdocs.NUMBER
 import kr.kro.btr.utils.restdocs.STRING
 import kr.kro.btr.utils.restdocs.andDocument
+import kr.kro.btr.utils.restdocs.cookieMeans
+import kr.kro.btr.utils.restdocs.headerMeans
 import kr.kro.btr.utils.restdocs.isRequired
 import kr.kro.btr.utils.restdocs.pathParameters
 import kr.kro.btr.utils.restdocs.requestBody
+import kr.kro.btr.utils.restdocs.requestCookies
+import kr.kro.btr.utils.restdocs.requestHeaders
 import kr.kro.btr.utils.restdocs.responseBody
 import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
 import kr.kro.btr.utils.restdocs.type
@@ -27,10 +32,12 @@ import kr.kro.btr.utils.shouldBe
 import org.mockito.ArgumentMatchers.anyLong
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.restdocs.ManualRestDocumentation
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.request
+import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REFRESH_TOKEN
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.context.WebApplicationContext
@@ -51,8 +58,40 @@ class UserControllerTest (
     beforeEach { restDocumentation.beforeTest(javaClass, it.name.testName) }
     afterEach { restDocumentation.afterTest() }
 
-    //TODO: refresh
-//    describe("POST : $baseUrl/refresh") {
+    describe("POST : $baseUrl/refresh") {
+        val url = "$baseUrl/refresh"
+        val expiredAccessToken = "expired.access.token"
+        val refreshTokenValue = "valid.refresh.token"
+        val newAccessToken = "new.access.token"
+
+        context("유효한 리프레시 토큰으로 액세스 토큰을 갱신하면") {
+            val request = request(HttpMethod.POST, url)
+                .header("Authorization", "Bearer $expiredAccessToken")
+                .cookie(Cookie("refresh_token", refreshTokenValue))
+
+            it("액세스 토큰을 반환한다") {
+                every { proxy.refreshToken(any(), any()) } returns newAccessToken
+
+                mockMvc.perform(request)
+                    .andExpect(status().isOk)
+                    .andExpectData(
+                        jsonPath("$.accessToken") shouldBe newAccessToken
+                    )
+                    .andDocument(
+                        "refresh-token",
+                        requestHeaders(
+                            HttpHeaders.AUTHORIZATION headerMeans "만료된 Bearer Access Token"
+                        ),
+                        requestCookies(
+                            REFRESH_TOKEN cookieMeans "유효한 Refresh Token"
+                        ),
+                        responseBody(
+                            "accessToken" type STRING means "인증 토큰" isRequired true
+                        )
+                    )
+            }
+        }
+    }
 
     describe("PUT : $baseUrl/sign-up") {
         val url = "$baseUrl/sign-up"

@@ -9,13 +9,13 @@ import kr.kro.btr.base.extension.toParticipantResult
 import kr.kro.btr.base.extension.toParticipateActivityQuery
 import kr.kro.btr.base.extension.toSearchAllActivityQuery
 import kr.kro.btr.domain.port.ActivityPort
-import kr.kro.btr.domain.port.model.result.ActivityResult
 import kr.kro.btr.domain.port.model.AttendanceActivityCommand
 import kr.kro.btr.domain.port.model.CreateActivityCommand
 import kr.kro.btr.domain.port.model.ModifyActivityCommand
-import kr.kro.btr.domain.port.model.result.ParticipantResult
 import kr.kro.btr.domain.port.model.ParticipateActivityCommand
 import kr.kro.btr.domain.port.model.SearchAllActivityCommand
+import kr.kro.btr.domain.port.model.result.ActivityResult
+import kr.kro.btr.domain.port.model.result.ParticipantResult
 import kr.kro.btr.infrastructure.ActivityGateway
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

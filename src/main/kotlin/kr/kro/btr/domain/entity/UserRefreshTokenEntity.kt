@@ -18,14 +18,5 @@ class UserRefreshTokenEntity(
     val userId: Long,
     var refreshToken: String,
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "userId", insertable = false, updatable = false)
-//    @JsonIgnore
-//    var userEntity: UserEntity? = null
-) {
-    fun add(userEntity: UserEntity) {
-//        userEntity.userRefreshTokenEntity = this
-//        this.userEntity = userEntity
-    }
-}
+)
 

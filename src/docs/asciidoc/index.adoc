@@ -61,6 +61,9 @@ operation::my-detail[snippets="http-request,http-response,response-fields"]
 operation::user-detail[snippets="http-request,path-parameters,http-response,response-fields"]
 === 정보 수정
 operation::modify-users[snippets="http-request,request-fields,http-response,response-fields"]
+=== 토큰 리프레시
+operation::refresh-token[snippets="http-request,request-headers,request-cookies,http-response,response-fields"]
+
 
 == 파일
 === 업로드

@@ -62,11 +62,27 @@ class AuthToken(
         } catch (e: MalformedJwtException) {
             throw InvalidTokenException("Invalid JWT token.")
         } catch (e: ExpiredJwtException) {
-            log.warn {"Expired JWT token." }
+            throw InvalidTokenException("Expired JWT token.")
         } catch (e: UnsupportedJwtException) {
             throw InvalidTokenException("Unsupported JWT token.")
         } catch (e: IllegalArgumentException) {
             throw InvalidTokenException("JWT token compact of handler are invalid.")
+        }
+    }
+
+    fun getExpiredTokenClaims(): Claims? {
+        return try {
+            Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .payload
+        } catch (e: ExpiredJwtException) {
+            log.info { "Expired JWT token." }
+            e.claims
+        } catch (e: Exception) {
+            log.warn(e) { "Failed to get claims from token: $e" }
+            null
         }
     }
 

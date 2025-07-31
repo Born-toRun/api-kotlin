@@ -8,12 +8,12 @@ import kr.kro.btr.base.extension.toSearchAllFeedQuery
 import kr.kro.btr.domain.entity.FeedImageMappingEntity
 import kr.kro.btr.domain.port.FeedPort
 import kr.kro.btr.domain.port.model.CreateFeedCommand
-import kr.kro.btr.domain.port.model.result.FeedResult
-import kr.kro.btr.domain.port.model.result.FeedDetailResult
 import kr.kro.btr.domain.port.model.ModifyFeedCommand
 import kr.kro.btr.domain.port.model.RemoveFeedCommand
 import kr.kro.btr.domain.port.model.SearchAllFeedCommand
 import kr.kro.btr.domain.port.model.SearchFeedDetailCommand
+import kr.kro.btr.domain.port.model.result.FeedDetailResult
+import kr.kro.btr.domain.port.model.result.FeedResult
 import kr.kro.btr.infrastructure.FeedGateway
 import kr.kro.btr.infrastructure.FeedImageMappingGateway
 import kr.kro.btr.infrastructure.UserGateway
