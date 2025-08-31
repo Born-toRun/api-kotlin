@@ -89,7 +89,7 @@ operation::search-comments[snippets="http-request,path-parameters,http-response,
 === 상세 조회
 operation::search-comment[snippets="http-request,path-parameters,http-response,response-fields"]
 === 등록
-operation::modify-comments[snippets="http-request,path-parameters,request-fields,http-response"]
+operation::create-comments[snippets="http-request,path-parameters,request-fields,http-response"]
 === 삭제
 operation::remove-comments[snippets="http-request,path-parameters,http-response"]
 === 수정
