@@ -21,7 +21,7 @@ class UserEntity(
     @Enumerated(EnumType.STRING)
     val providerType: ProviderType,
     @Enumerated(EnumType.STRING)
-    val roleType: RoleType = RoleType.GUEST,
+    var roleType: RoleType = RoleType.GUEST,
     var name: String? = null,
     var crewId: Long? = null,
     var instagramId: String? = null,
@@ -86,7 +86,7 @@ class UserEntity(
         }
     }
 
-    fun modify(userName: String?, crewId: Long?, instagramId: String?) {
+    fun modify(userName: String?, crewId: Long?, instagramId: String?, roleType: RoleType) {
         crewId?.takeIf { it != 0L }?.let {
             this.crewId = it
         }
@@ -97,6 +97,10 @@ class UserEntity(
 
         userName?.takeIf { it.isNotBlank() }?.let {
             this.name = it
+        }
+
+        roleType.let {
+            this.roleType = it
         }
     }
 
