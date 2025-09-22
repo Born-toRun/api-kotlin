@@ -26,7 +26,7 @@ class ObjectStorageGateway(
     fun upload(query: UploadObjectStorageQuery): ObjectStorageEntity {
         val uploadedFileName = minioGateway.uploadObject(query.toUpload())
 
-        val cdnUri = "${minioProperties.cdnHost}/${query.bucket.name}/$uploadedFileName"
+        val cdnUri = "${minioProperties.cdnHost}/${query.bucket.bucketName}/$uploadedFileName"
 
         return objectStorageRepository.save(
             ObjectStorageEntity(
@@ -92,7 +92,7 @@ class ObjectStorageGateway(
 
         val uploadedFileName = minioGateway.uploadObject(query.toUpload())
         val targetCdnUri = objectStorage.fileUri
-        val cdnUri = "${minioProperties.cdnHost}/${query.bucket}/$uploadedFileName"
+        val cdnUri = "${minioProperties.cdnHost}/${query.bucket.bucketName}/$uploadedFileName"
 
         objectStorage.fileUri = cdnUri
         objectStorageRepository.save(objectStorage)

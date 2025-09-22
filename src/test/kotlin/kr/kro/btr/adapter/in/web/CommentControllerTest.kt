@@ -279,7 +279,7 @@ class CommentControllerTest (
                 mockMvc.perform(request)
                     .andExpect(status().isCreated)
                     .andDocument(
-                        "modify-comments",
+                        "create-comments",
                         pathParameters(
                             "feedId" isRequired true pathMeans "피드 식별자"
                         ),

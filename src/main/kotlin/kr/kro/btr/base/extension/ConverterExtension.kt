@@ -1158,7 +1158,8 @@ fun SignUpCommand.toSignUpUserQuery(): SignUpUserQuery {
         userId = this.userId,
         userName = this.userName,
         crewId = this.crewId,
-        instagramId = this.instagramId
+        instagramId = this.instagramId,
+        roleType = RoleType.MEMBER
     )
 }
 
