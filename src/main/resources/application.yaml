@@ -61,7 +61,7 @@ cors:
     max-age: 3600
 app:
     auth:
-        tokenExpiry: 3600000
+        tokenExpiry: 600000
         refreshTokenExpiry: 604800000
 adapter:
     discord:
