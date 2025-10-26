@@ -45,6 +45,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.context.WebApplicationContext
 import java.time.LocalDateTime
+import java.util.Collections
 
 @WebMvcTest(ActivityController::class)
 class ActivityControllerTest (
@@ -64,6 +65,7 @@ class ActivityControllerTest (
     describe("POST : $baseUrl") {
         val url = baseUrl
         val requestBody = CreateActivityRequest(
+            imageIds = Collections.emptyList(),
             title = "title",
             contents = "contents",
             startAt = LocalDateTime.now(),
@@ -90,6 +92,7 @@ class ActivityControllerTest (
                     .andDocument(
                         "create-activities",
                         requestBody(
+                            "imageIds" type ARRAY means "이미지 식별자 리스트" isRequired false,
                             "title" type STRING means "행사명" isRequired true,
                             "contents" type STRING means "내용" isRequired true,
                             "startAt" type DATETIME means "시작일자" isRequired true,
@@ -248,6 +251,7 @@ class ActivityControllerTest (
                 updatedAt = LocalDateTime.now(),
                 registeredAt = LocalDateTime.now(),
                 recruitmentType = queryParam.recruitmentType,
+                imageUrls = listOf("https://example.com/image1.jpg", "https://example.com/image2.jpg"),
                 host = ActivityResult.Host(
                     userId = 0,
                     crewId = 0,
@@ -280,7 +284,8 @@ class ActivityControllerTest (
                     updatedAt = getDateTimeByFormat(activityResults[0].updatedAt),
                     registeredAt = getDateTimeByFormat(activityResults[0].registeredAt),
                     isOpen = activityResults[0].isOpen,
-                    recruitmentType = activityResults[0].recruitmentType
+                    recruitmentType = activityResults[0].recruitmentType,
+                    imageUrls = activityResults[0].imageUrls
                 )
             )
         )
@@ -307,6 +312,8 @@ class ActivityControllerTest (
                         jsonPath("$.details[0].registeredAt") shouldBe response.details[0].registeredAt,
                         jsonPath("$.details[0].isOpen") shouldBe response.details[0].isOpen,
                         jsonPath("$.details[0].recruitmentType") shouldBe response.details[0].recruitmentType,
+                        jsonPath("$.details[0].imageUrls[0]") shouldBe response.details[0].imageUrls[0],
+                        jsonPath("$.details[0].imageUrls[1]") shouldBe response.details[0].imageUrls[1],
                         jsonPath("$.details[0].host.userId") shouldBe response.details[0].host.userId,
                         jsonPath("$.details[0].host.crewId") shouldBe response.details[0].host.crewId,
                         jsonPath("$.details[0].host.userProfileUri") shouldBe response.details[0].host.userProfileUri,
@@ -650,6 +657,7 @@ class ActivityControllerTest (
                 "registeredAt" type DATETIME means "등록일자" isRequired true,
                 "isOpen" type BOOLEAN means "오픈 여부" isRequired false,
                 "recruitmentType" type STRING means "상태" isRequired false,
+                "imageUrls" type ARRAY means "이미지 URL 리스트" isRequired true,
                 "host" type OBJECT means "호스트" isRequired true,
                 "host.userId" type NUMBER means "식별자" isRequired true,
                 "host.crewId" type NUMBER means "소속 크루 식별자" isRequired false,

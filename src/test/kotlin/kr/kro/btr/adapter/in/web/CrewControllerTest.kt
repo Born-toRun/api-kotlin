@@ -159,6 +159,62 @@ class CrewControllerTest (
         }
     }
 
+    describe("GET : $baseUrl/my") {
+        val url = "$baseUrl/my"
+        val crewId = 1L
+        val crewResult = CrewResult(
+            id = 1,
+            name = "crewName",
+            contents = "contents",
+            region = "region",
+            imageUri = "imageUri",
+            logoUri = "logoUri",
+            sns = "crewSnsUri"
+        )
+        val response = DetailCrewResponse(
+            id = crewResult.id,
+            crewName = crewResult.name,
+            contents = crewResult.contents,
+            region = crewResult.region,
+            imageUri = crewResult.imageUri,
+            logoUri = crewResult.logoUri,
+            crewSnsUri = crewResult.sns
+        )
+
+        context("로그인 사용자의 크루 상세 조회를 하면") {
+            val request = request(HttpMethod.GET, url)
+                .contentType(APPLICATION_JSON)
+
+            it("200 OK") {
+                every { proxy.detailMyCrew(any()) } returns crewResult
+
+                mockMvc.perform(request)
+                    .andExpect(status().isOk)
+                    .andExpectData(
+                        jsonPath("$.id") shouldBe response.id,
+                        jsonPath("$.crewName") shouldBe response.crewName,
+                        jsonPath("$.contents") shouldBe response.contents,
+                        jsonPath("$.region") shouldBe response.region,
+                        jsonPath("$.imageUri") shouldBe response.imageUri,
+                        jsonPath("$.logoUri") shouldBe response.logoUri,
+                        jsonPath("$.crewSnsUri") shouldBe response.crewSnsUri
+                    )
+                    .andDocument(
+                        "search-my-crew-detail",
+                        responseBody(
+                            "id" type NUMBER means "식별자" isRequired true,
+                            "crewName" type STRING means "크루명" isRequired true,
+                            "contents" type STRING means "크루 소개" isRequired true,
+                            "region" type STRING means "크루 활동 지역" isRequired true,
+                            "imageUri" type STRING means "크루 대표 이미지 uri" isRequired false,
+                            "logoUri" type STRING means "크루 로고 uri" isRequired false,
+                            "crewSnsUri" type STRING means "크루 sns uri" isRequired false
+                        )
+                    )
+            }
+        }
+    }
+
     describe("POST : $baseUrl") {
         val url = baseUrl
         val requestBody = CreateCrewRequest(

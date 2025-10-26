@@ -3,6 +3,7 @@ package kr.kro.btr.infrastructure.model
 import java.time.LocalDateTime
 
 data class CreateActivityQuery(
+    val imageIds: List<Long>?,
     val title: String,
     val contents: String,
     val startAt: LocalDateTime,

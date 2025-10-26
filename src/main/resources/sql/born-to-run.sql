@@ -195,6 +195,7 @@ CREATE TABLE `marathon_bookmark`
 
 CREATE TABLE `activity_image_mapping`
 (
+    `id`          bigint(20) NOT NULL AUTO_INCREMENT,
     `activity_id` bigint(20) NOT NULL COMMENT '행사 식별자',
     `image_id`    bigint(20) NOT NULL COMMENT '이미지 식별자',
     PRIMARY KEY (`activity_id`, `image_id`)

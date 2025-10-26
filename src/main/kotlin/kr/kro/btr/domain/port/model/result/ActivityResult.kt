@@ -21,6 +21,7 @@ data class ActivityResult(
     val updatedAt: LocalDateTime,
     val registeredAt: LocalDateTime,
     val recruitmentType: ActivityRecruitmentType? = null,
+    val imageUrls: List<String> = emptyList(),
     val host: Host
 ) {
     data class Host(

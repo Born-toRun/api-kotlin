@@ -1,5 +1,6 @@
 package kr.kro.btr.infrastructure
 
+import kr.kro.btr.adapter.out.persistence.ActivityImageMappingRepository
 import kr.kro.btr.adapter.out.persistence.ActivityParticipationRepository
 import kr.kro.btr.adapter.out.persistence.ActivityRepository
 import kr.kro.btr.adapter.out.persistence.querydsl.ActivityQuery
@@ -8,6 +9,7 @@ import kr.kro.btr.base.extension.toActivityEntity
 import kr.kro.btr.base.extension.toActivityParticipationEntity
 import kr.kro.btr.domain.constant.ActivityRecruitmentType.*
 import kr.kro.btr.domain.entity.ActivityEntity
+import kr.kro.btr.domain.entity.ActivityImageMappingEntity
 import kr.kro.btr.domain.entity.ActivityParticipationEntity
 import kr.kro.btr.infrastructure.model.AttendanceActivityQuery
 import kr.kro.btr.infrastructure.model.CreateActivityQuery
@@ -25,6 +27,7 @@ import kotlin.time.toJavaDuration
 @Component
 class ActivityGateway(
     private val activityRepository: ActivityRepository,
+    private val activityImageMappingRepository: ActivityImageMappingRepository,
     private val activityParticipationRepository: ActivityParticipationRepository,
     private val activityQuery: ActivityQuery,
     private val redisClient: RedisClient
@@ -33,6 +36,18 @@ class ActivityGateway(
     fun create(query: CreateActivityQuery) {
         val activityEntity = activityRepository.findByStartAtAndUserId(query.startAt, query.myUserId) ?: query.toActivityEntity()
         activityRepository.save(activityEntity)
+
+        val activityImageMappingEntities = query.imageIds?.map { imageId ->
+            ActivityImageMappingEntity(
+                imageId = imageId,
+                activityId = activityEntity.id
+            )
+        }
+
+        activityEntity.add(activityImageMappingEntities)
+        if (activityImageMappingEntities != null) {
+            activityImageMappingRepository.saveAll(activityImageMappingEntities)
+        }
     }
 
     fun modify(query: ModifyActivityQuery) {

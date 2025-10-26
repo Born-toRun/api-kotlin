@@ -46,7 +46,8 @@ fun List<ActivityResult>.toSearchActivityResponse(): SearchActivitiesResponse {
             updatedAt = activityResult.updatedAt,
             registeredAt = activityResult.registeredAt,
             isOpen = activityResult.isOpen,
-            recruitmentType = activityResult.recruitmentType
+            recruitmentType = activityResult.recruitmentType,
+            imageUrls = activityResult.imageUrls
         )
     }
 
@@ -112,6 +113,7 @@ fun ParticipantResult.toParticipationActivityResponse(): ParticipationActivityRe
 
 fun CreateActivityRequest.toCreateActivityCommand(my: TokenDetail): CreateActivityCommand {
     return CreateActivityCommand(
+        imageIds = this.imageIds,
         title = this.title,
         contents = this.contents,
         startAt = this.startAt,
@@ -161,6 +163,7 @@ fun AttendanceActivityRequest.toAttendanceActivityCommand(activityId: Long, myUs
 
 fun CreateActivityCommand.toCreateActivityQuery(): CreateActivityQuery {
     return CreateActivityQuery(
+        imageIds = this.imageIds,
         title = this.title,
         contents = this.contents,
         startAt = this.startAt,
@@ -222,6 +225,7 @@ fun ActivityEntity.toActivityResult(userId: Long): ActivityResult {
         updatedAt = this.updatedAt,
         registeredAt = this.registeredAt,
         recruitmentType = convertRecruitmentType(userId),
+        imageUrls = this.getImageUris(),
         host = this.toHost()
     )
 }
@@ -244,6 +248,7 @@ fun ActivityEntity.toActivityResult(accessCode: Int): ActivityResult {
         isOpen = this.isOpen,
         updatedAt = this.updatedAt,
         registeredAt = this.registeredAt,
+        imageUrls = this.getImageUris(),
         host = this.toHost()
     )
 }

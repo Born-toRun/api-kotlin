@@ -44,6 +44,18 @@ class ActivityEntity(
     @OneToMany(mappedBy = "activityEntity", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
     val activityParticipationEntities: MutableSet<ActivityParticipationEntity> = mutableSetOf()
 
+    @OneToMany(mappedBy = "activityEntity", cascade = [CascadeType.REMOVE], orphanRemoval = true)
+    val activityImageMappingEntities: MutableSet<ActivityImageMappingEntity> = mutableSetOf()
+
+    fun add(activityImageMappingEntities: List<ActivityImageMappingEntity>?) {
+        if (activityImageMappingEntities == null) {
+            return
+        }
+
+        activityImageMappingEntities.forEach { it.activityEntity = this }
+        this.activityImageMappingEntities.addAll(activityImageMappingEntities)
+    }
+
     fun open() {
         isOpen = true
     }
@@ -60,4 +72,7 @@ class ActivityEntity(
         query.courseDetail?.takeIf { it != courseDetail }?.let { courseDetail = it }
         query.path?.takeIf { it != path }?.let { path = it }
     }
+
+    fun getImageUris(): List<String> =
+        activityImageMappingEntities.mapNotNull { it.objectStorageEntity?.fileUri }
 }
