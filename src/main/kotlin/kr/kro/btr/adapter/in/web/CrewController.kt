@@ -8,6 +8,8 @@ import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.base.extension.toDetailCrewResponse
 import kr.kro.btr.base.extension.toSearchCrewResponse
 import kr.kro.btr.domain.port.model.result.CrewResult
+import kr.kro.btr.support.TokenDetail
+import kr.kro.btr.support.annotation.AuthUser
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -30,6 +32,13 @@ class CrewController(
     @GetMapping("/{crewId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun detail(@PathVariable crewId: Long): ResponseEntity<DetailCrewResponse> {
         val crew = crewProxy.detail(crewId)
+        val response = crew.toDetailCrewResponse()
+        return ResponseEntity.ok(response)
+    }
+
+    @GetMapping("/my", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun detailMyCrew(@AuthUser my: TokenDetail): ResponseEntity<DetailCrewResponse> {
+        val crew = crewProxy.detailMyCrew(my.crewId)
         val response = crew.toDetailCrewResponse()
         return ResponseEntity.ok(response)
     }

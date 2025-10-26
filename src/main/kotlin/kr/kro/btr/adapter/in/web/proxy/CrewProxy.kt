@@ -4,6 +4,8 @@ import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
 import kr.kro.btr.base.extension.toCreateCrewCommand
 import kr.kro.btr.domain.port.CrewPort
 import kr.kro.btr.domain.port.model.result.CrewResult
+import kr.kro.btr.support.TokenDetail
+import kr.kro.btr.support.exception.AuthorizationException
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
@@ -23,6 +25,11 @@ class CrewProxy(
     @Cacheable(key = "'detail: ' + #crewId")
     fun detail(crewId: Long): CrewResult {
         return crewPort.detail(crewId)
+    }
+
+    @Cacheable(key = "'detail: ' + #crewId")
+    fun detailMyCrew(crewId: Long?): CrewResult {
+        return crewPort.detailMyCrew(crewId ?: throw AuthorizationException("사용자가 크루에 소속되어 있지 않습니다."))
     }
 
     @CacheEvict(allEntries = true)
