@@ -9,9 +9,11 @@ import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
+import kr.kro.btr.domain.port.model.result.CrewMemberResult
 import kr.kro.btr.domain.port.model.result.CrewResult
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.ARRAY
+import kr.kro.btr.utils.restdocs.BOOLEAN
 import kr.kro.btr.utils.restdocs.NUMBER
 import kr.kro.btr.utils.restdocs.RestDocsField
 import kr.kro.btr.utils.restdocs.STRING
@@ -215,6 +217,63 @@ class CrewControllerTest (
         }
     }
 
+    describe("GET : $baseUrl/{crewId}/members") {
+        val url = "$baseUrl/{crewId}/members"
+        val crewId = 1L
+        val memberResults = listOf(
+            CrewMemberResult(
+                userId = 1,
+                userName = "홍길동",
+                profileImageUri = "https://example.com/profile1.jpg",
+                instagramId = "@hong123",
+                isManager = true,
+                isAdmin = false
+            ),
+            CrewMemberResult(
+                userId = 2,
+                userName = "김철수",
+                profileImageUri = "https://example.com/profile2.jpg",
+                instagramId = "@kim456",
+                isManager = false,
+                isAdmin = false
+            )
+        )
+
+        context("크루 멤버 목록 조회를 하면") {
+            val request = request(HttpMethod.GET, url, crewId)
+                .contentType(APPLICATION_JSON)
+
+            it("200 OK") {
+                every { proxy.searchMembers(any()) } returns memberResults
+
+                mockMvc.perform(request)
+                    .andExpect(status().isOk)
+                    .andExpectData(
+                        jsonPath("$.members[0].userId") shouldBe memberResults[0].userId,
+                        jsonPath("$.members[0].userName") shouldBe memberResults[0].userName,
+                        jsonPath("$.members[0].profileImageUri") shouldBe memberResults[0].profileImageUri,
+                        jsonPath("$.members[0].instagramId") shouldBe memberResults[0].instagramId,
+                        jsonPath("$.members[0].isManager") shouldBe memberResults[0].isManager,
+                        jsonPath("$.members[0].isAdmin") shouldBe memberResults[0].isAdmin,
+                        jsonPath("$.members[1].userId") shouldBe memberResults[1].userId,
+                        jsonPath("$.members[1].userName") shouldBe memberResults[1].userName,
+                        jsonPath("$.members[1].isManager") shouldBe memberResults[1].isManager,
+                        jsonPath("$.members[1].isAdmin") shouldBe memberResults[1].isAdmin
+                    )
+                    .andDocument(
+                        "search-crew-members",
+                        pathParameters(
+                            "crewId" isRequired true pathMeans "크루 식별자"
+                        ),
+                        responseBody(
+                            "members" type ARRAY means "크루 멤버 목록" isRequired true
+                        )
+                            .andWithPrefix("members[].", getCrewMembersResponseSnippet())
+                    )
+            }
+        }
+    }
+
     describe("POST : $baseUrl") {
         val url = baseUrl
         val requestBody = CreateCrewRequest(
@@ -258,6 +317,17 @@ class CrewControllerTest (
                 "imageUri" type STRING means "크루 대표 이미지 uri" isRequired false,
                 "logoUri" type STRING means "크루 로고 uri" isRequired false,
                 "crewSnsUri" type STRING means "크루 sns uri" isRequired false
+            )
+        }
+
+        fun getCrewMembersResponseSnippet(): List<FieldDescriptor> {
+            return descriptor(
+                "userId" type NUMBER means "사용자 식별자" isRequired true,
+                "userName" type STRING means "사용자 이름" isRequired true,
+                "profileImageUri" type STRING means "프로필 이미지 URI" isRequired false,
+                "instagramId" type STRING means "인스타그램 ID" isRequired false,
+                "isManager" type BOOLEAN means "매니저 여부" isRequired true,
+                "isAdmin" type BOOLEAN means "관리자 여부" isRequired true
             )
         }
 

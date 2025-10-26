@@ -2,10 +2,13 @@ package kr.kro.btr.core.service
 
 import kr.kro.btr.base.extension.toCreateCrewQuery
 import kr.kro.btr.base.extension.toCrew
+import kr.kro.btr.base.extension.toCrewMembers
 import kr.kro.btr.base.extension.toCrews
 import kr.kro.btr.domain.entity.CrewEntity
+import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.port.CrewPort
 import kr.kro.btr.domain.port.model.CreateCrewCommand
+import kr.kro.btr.domain.port.model.result.CrewMemberResult
 import kr.kro.btr.domain.port.model.result.CrewResult
 import kr.kro.btr.infrastructure.CrewGateway
 import org.springframework.stereotype.Service
@@ -38,5 +41,11 @@ class CrewService(
     override fun create(command: CreateCrewCommand) {
         val query = command.toCreateCrewQuery()
         crewGateway.create(query)
+    }
+
+    @Transactional(readOnly = true)
+    override fun searchMembers(crewId: Long): List<CrewMemberResult> {
+        val userEntities: List<UserEntity> = crewGateway.searchMembersByCrewId(crewId)
+        return userEntities.toCrewMembers()
     }
 }

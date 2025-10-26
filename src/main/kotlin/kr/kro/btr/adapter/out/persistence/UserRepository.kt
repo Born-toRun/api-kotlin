@@ -8,10 +8,10 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
 
     @Query(
         """
-        SELECT u FROM UserEntity u 
-        LEFT JOIN FETCH u.crewEntity 
+        SELECT u FROM UserEntity u
+        LEFT JOIN FETCH u.crewEntity
         INNER JOIN FETCH u.userPrivacyEntity
-        LEFT JOIN FETCH u.profileImageEntity 
+        LEFT JOIN FETCH u.profileImageEntity
         WHERE u.id = :id
         """
     )
@@ -19,16 +19,16 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
 
     @Query(
         """
-        SELECT DISTINCT u FROM UserEntity u 
-        LEFT JOIN FETCH u.crewEntity 
-        LEFT JOIN FETCH u.profileImageEntity 
-        LEFT JOIN FETCH u.userPrivacyEntity 
-        LEFT JOIN FETCH u.feedEntities 
-        LEFT JOIN FETCH u.activityEntities 
-        LEFT JOIN FETCH u.activityParticipationEntities 
-        LEFT JOIN FETCH u.commentEntities 
-        LEFT JOIN FETCH u.marathonBookmarkEntities 
-        LEFT JOIN FETCH u.recommendationEntities 
+        SELECT DISTINCT u FROM UserEntity u
+        LEFT JOIN FETCH u.crewEntity
+        LEFT JOIN FETCH u.profileImageEntity
+        LEFT JOIN FETCH u.userPrivacyEntity
+        LEFT JOIN FETCH u.feedEntities
+        LEFT JOIN FETCH u.activityEntities
+        LEFT JOIN FETCH u.activityParticipationEntities
+        LEFT JOIN FETCH u.commentEntities
+        LEFT JOIN FETCH u.marathonBookmarkEntities
+        LEFT JOIN FETCH u.recommendationEntities
         WHERE u.id = :id
         """
     )
@@ -38,13 +38,23 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
 
     @Query(
         """
-        SELECT u FROM UserEntity u 
-        LEFT JOIN FETCH u.profileImageEntity 
-        LEFT JOIN FETCH u.userPrivacyEntity 
+        SELECT u FROM UserEntity u
+        LEFT JOIN FETCH u.profileImageEntity
+        LEFT JOIN FETCH u.userPrivacyEntity
         WHERE u.socialId = :socialId
         """
     )
     fun findBySocialId(socialId: String): UserEntity?
 
     fun existsBySocialId(socialId: String): Boolean
+
+    @Query(
+        """
+        SELECT u FROM UserEntity u
+        LEFT JOIN FETCH u.profileImageEntity
+        LEFT JOIN FETCH u.userPrivacyEntity
+        WHERE u.crewId = :crewId
+        """
+    )
+    fun findAllByCrewId(crewId: Long): List<UserEntity>
 }

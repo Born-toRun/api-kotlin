@@ -11,6 +11,7 @@ import kr.kro.btr.domain.port.model.result.AnnounceResult
 import kr.kro.btr.domain.port.model.result.BornToRunUser
 import kr.kro.btr.domain.port.model.result.CommentDetailResult
 import kr.kro.btr.domain.port.model.result.CommentResult
+import kr.kro.btr.domain.port.model.result.CrewMemberResult
 import kr.kro.btr.domain.port.model.result.CrewResult
 import kr.kro.btr.domain.port.model.result.FeedDetailResult
 import kr.kro.btr.domain.port.model.result.FeedResult
@@ -615,6 +616,38 @@ fun CreateCrewQuery.toCrewEntity(): CrewEntity {
         contents = this.contents,
         sns = this.sns,
         region = this.region
+    )
+}
+
+// crew members
+fun List<CrewMemberResult>.toSearchCrewMembersResponse(): SearchCrewMembersResponse {
+    val members = this.map { it.toCrewMember() }
+    return SearchCrewMembersResponse(members)
+}
+
+fun CrewMemberResult.toCrewMember(): SearchCrewMembersResponse.Member {
+    return SearchCrewMembersResponse.Member(
+        userId = this.userId,
+        userName = this.userName,
+        profileImageUri = this.profileImageUri,
+        instagramId = this.instagramId,
+        isManager = this.isManager,
+        isAdmin = this.isAdmin
+    )
+}
+
+fun List<UserEntity>.toCrewMembers(): List<CrewMemberResult> {
+    return this.map { it.toCrewMember() }
+}
+
+fun UserEntity.toCrewMember(): CrewMemberResult {
+    return CrewMemberResult(
+        userId = this.id,
+        userName = this.name ?: "Unknown",
+        profileImageUri = this.getProfileImageUri(),
+        instagramId = this.instagramId,
+        isManager = this.getIsManager(),
+        isAdmin = this.getIsAdmin()
     )
 }
 

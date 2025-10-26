@@ -1,6 +1,7 @@
 package kr.kro.btr.domain.port
 
 import kr.kro.btr.domain.port.model.CreateCrewCommand
+import kr.kro.btr.domain.port.model.result.CrewMemberResult
 import kr.kro.btr.domain.port.model.result.CrewResult
 
 interface CrewPort {
@@ -8,4 +9,5 @@ interface CrewPort {
     fun detail(crewId: Long): CrewResult
     fun detailMyCrew(myCrewId: Long): CrewResult
     fun create(command: CreateCrewCommand)
+    fun searchMembers(crewId: Long): List<CrewMemberResult>
 }

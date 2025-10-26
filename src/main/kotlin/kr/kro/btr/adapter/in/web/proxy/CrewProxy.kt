@@ -3,6 +3,7 @@ package kr.kro.btr.adapter.`in`.web.proxy
 import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
 import kr.kro.btr.base.extension.toCreateCrewCommand
 import kr.kro.btr.domain.port.CrewPort
+import kr.kro.btr.domain.port.model.result.CrewMemberResult
 import kr.kro.btr.domain.port.model.result.CrewResult
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.exception.AuthorizationException
@@ -36,5 +37,10 @@ class CrewProxy(
     fun create(request: CreateCrewRequest) {
         val command = request.toCreateCrewCommand()
         crewPort.create(command)
+    }
+
+    @Cacheable(key = "'members: ' + #crewId")
+    fun searchMembers(crewId: Long): List<CrewMemberResult> {
+        return crewPort.searchMembers(crewId)
     }
 }

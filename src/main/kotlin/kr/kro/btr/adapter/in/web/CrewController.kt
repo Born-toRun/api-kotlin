@@ -3,10 +3,13 @@ package kr.kro.btr.adapter.`in`.web
 import jakarta.validation.Valid
 import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
+import kr.kro.btr.adapter.`in`.web.payload.SearchCrewMembersResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.base.extension.toDetailCrewResponse
+import kr.kro.btr.base.extension.toSearchCrewMembersResponse
 import kr.kro.btr.base.extension.toSearchCrewResponse
+import kr.kro.btr.domain.port.model.result.CrewMemberResult
 import kr.kro.btr.domain.port.model.result.CrewResult
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
@@ -40,6 +43,13 @@ class CrewController(
     fun detailMyCrew(@AuthUser my: TokenDetail): ResponseEntity<DetailCrewResponse> {
         val crew = crewProxy.detailMyCrew(my.crewId)
         val response = crew.toDetailCrewResponse()
+        return ResponseEntity.ok(response)
+    }
+
+    @GetMapping("/{crewId}/members", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun searchMembers(@PathVariable crewId: Long): ResponseEntity<SearchCrewMembersResponse> {
+        val members: List<CrewMemberResult> = crewProxy.searchMembers(crewId)
+        val response = members.toSearchCrewMembersResponse()
         return ResponseEntity.ok(response)
     }
 
