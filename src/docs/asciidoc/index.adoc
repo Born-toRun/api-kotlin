@@ -10,6 +10,8 @@
 operation::search-crews[snippets="http-request,http-response,response-fields"]
 === 상세 조회
 operation::search-crew-detail[snippets="http-request,path-parameters,http-response,response-fields"]
+=== 나의 크루 상세 조회
+operation::search-my-crew-detail[snippets="http-request,http-response,response-fields"]
 === 등록
 operation::create-crews[snippets="http-request,request-fields,http-response"]
 
