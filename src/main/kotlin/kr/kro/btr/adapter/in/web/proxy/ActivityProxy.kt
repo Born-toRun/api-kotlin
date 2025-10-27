@@ -8,6 +8,7 @@ import kr.kro.btr.base.extension.toAttendanceActivityCommand
 import kr.kro.btr.base.extension.toCreateActivityCommand
 import kr.kro.btr.base.extension.toModifyActivityCommand
 import kr.kro.btr.base.extension.toSearchAllActivityCommand
+import kr.kro.btr.base.extension.toSearchByCrewIdActivityCommand
 import kr.kro.btr.domain.port.ActivityPort
 import kr.kro.btr.domain.port.model.ParticipateActivityCommand
 import kr.kro.btr.domain.port.model.result.ActivityResult
@@ -56,6 +57,12 @@ class ActivityProxy(
     fun searchAll(request: SearchActivitiesRequest, my: TokenDetail): List<ActivityResult> {
         val command = request.toSearchAllActivityCommand(my)
         return activityPort.searchAll(command)
+    }
+
+    @Cacheable(key = "'searchByCrewId: ' + #crewId + #request.hashCode()")
+    fun searchByCrewId(crewId: Long, request: SearchActivitiesRequest): List<ActivityResult> {
+        val command = request.toSearchByCrewIdActivityCommand(crewId)
+        return activityPort.searchByCrewId(command)
     }
 
     @Cacheable(key = "'search: ' + #my.id + #activityId")

@@ -58,6 +58,16 @@ class ActivityController(
         return ResponseEntity.ok(response)
     }
 
+    @GetMapping("/crew/{crewId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun searchByCrewId(
+        @PathVariable crewId: Long,
+        @Valid @ModelAttribute request: SearchActivitiesRequest
+    ): ResponseEntity<SearchActivitiesResponse> {
+        val activities = activityProxy.searchByCrewId(crewId, request)
+        val response = activities.toSearchActivityResponse()
+        return ResponseEntity.ok(response)
+    }
+
     @GetMapping("/{activityId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun search(
         @AuthUser my: TokenDetail,

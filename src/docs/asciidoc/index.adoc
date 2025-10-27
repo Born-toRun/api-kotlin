@@ -114,6 +114,8 @@ operation::participate-activities[snippets="http-request,path-parameters,http-re
 operation::cancel-participate-activities[snippets="http-request,path-parameters,http-response"]
 === 목록 조회
 operation::search-activities[snippets="http-request,query-parameters,http-response,response-fields"]
+=== 크루별 목록 조회
+operation::search-crew-activities[snippets="http-request,path-parameters,query-parameters,http-response,response-fields"]
 === 상세 조회
 operation::search-activities-detail[snippets="http-request,path-parameters,http-response,response-fields"]
 === 오픈

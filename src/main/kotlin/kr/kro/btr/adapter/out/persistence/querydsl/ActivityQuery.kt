@@ -21,6 +21,11 @@ class ActivityQuery(
     fun searchAllByFilter(query: SearchAllActivityQuery): List<ActivityEntity> {
         val activity = QActivityEntity.activityEntity
 
+        // 크루에 소속되지 않은 사용자는 빈 리스트 반환
+        if (query.myCrewId == null) {
+            return emptyList()
+        }
+
         var whereClause: BooleanExpression = activity.userEntity.crewId.eq(query.myCrewId)
         var optionalWhereClause: BooleanExpression? = null
 

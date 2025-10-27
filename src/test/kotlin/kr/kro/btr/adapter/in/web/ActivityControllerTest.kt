@@ -227,6 +227,120 @@ class ActivityControllerTest (
         }
     }
 
+    describe("GET : $baseUrl/crew/{crewId}") {
+        val url = "$baseUrl/crew/{crewId}"
+        val crewId = 1L
+        val queryParam = SearchActivitiesRequest(
+            courses = listOf("course1", "course2"),
+            recruitmentType = ActivityRecruitmentType.RECRUITING
+        )
+        val activityResults = listOf(
+            ActivityResult(
+                id = 0,
+                title = "title",
+                contents = "contents",
+                startAt = LocalDateTime.now(),
+                venue = "venue",
+                venueUrl = "venueUrl",
+                participantsLimit = 1,
+                participantsQty = 1,
+                participationFee = 0,
+                course = "course",
+                courseDetail = "courseDetail",
+                path = "path",
+                isOpen = true,
+                updatedAt = LocalDateTime.now(),
+                registeredAt = LocalDateTime.now(),
+                recruitmentType = queryParam.recruitmentType,
+                imageUrls = listOf("https://example.com/image1.jpg", "https://example.com/image2.jpg"),
+                host = ActivityResult.Host(
+                    userId = 0,
+                    crewId = crewId,
+                    userProfileUri = "userProfileUri",
+                    userName = "userName",
+                    crewName = "crewName",
+                    isManager = true,
+                    isAdmin = false
+                ),
+            )
+        )
+        val response = SearchActivitiesResponse(
+            details = listOf(
+                SearchActivitiesResponse.Activity(
+                    id = activityResults[0].id,
+                    title = activityResults[0].title,
+                    host = SearchActivitiesResponse.Host(
+                        userId = activityResults[0].host.userId,
+                        crewId = activityResults[0].host.crewId,
+                        userProfileUri = activityResults[0].host.userProfileUri,
+                        userName = activityResults[0].host.userName,
+                        crewName = activityResults[0].host.crewName,
+                        isManager = activityResults[0].host.isManager,
+                        isAdmin = activityResults[0].host.isAdmin
+                    ),
+                    startAt = getDateTimeByFormat(activityResults[0].startAt),
+                    course = activityResults[0].course,
+                    participantsLimit = activityResults[0].participantsLimit,
+                    participantsQty = activityResults[0].participantsQty,
+                    updatedAt = getDateTimeByFormat(activityResults[0].updatedAt),
+                    registeredAt = getDateTimeByFormat(activityResults[0].registeredAt),
+                    isOpen = activityResults[0].isOpen,
+                    recruitmentType = activityResults[0].recruitmentType,
+                    imageUrls = activityResults[0].imageUrls
+                )
+            )
+        )
+
+        context("크루별 행사 조회를 하면") {
+            val request = request(HttpMethod.GET, url, crewId)
+                .contentType(APPLICATION_JSON)
+                .param("courses", queryParam.courses?.joinToString(","))
+                .param("recruitmentType", queryParam.recruitmentType?.name)
+
+            it("200 OK") {
+                every { proxy.searchByCrewId(any(), any()) } returns activityResults
+
+                mockMvc.perform(request)
+                    .andExpect(status().isOk)
+                    .andExpectData(
+                        jsonPath("$.details[0].id") shouldBe response.details[0].id,
+                        jsonPath("$.details[0].title") shouldBe response.details[0].title,
+                        jsonPath("$.details[0].startAt") shouldBe response.details[0].startAt,
+                        jsonPath("$.details[0].course") shouldBe response.details[0].course,
+                        jsonPath("$.details[0].participantsLimit") shouldBe response.details[0].participantsLimit,
+                        jsonPath("$.details[0].participantsQty") shouldBe response.details[0].participantsQty,
+                        jsonPath("$.details[0].updatedAt") shouldBe response.details[0].updatedAt,
+                        jsonPath("$.details[0].registeredAt") shouldBe response.details[0].registeredAt,
+                        jsonPath("$.details[0].isOpen") shouldBe response.details[0].isOpen,
+                        jsonPath("$.details[0].recruitmentType") shouldBe response.details[0].recruitmentType,
+                        jsonPath("$.details[0].imageUrls[0]") shouldBe response.details[0].imageUrls[0],
+                        jsonPath("$.details[0].imageUrls[1]") shouldBe response.details[0].imageUrls[1],
+                        jsonPath("$.details[0].host.userId") shouldBe response.details[0].host.userId,
+                        jsonPath("$.details[0].host.crewId") shouldBe response.details[0].host.crewId,
+                        jsonPath("$.details[0].host.userProfileUri") shouldBe response.details[0].host.userProfileUri,
+                        jsonPath("$.details[0].host.userName") shouldBe response.details[0].host.userName,
+                        jsonPath("$.details[0].host.crewName") shouldBe response.details[0].host.crewName,
+                        jsonPath("$.details[0].host.isManager") shouldBe response.details[0].host.isManager,
+                        jsonPath("$.details[0].host.isAdmin") shouldBe response.details[0].host.isAdmin,
+                    )
+                    .andDocument(
+                        "search-crew-activities",
+                        pathParameters(
+                            "crewId" isRequired true pathMeans "크루 식별자"
+                        ),
+                        queryParameters(
+                            "courses" isRequired false pathMeans "코스 리스트",
+                            "recruitmentType" isRequired false pathMeans "상태"
+                        ),
+                        responseBody(
+                            "details" type ARRAY means "행사 목록" isRequired true,
+                        )
+                            .andWithPrefix("details[]", getActivitiesResponseSnippet())
+                    )
+            }
+        }
+    }
+
     describe("GET : $baseUrl") {
         val url = baseUrl
         val queryParam = SearchActivitiesRequest(

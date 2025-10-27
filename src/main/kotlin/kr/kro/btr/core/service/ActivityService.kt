@@ -8,12 +8,14 @@ import kr.kro.btr.base.extension.toModifyActivityQuery
 import kr.kro.btr.base.extension.toParticipantResult
 import kr.kro.btr.base.extension.toParticipateActivityQuery
 import kr.kro.btr.base.extension.toSearchAllActivityQuery
+import kr.kro.btr.base.extension.toSearchByCrewIdActivityQuery
 import kr.kro.btr.domain.port.ActivityPort
 import kr.kro.btr.domain.port.model.AttendanceActivityCommand
 import kr.kro.btr.domain.port.model.CreateActivityCommand
 import kr.kro.btr.domain.port.model.ModifyActivityCommand
 import kr.kro.btr.domain.port.model.ParticipateActivityCommand
 import kr.kro.btr.domain.port.model.SearchAllActivityCommand
+import kr.kro.btr.domain.port.model.SearchByCrewIdActivityCommand
 import kr.kro.btr.domain.port.model.result.ActivityResult
 import kr.kro.btr.domain.port.model.result.ParticipantResult
 import kr.kro.btr.infrastructure.ActivityGateway
@@ -63,6 +65,14 @@ class ActivityService(
         val query = command.toSearchAllActivityQuery()
         val activityEntities = activityGateway.searchAll(query)
         return activityEntities.toActivityResults(command.myUserId)
+    }
+
+    @Transactional(readOnly = true)
+    override fun searchByCrewId(command: SearchByCrewIdActivityCommand): List<ActivityResult> {
+        val query = command.toSearchByCrewIdActivityQuery()
+        val activityEntities = activityGateway.searchAll(query)
+        // Use a default userId of 0 for public access since no user context is available
+        return activityEntities.toActivityResults(0L)
     }
 
     @Transactional(readOnly = true)

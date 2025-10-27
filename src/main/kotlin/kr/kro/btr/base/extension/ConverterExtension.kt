@@ -154,6 +154,14 @@ fun SearchActivitiesRequest.toSearchAllActivityCommand(my: TokenDetail): SearchA
     )
 }
 
+fun SearchActivitiesRequest.toSearchByCrewIdActivityCommand(crewId: Long): SearchByCrewIdActivityCommand {
+    return SearchByCrewIdActivityCommand(
+        crewId = crewId,
+        courses = this.courses,
+        recruitmentType = this.recruitmentType
+    )
+}
+
 fun AttendanceActivityRequest.toAttendanceActivityCommand(activityId: Long, myUserId: Long): AttendanceActivityCommand {
     return AttendanceActivityCommand(
         activityId = activityId,
@@ -201,6 +209,15 @@ fun SearchAllActivityCommand.toSearchAllActivityQuery(): SearchAllActivityQuery 
         recruitmentType = this.recruitmentType,
         myCrewId = this.myCrewId,
         myUserId = this.myUserId
+    )
+}
+
+fun SearchByCrewIdActivityCommand.toSearchByCrewIdActivityQuery(): SearchAllActivityQuery {
+    return SearchAllActivityQuery(
+        courses = this.courses,
+        recruitmentType = this.recruitmentType,
+        myCrewId = this.crewId,
+        myUserId = 0L
     )
 }
 
