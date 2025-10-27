@@ -1,7 +1,9 @@
 package kr.kro.btr.adapter.`in`.web.proxy
 
 import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
+import kr.kro.btr.adapter.`in`.web.payload.ModifyCrewRequest
 import kr.kro.btr.base.extension.toCreateCrewCommand
+import kr.kro.btr.base.extension.toModifyCrewCommand
 import kr.kro.btr.domain.port.CrewPort
 import kr.kro.btr.domain.port.model.result.CrewMemberResult
 import kr.kro.btr.domain.port.model.result.CrewResult
@@ -37,6 +39,12 @@ class CrewProxy(
     fun create(request: CreateCrewRequest) {
         val command = request.toCreateCrewCommand()
         crewPort.create(command)
+    }
+
+    @CacheEvict(allEntries = true)
+    fun modify(request: ModifyCrewRequest, crewId: Long) {
+        val command = request.toModifyCrewCommand(crewId)
+        crewPort.modify(command)
     }
 
     @Cacheable(key = "'members: ' + #crewId")

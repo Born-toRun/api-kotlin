@@ -662,6 +662,30 @@ fun CreateCrewQuery.toCrewEntity(): CrewEntity {
     )
 }
 
+fun ModifyCrewRequest.toModifyCrewCommand(crewId: Long): ModifyCrewCommand {
+    return ModifyCrewCommand(
+        crewId = crewId,
+        name = this.name,
+        contents = this.contents,
+        sns = this.sns,
+        region = this.region,
+        imageId = this.imageId,
+        logoId = this.logoId
+    )
+}
+
+fun ModifyCrewCommand.toModifyCrewQuery(): ModifyCrewQuery {
+    return ModifyCrewQuery(
+        crewId = this.crewId,
+        name = this.name,
+        contents = this.contents,
+        sns = this.sns,
+        region = this.region,
+        imageId = this.imageId,
+        logoId = this.logoId
+    )
+}
+
 // crew members
 fun List<CrewMemberResult>.toSearchCrewMembersResponse(): SearchCrewMembersResponse {
     val members = this.map { it.toCrewMember() }

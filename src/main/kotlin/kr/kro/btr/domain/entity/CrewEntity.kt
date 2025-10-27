@@ -9,12 +9,12 @@ class CrewEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
-    val name: String,
-    val contents: String,
-    val sns: String? = null,
-    val region: String,
-    val imageId: Long? = null,
-    val logoId: Long? = null,
+    var name: String,
+    var contents: String,
+    var sns: String? = null,
+    var region: String,
+    var imageId: Long? = null,
+    var logoId: Long? = null,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "imageId", insertable = false, updatable = false)
@@ -26,4 +26,13 @@ class CrewEntity(
 ) {
     @OneToMany(mappedBy = "crewEntity")
     val userEntities: MutableSet<UserEntity> = mutableSetOf()
+
+    fun modify(query: kr.kro.btr.infrastructure.model.ModifyCrewQuery) {
+        query.name.takeIf { it != name }?.let { name = it }
+        query.contents.takeIf { it != contents }?.let { contents = it }
+        query.sns?.takeIf { it != sns }?.let { sns = it }
+        query.region.takeIf { it != region }?.let { region = it }
+        query.imageId?.let { imageId = it }
+        query.logoId?.let { logoId = it }
+    }
 }

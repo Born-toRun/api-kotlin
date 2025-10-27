@@ -3,6 +3,7 @@ package kr.kro.btr.adapter.`in`.web
 import jakarta.validation.Valid
 import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
+import kr.kro.btr.adapter.`in`.web.payload.ModifyCrewRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewMembersResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
@@ -57,5 +58,14 @@ class CrewController(
     fun create(@RequestBody @Valid request: CreateCrewRequest): ResponseEntity<Void> {
         crewProxy.create(request)
         return ResponseEntity(CREATED)
+    }
+
+    @PutMapping("/{crewId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun modify(
+        @PathVariable crewId: Long,
+        @Valid @RequestBody request: ModifyCrewRequest
+    ): ResponseEntity<Void> {
+        crewProxy.modify(request, crewId)
+        return ResponseEntity.ok().build()
     }
 }

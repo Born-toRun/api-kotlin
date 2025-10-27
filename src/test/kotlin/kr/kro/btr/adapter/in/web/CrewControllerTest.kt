@@ -6,6 +6,7 @@ import io.mockk.just
 import io.mockk.runs
 import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
+import kr.kro.btr.adapter.`in`.web.payload.ModifyCrewRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
@@ -301,6 +302,47 @@ class CrewControllerTest (
                             "contents" type STRING means "크루소개" isRequired true,
                             "sns" type STRING means "크루 sns uri" isRequired false,
                             "region" type STRING means "크루 활동 지역" isRequired true
+                        )
+                    )
+            }
+        }
+    }
+
+    describe("PUT : $baseUrl/{crewId}") {
+        val url = "$baseUrl/{crewId}"
+        val crewId = 1L
+        val requestBody = ModifyCrewRequest(
+            name = "Updated Crew Name",
+            contents = "Updated crew description",
+            sns = "https://instagram.com/updated",
+            region = "Updated Region",
+            imageId = 100L,
+            logoId = 200L
+        )
+
+        context("수정을 하면") {
+            every { proxy.modify(any(), any()) } just runs
+
+            val requestJson = toJson(requestBody)
+            val request = request(HttpMethod.PUT, url, crewId)
+                .contentType(APPLICATION_JSON)
+                .content(requestJson)
+
+            it("200 OK") {
+                mockMvc.perform(request)
+                    .andExpect(status().isOk)
+                    .andDocument(
+                        "modify-crews",
+                        pathParameters(
+                            "crewId" isRequired true pathMeans "크루 식별자"
+                        ),
+                        requestBody(
+                            "name" type STRING means "크루명" isRequired true,
+                            "contents" type STRING means "크루소개" isRequired true,
+                            "sns" type STRING means "크루 sns uri" isRequired false,
+                            "region" type STRING means "크루 활동 지역" isRequired true,
+                            "imageId" type NUMBER means "대표 이미지 ID" isRequired false,
+                            "logoId" type NUMBER means "로고 이미지 ID" isRequired false
                         )
                     )
             }
