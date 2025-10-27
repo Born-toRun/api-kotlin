@@ -619,6 +619,19 @@ fun CrewResult.toDetailCrewResponse(): DetailCrewResponse {
     )
 }
 
+fun CrewResult.toMyCrewDetailResponse(isManager: Boolean): MyCrewDetailResponse {
+    return MyCrewDetailResponse(
+        id = this.id,
+        crewName = this.name,
+        contents = this.contents,
+        region = this.region,
+        imageUri = this.imageUri,
+        logoUri = this.logoUri,
+        crewSnsUri = this.sns,
+        isManager = isManager
+    )
+}
+
 fun CreateCrewRequest.toCreateCrewCommand(): CreateCrewCommand {
     return CreateCrewCommand(
         name = this.name,

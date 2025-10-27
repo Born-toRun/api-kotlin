@@ -7,6 +7,7 @@ import io.mockk.runs
 import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyCrewRequest
+import kr.kro.btr.adapter.`in`.web.payload.MyCrewDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
@@ -174,14 +175,15 @@ class CrewControllerTest (
             logoUri = "logoUri",
             sns = "crewSnsUri"
         )
-        val response = DetailCrewResponse(
+        val response = MyCrewDetailResponse(
             id = crewResult.id,
             crewName = crewResult.name,
             contents = crewResult.contents,
             region = crewResult.region,
             imageUri = crewResult.imageUri,
             logoUri = crewResult.logoUri,
-            crewSnsUri = crewResult.sns
+            crewSnsUri = crewResult.sns,
+            isManager = false
         )
 
         context("로그인 사용자의 크루 상세 조회를 하면") {
@@ -200,7 +202,8 @@ class CrewControllerTest (
                         jsonPath("$.region") shouldBe response.region,
                         jsonPath("$.imageUri") shouldBe response.imageUri,
                         jsonPath("$.logoUri") shouldBe response.logoUri,
-                        jsonPath("$.crewSnsUri") shouldBe response.crewSnsUri
+                        jsonPath("$.crewSnsUri") shouldBe response.crewSnsUri,
+                        jsonPath("$.isManager") shouldBe response.isManager
                     )
                     .andDocument(
                         "search-my-crew-detail",
@@ -211,7 +214,8 @@ class CrewControllerTest (
                             "region" type STRING means "크루 활동 지역" isRequired true,
                             "imageUri" type STRING means "크루 대표 이미지 uri" isRequired false,
                             "logoUri" type STRING means "크루 로고 uri" isRequired false,
-                            "crewSnsUri" type STRING means "크루 sns uri" isRequired false
+                            "crewSnsUri" type STRING means "크루 sns uri" isRequired false,
+                            "isManager" type BOOLEAN means "매니저 여부" isRequired true
                         )
                     )
             }

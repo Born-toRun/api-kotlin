@@ -4,10 +4,12 @@ import jakarta.validation.Valid
 import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyCrewRequest
+import kr.kro.btr.adapter.`in`.web.payload.MyCrewDetailResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewMembersResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchCrewsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.base.extension.toDetailCrewResponse
+import kr.kro.btr.base.extension.toMyCrewDetailResponse
 import kr.kro.btr.base.extension.toSearchCrewMembersResponse
 import kr.kro.btr.base.extension.toSearchCrewResponse
 import kr.kro.btr.domain.port.model.result.CrewMemberResult
@@ -41,9 +43,9 @@ class CrewController(
     }
 
     @GetMapping("/my", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun detailMyCrew(@AuthUser my: TokenDetail): ResponseEntity<DetailCrewResponse> {
+    fun detailMyCrew(@AuthUser my: TokenDetail): ResponseEntity<MyCrewDetailResponse> {
         val crew = crewProxy.detailMyCrew(my.crewId)
-        val response = crew.toDetailCrewResponse()
+        val response = crew.toMyCrewDetailResponse(my.isManager)
         return ResponseEntity.ok(response)
     }
 
