@@ -86,21 +86,31 @@ class ActivityGateway(
     fun searchAll(query: SearchAllActivityQuery): List<ActivityEntity> {
         val activityEntities = activityQuery.searchAllByFilter(query)
 
-        query.recruitmentType?.let {
-            return when (it) {
-                RECRUITING -> activityEntities.filter { a ->
-                    a.participantsLimit > a.activityParticipationEntities.size
+        query.recruitmentType?.let { recruitmentType ->
+            val now = LocalDateTime.now()
+
+            return when (recruitmentType) {
+                // CLOSED (종료): isOpen == true AND startAt < now()
+                CLOSED -> activityEntities.filter { a ->
+                    a.isOpen && a.startAt.isBefore(now)
                 }
+
+                // FULL (정원마감): isOpen == false AND startAt > now() AND participantsLimit == participantsQty
+                FULL -> activityEntities.filter { a ->
+                    val participantsQty = a.activityParticipationEntities.size
+                    !a.isOpen && a.startAt.isAfter(now) && a.participantsLimit == participantsQty
+                }
+
+                // RECRUITING (모집중): isOpen == false AND startAt > now()
+                RECRUITING -> activityEntities.filter { a ->
+                    !a.isOpen && a.startAt.isAfter(now)
+                }
+
+                // ALREADY_PARTICIPATING (참여완료): User is already participating
                 ALREADY_PARTICIPATING -> activityEntities.filter { a ->
                     a.activityParticipationEntities.any { ap ->
                         ap.userEntity?.id == query.myUserId
                     }
-                }
-                ENDED -> activityEntities.filter { a ->
-                    a.startAt.isBefore(LocalDateTime.now())
-                }
-                CLOSED -> activityEntities.filter { a ->
-                    a.participantsLimit <= a.activityParticipationEntities.size
                 }
             }
         }

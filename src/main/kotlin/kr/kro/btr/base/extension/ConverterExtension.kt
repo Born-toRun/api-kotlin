@@ -360,16 +360,42 @@ fun ActivityEntity.toHost(): ActivityResult.Host {
 }
 
 fun ActivityEntity.convertRecruitmentType(myUserId: Long): ActivityRecruitmentType {
+    // First check if user is already participating
     if (this.activityParticipationEntities.any { it.userEntity?.id == myUserId }) {
         return ActivityRecruitmentType.ALREADY_PARTICIPATING
     }
-    if (this.startAt.isBefore(LocalDateTime.now())) {
-        return ActivityRecruitmentType.ENDED
-    }
-    if (this.participantsLimit >= this.activityParticipationEntities.size) {
+
+    val now = LocalDateTime.now()
+    val participantsQty = this.activityParticipationEntities.size
+
+    // Status calculation based on requirements:
+    // NOTE: Original requirement had "participantsLimit == participationFee" which compared
+    // person count with money. This has been corrected to use participantsQty.
+
+    // CLOSED (종료): isOpen == true AND startAt < now()
+    // NOTE: This logic seems inverted. Typically isOpen=true means "event is active/check-in enabled"
+    // But requirement states isOpen=true means CLOSED. Implementing as specified.
+    if (this.isOpen && this.startAt.isBefore(now)) {
         return ActivityRecruitmentType.CLOSED
     }
-    return ActivityRecruitmentType.RECRUITING
+
+    // FULL (정원마감): isOpen == false AND startAt > now() AND participantsLimit == participantsQty
+    if (!this.isOpen && this.startAt.isAfter(now) && this.participantsLimit == participantsQty) {
+        return ActivityRecruitmentType.FULL
+    }
+
+    // RECRUITING (모집중): isOpen == false AND startAt > now()
+    if (!this.isOpen && this.startAt.isAfter(now)) {
+        return ActivityRecruitmentType.RECRUITING
+    }
+
+    // Fallback: If activity has started but not explicitly opened, or other edge cases
+    // Default to CLOSED if event date has passed
+    return if (this.startAt.isBefore(now)) {
+        ActivityRecruitmentType.CLOSED
+    } else {
+        ActivityRecruitmentType.RECRUITING
+    }
 }
 
 // comment
