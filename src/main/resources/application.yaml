@@ -66,6 +66,11 @@ app:
     auth:
         tokenExpiry: 600000
         refreshTokenExpiry: 604800000
+    oauth2:
+        authorizedRedirectUris:
+            - 'http://localhost:3000'
+            - 'https://born-to-run.kro.kr'
+            - 'https://born-to-run.kro.kr:8443'
 adapter:
     discord:
         host: 'https://discord.com'

@@ -5,7 +5,6 @@ import kr.kro.btr.domain.constant.ProviderType
 import kr.kro.btr.domain.constant.RoleType
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
-import org.springframework.util.StringUtils
 import java.time.LocalDateTime
 
 @Entity
@@ -81,7 +80,7 @@ class UserEntity(
         if (profileImageId != 0L) {
             this.imageId = profileImageId
         }
-        if (StringUtils.hasLength(instagramId)) {
+        if (!instagramId.isNullOrBlank()) {
             this.instagramId = instagramId
         }
     }

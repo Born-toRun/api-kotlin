@@ -5,8 +5,8 @@ import kr.kro.btr.adapter.out.persistence.UserRepository
 import kr.kro.btr.base.extension.toCrewEntity
 import kr.kro.btr.domain.entity.CrewEntity
 import kr.kro.btr.domain.entity.UserEntity
+import kr.kro.btr.domain.model.ModifyCrewQuery
 import kr.kro.btr.infrastructure.model.CreateCrewQuery
-import kr.kro.btr.infrastructure.model.ModifyCrewQuery
 import kr.kro.btr.support.exception.NotFoundException
 import org.springframework.stereotype.Component
 

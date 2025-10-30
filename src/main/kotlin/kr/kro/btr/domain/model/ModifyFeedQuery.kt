@@ -1,4 +1,4 @@
-package kr.kro.btr.infrastructure.model
+package kr.kro.btr.domain.model
 
 import kr.kro.btr.domain.constant.FeedAccessLevel
 import kr.kro.btr.domain.constant.FeedCategory

@@ -4,17 +4,17 @@ import kr.kro.btr.base.extension.toRemoveObjectStorageCommand
 import kr.kro.btr.base.extension.toUploadObjectStorageCommand
 import kr.kro.btr.domain.constant.Bucket
 import kr.kro.btr.domain.port.ObjectStoragePort
+import kr.kro.btr.domain.model.FileUpload
 import kr.kro.btr.domain.port.model.result.ObjectStorageResult
 import kr.kro.btr.support.TokenDetail
 import org.springframework.stereotype.Component
-import org.springframework.web.multipart.MultipartFile
 
 @Component
 class ObjectStorageProxy(
     private val objectStoragePort: ObjectStoragePort
 ) {
 
-    fun upload(my: TokenDetail, bucket: Bucket, file: MultipartFile): ObjectStorageResult {
+    fun upload(my: TokenDetail, bucket: Bucket, file: FileUpload): ObjectStorageResult {
         val command = my.toUploadObjectStorageCommand(file, bucket)
         return objectStoragePort.upload(command)
     }

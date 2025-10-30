@@ -3,9 +3,9 @@ package kr.kro.btr.core.event
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kr.kro.btr.base.extension.toRemove
 import kr.kro.btr.base.extension.toRemoveAll
-import kr.kro.btr.core.event.model.MinioRemoveAllEventModel
-import kr.kro.btr.core.event.model.MinioRemoveEventModel
 import kr.kro.btr.infrastructure.MinioGateway
+import kr.kro.btr.infrastructure.event.MinioRemoveAllEventModel
+import kr.kro.btr.infrastructure.event.MinioRemoveEventModel
 import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener

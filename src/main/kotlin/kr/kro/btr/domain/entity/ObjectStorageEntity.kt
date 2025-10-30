@@ -1,14 +1,12 @@
 package kr.kro.btr.domain.entity
 
 import jakarta.persistence.*
-import kr.kro.btr.core.event.MinioRemoveListener
 import org.hibernate.annotations.DynamicInsert
 import java.time.LocalDateTime
 
 @Entity
 @Table(name = "object_storage")
 @DynamicInsert
-@EntityListeners(MinioRemoveListener::class)
 class ObjectStorageEntity(
 
     @Id

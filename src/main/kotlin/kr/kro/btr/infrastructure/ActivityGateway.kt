@@ -11,9 +11,9 @@ import kr.kro.btr.domain.constant.ActivityRecruitmentType.*
 import kr.kro.btr.domain.entity.ActivityEntity
 import kr.kro.btr.domain.entity.ActivityImageMappingEntity
 import kr.kro.btr.domain.entity.ActivityParticipationEntity
+import kr.kro.btr.domain.model.ModifyActivityQuery
 import kr.kro.btr.infrastructure.model.AttendanceActivityQuery
 import kr.kro.btr.infrastructure.model.CreateActivityQuery
-import kr.kro.btr.infrastructure.model.ModifyActivityQuery
 import kr.kro.btr.infrastructure.model.ParticipateActivityQuery
 import kr.kro.btr.infrastructure.model.SearchAllActivityQuery
 import kr.kro.btr.support.exception.InvalidException

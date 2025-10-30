@@ -2,6 +2,7 @@ package kr.kro.btr.adapter.`in`.web
 
 
 import kr.kro.btr.adapter.`in`.web.payload.UploadFileResponse
+import kr.kro.btr.adapter.`in`.web.payload.toFileUpload
 import kr.kro.btr.adapter.`in`.web.proxy.ObjectStorageProxy
 import kr.kro.btr.base.extension.toUploadFileResponse
 import kr.kro.btr.domain.constant.Bucket
@@ -29,7 +30,7 @@ class ObjectStorageController(
         @PathVariable bucket: Bucket,
         @RequestParam("file") file: MultipartFile
     ): ResponseEntity<UploadFileResponse> {
-        val objectStorageResult: ObjectStorageResult = objectStorageProxy.upload(my, bucket, file)
+        val objectStorageResult: ObjectStorageResult = objectStorageProxy.upload(my, bucket, file.toFileUpload())
         val response: UploadFileResponse = objectStorageResult.toUploadFileResponse()
         return ResponseEntity.ok(response)
     }

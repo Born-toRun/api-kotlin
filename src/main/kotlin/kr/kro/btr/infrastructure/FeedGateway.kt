@@ -6,8 +6,8 @@ import kr.kro.btr.adapter.out.persistence.querydsl.FeedQuery
 import kr.kro.btr.base.extension.toFeedEntity
 import kr.kro.btr.domain.entity.FeedEntity
 import kr.kro.btr.domain.entity.FeedImageMappingEntity
+import kr.kro.btr.domain.model.ModifyFeedQuery
 import kr.kro.btr.infrastructure.model.CreateFeedQuery
-import kr.kro.btr.infrastructure.model.ModifyFeedQuery
 import kr.kro.btr.infrastructure.model.SearchAllFeedQuery
 import kr.kro.btr.support.exception.NotFoundException
 import org.springframework.data.domain.Page

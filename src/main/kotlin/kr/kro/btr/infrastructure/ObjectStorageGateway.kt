@@ -4,9 +4,9 @@ import kr.kro.btr.adapter.out.persistence.ObjectStorageRepository
 import kr.kro.btr.base.extension.findByIdOrThrow
 import kr.kro.btr.base.extension.toUpload
 import kr.kro.btr.config.properties.MinioProperties
-import kr.kro.btr.core.event.model.MinioRemoveAllEventModel
-import kr.kro.btr.core.event.model.MinioRemoveEventModel
 import kr.kro.btr.domain.entity.ObjectStorageEntity
+import kr.kro.btr.infrastructure.event.MinioRemoveAllEventModel
+import kr.kro.btr.infrastructure.event.MinioRemoveEventModel
 import kr.kro.btr.infrastructure.model.ModifyObjectStorageQuery
 import kr.kro.btr.infrastructure.model.RemoveAllObjectStorageQuery
 import kr.kro.btr.infrastructure.model.RemoveObjectStorageQuery

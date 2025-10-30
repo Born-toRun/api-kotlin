@@ -4,8 +4,8 @@ import kr.kro.btr.adapter.out.persistence.AnnounceRepository
 import kr.kro.btr.base.extension.findByIdOrThrow
 import kr.kro.btr.base.extension.toAnnounceEntity
 import kr.kro.btr.domain.entity.AnnounceEntity
+import kr.kro.btr.domain.model.ModifyAnnounceQuery
 import kr.kro.btr.infrastructure.model.CreateAnnounceQuery
-import kr.kro.btr.infrastructure.model.ModifyAnnounceQuery
 import org.springframework.stereotype.Component
 
 @Component

@@ -8,7 +8,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import kr.kro.btr.infrastructure.model.ModifyAnnounceQuery
+import kr.kro.btr.domain.model.ModifyAnnounceQuery
 import java.time.LocalDateTime
 
 @Entity

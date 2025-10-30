@@ -1,4 +1,4 @@
-package kr.kro.btr.infrastructure.model
+package kr.kro.btr.domain.model
 
 data class ModifyCrewQuery(
     val crewId: Long,

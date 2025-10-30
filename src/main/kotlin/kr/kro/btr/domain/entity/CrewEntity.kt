@@ -27,7 +27,7 @@ class CrewEntity(
     @OneToMany(mappedBy = "crewEntity")
     val userEntities: MutableSet<UserEntity> = mutableSetOf()
 
-    fun modify(query: kr.kro.btr.infrastructure.model.ModifyCrewQuery) {
+    fun modify(query: kr.kro.btr.domain.model.ModifyCrewQuery) {
         query.name.takeIf { it != name }?.let { name = it }
         query.contents.takeIf { it != contents }?.let { contents = it }
         query.sns?.takeIf { it != sns }?.let { sns = it }

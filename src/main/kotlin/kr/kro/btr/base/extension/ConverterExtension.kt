@@ -2,10 +2,11 @@ package kr.kro.btr.base.extension
 
 import kr.kro.btr.adapter.`in`.web.payload.*
 import kr.kro.btr.adapter.out.thirdparty.model.*
-import kr.kro.btr.core.event.model.*
 import kr.kro.btr.domain.constant.*
 import kr.kro.btr.domain.entity.*
+import kr.kro.btr.domain.model.*
 import kr.kro.btr.domain.port.model.*
+import kr.kro.btr.infrastructure.event.*
 import kr.kro.btr.domain.port.model.result.ActivityResult
 import kr.kro.btr.domain.port.model.result.AnnounceResult
 import kr.kro.btr.domain.port.model.result.BornToRunUser
@@ -22,7 +23,6 @@ import kr.kro.btr.domain.port.model.result.ParticipantResult
 import kr.kro.btr.domain.port.model.result.UserPrivacyResult
 import kr.kro.btr.infrastructure.model.*
 import kr.kro.btr.support.TokenDetail
-import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 
 // activity
@@ -1089,7 +1089,7 @@ fun ObjectStorageResult.toUploadFileResponse(): UploadFileResponse {
     )
 }
 
-fun TokenDetail.toUploadObjectStorageCommand(file: MultipartFile, bucket: Bucket): UploadObjectStorageCommand {
+fun TokenDetail.toUploadObjectStorageCommand(file: FileUpload, bucket: Bucket): UploadObjectStorageCommand {
     return UploadObjectStorageCommand(
         myUserId = this.id,
         file = file,
