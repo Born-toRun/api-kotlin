@@ -98,6 +98,7 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("com.epages:restdocs-api-spec:0.19.4")
     testImplementation("com.epages:restdocs-api-spec-mockmvc:0.19.4")
+    testImplementation("com.tngtech.archunit:archunit-junit5:1.4.1")
 
     annotationProcessor("com.querydsl:querydsl-apt:$querydslVersion:jakarta")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
