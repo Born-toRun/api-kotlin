@@ -74,7 +74,8 @@ fun List<FeedResult>.toMyFeedsResponse(): MyFeedsResponse {
     val feeds = this.map { feedResult ->
         MyFeedsResponse.Feed(
             feedId = feedResult.id,
-            contents = feedResult.contents
+            contents = feedResult.contents,
+            imageUris = feedResult.imageUris ?: emptyList()
         )
     }
 

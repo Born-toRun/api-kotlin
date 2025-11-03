@@ -385,7 +385,8 @@ class FeedControllerTest (
         val feedResults = listOf(
             FeedResult(
                 id = 1L,
-                contents = "내가 작성한 첫 번째 피드",
+                imageUris = listOf("https://example.com/image1.jpg", "https://example.com/image2.jpg"),
+                contents = "내가 작성한 첫 번째 피드\n이것은 추가적인 내용입니다.",
                 viewQty = 10,
                 recommendationQty = 5,
                 commentQty = 3,
@@ -402,6 +403,7 @@ class FeedControllerTest (
             ),
             FeedResult(
                 id = 2L,
+                imageUris = emptyList(),
                 contents = "내가 작성한 두 번째 피드",
                 viewQty = 20,
                 recommendationQty = 10,
@@ -431,15 +433,19 @@ class FeedControllerTest (
                     .andExpectData(
                         jsonPath("$.feeds[0].feedId") shouldBe feedResults[0].id,
                         jsonPath("$.feeds[0].contents") shouldBe feedResults[0].contents,
+                        jsonPath("$.feeds[0].imageUris[0]") shouldBe "https://example.com/image1.jpg",
+                        jsonPath("$.feeds[0].imageUris[1]") shouldBe "https://example.com/image2.jpg",
                         jsonPath("$.feeds[1].feedId") shouldBe feedResults[1].id,
-                        jsonPath("$.feeds[1].contents") shouldBe feedResults[1].contents
+                        jsonPath("$.feeds[1].contents") shouldBe feedResults[1].contents,
+                        jsonPath("$.feeds[1].imageUris").isEmpty
                     )
                     .andDocument(
                         "search-my-feeds",
                         responseBody(
                             "feeds" type ARRAY means "피드 목록" isRequired true,
                             "feeds[].feedId" type NUMBER means "피드 식별자" isRequired true,
-                            "feeds[].contents" type STRING means "피드 내용" isRequired true
+                            "feeds[].contents" type STRING means "피드 내용" isRequired true,
+                            "feeds[].imageUris" type ARRAY means "첨부 이미지 URI 목록" isRequired true
                         )
                     )
             }

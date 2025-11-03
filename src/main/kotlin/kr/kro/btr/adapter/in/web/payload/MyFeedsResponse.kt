@@ -5,6 +5,7 @@ data class MyFeedsResponse(
 ) {
     data class Feed(
         val feedId: Long,
-        val contents: String
+        val contents: String,
+        val imageUris: List<String>
     )
 }

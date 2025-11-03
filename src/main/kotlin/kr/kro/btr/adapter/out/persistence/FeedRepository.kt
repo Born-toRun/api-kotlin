@@ -29,4 +29,16 @@ interface FeedRepository : JpaRepository<FeedEntity, Long> {
         """
     )
     fun findAllByUserId(userId: Long): List<FeedEntity>
+
+    @Query(
+        """
+        SELECT DISTINCT f FROM FeedEntity f
+        INNER JOIN FETCH f.userEntity
+        LEFT JOIN FETCH f.feedImageMappingEntities fim
+        LEFT JOIN FETCH fim.objectStorageEntity
+        WHERE f.userId = :userId
+        ORDER BY f.registeredAt DESC
+        """
+    )
+    fun findAllByUserIdWithImages(userId: Long): List<FeedEntity>
 }

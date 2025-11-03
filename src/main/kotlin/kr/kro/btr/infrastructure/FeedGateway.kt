@@ -73,6 +73,6 @@ class FeedGateway(
     }
 
     fun searchMyFeeds(myUserId: Long): List<FeedEntity> {
-        return feedRepository.findAllByUserId(myUserId)
+        return feedRepository.findAllByUserIdWithImages(myUserId)
     }
 }
