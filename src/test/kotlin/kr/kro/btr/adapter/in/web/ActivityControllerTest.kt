@@ -748,8 +748,8 @@ class ActivityControllerTest (
         }
     }
 
-    describe("GET : $baseUrl/my-participations") {
-        val url = "$baseUrl/my-participations"
+    describe("GET : $baseUrl/participation/my") {
+        val url = "$baseUrl/participation/my"
         val activityResults = listOf(
             ActivityResult(
                 id = 1L,

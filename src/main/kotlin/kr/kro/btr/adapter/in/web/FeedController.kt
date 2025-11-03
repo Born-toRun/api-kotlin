@@ -65,7 +65,7 @@ class FeedController(
         return ResponseEntity.ok(feedPage.map { it.toSearchFeedResponse() })
     }
 
-    @GetMapping("/my-feeds", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/my", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun searchMyFeeds(@AuthUser my: TokenDetail): ResponseEntity<MyFeedsResponse> {
         val feeds = feedProxy.searchMyFeeds(my.id)
         val response = feeds.toMyFeedsResponse()

@@ -118,7 +118,7 @@ class ActivityController(
         return ResponseEntity.ok().build()
     }
 
-    @GetMapping("/my-participations", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/participation/my", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun searchMyParticipations(
         @AuthUser my: TokenDetail
     ): ResponseEntity<MyParticipationsResponse> {

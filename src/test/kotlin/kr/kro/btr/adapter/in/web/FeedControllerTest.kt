@@ -380,8 +380,8 @@ class FeedControllerTest (
         }
     }
 
-    describe("GET : $baseUrl/my-feeds") {
-        val url = "$baseUrl/my-feeds"
+    describe("GET : $baseUrl/my") {
+        val url = "$baseUrl/my"
         val feedResults = listOf(
             FeedResult(
                 id = 1L,
