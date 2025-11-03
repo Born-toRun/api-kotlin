@@ -120,9 +120,9 @@ class ActivityController(
 
     @GetMapping("/participation/my", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun searchMyParticipations(
-        @AuthUser my: TokenDetail
+        @AuthUser tokenDetail: TokenDetail
     ): ResponseEntity<MyParticipationsResponse> {
-        val activities = activityProxy.searchMyParticipations(my.id)
+        val activities = activityProxy.searchMyParticipations(tokenDetail.id)
         val response = activities.toMyParticipationsResponse()
         return ResponseEntity.ok(response)
     }
