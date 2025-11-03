@@ -80,4 +80,12 @@ class FeedService(
 
         feedImageMappingGateway.removeAllByFileId(removedImageIds)
     }
+
+    @Transactional(readOnly = true)
+    override fun searchMyFeeds(myUserId: Long): List<FeedResult> {
+        val feedEntities = feedGateway.searchMyFeeds(myUserId)
+        return feedEntities.map { entity ->
+            entity.toFeedCard(myUserId)
+        }
+    }
 }

@@ -85,4 +85,9 @@ class ActivityProxy(
     fun getParticipation(activityId: Long): ParticipantResult {
         return activityPort.getParticipation(activityId)
     }
+
+    @Cacheable(key = "'myParticipations: ' + #myUserId")
+    fun searchMyParticipations(myUserId: Long): List<ActivityResult> {
+        return activityPort.searchMyParticipations(myUserId)
+    }
 }

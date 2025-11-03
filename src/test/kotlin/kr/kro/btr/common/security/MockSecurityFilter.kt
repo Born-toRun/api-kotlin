@@ -19,7 +19,7 @@ class MockSecurityFilter() : Filter {
 		response: ServletResponse?,
 		chain: FilterChain
 	) {
-        val tokenDetail = TokenDetail(id = 1)
+        val tokenDetail = TokenDetail(id = 1, crewId = 1)
 
         val authentication: Authentication = UsernamePasswordAuthenticationToken(
             tokenDetail,

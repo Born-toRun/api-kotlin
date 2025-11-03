@@ -103,4 +103,10 @@ class ActivityService(
         }
         return activityParticipationEntities.toParticipantResult()
     }
+
+    @Transactional(readOnly = true)
+    override fun searchMyParticipations(myUserId: Long): List<ActivityResult> {
+        val activityEntities = activityGateway.searchMyParticipations(myUserId)
+        return activityEntities.toActivityResults(myUserId)
+    }
 }

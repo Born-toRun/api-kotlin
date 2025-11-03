@@ -8,15 +8,25 @@ interface FeedRepository : JpaRepository<FeedEntity, Long> {
 
     @Query(
         """
-        SELECT DISTINCT f FROM FeedEntity f 
+        SELECT DISTINCT f FROM FeedEntity f
         INNER JOIN FETCH f.userEntity
         LEFT JOIN FETCH f.userEntity.profileImageEntity
         INNER JOIN FETCH f.userEntity.crewEntity
-        LEFT JOIN FETCH f.commentEntities 
-        LEFT JOIN FETCH f.feedImageMappingEntities 
-        LEFT JOIN FETCH f.recommendationEntities 
+        LEFT JOIN FETCH f.commentEntities
+        LEFT JOIN FETCH f.feedImageMappingEntities
+        LEFT JOIN FETCH f.recommendationEntities
         WHERE f.id = :id
         """
     )
     fun findByIdOrNull(id: Long): FeedEntity?
+
+    @Query(
+        """
+        SELECT DISTINCT f FROM FeedEntity f
+        INNER JOIN FETCH f.userEntity
+        WHERE f.userId = :userId
+        ORDER BY f.registeredAt DESC
+        """
+    )
+    fun findAllByUserId(userId: Long): List<FeedEntity>
 }

@@ -71,4 +71,8 @@ class FeedGateway(
         return feedRepository.findByIdOrNull(feedId)
             ?: throw NotFoundException("해당 피드를 찾을 수 없습니다.")
     }
+
+    fun searchMyFeeds(myUserId: Long): List<FeedEntity> {
+        return feedRepository.findAllByUserId(myUserId)
+    }
 }

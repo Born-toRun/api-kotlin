@@ -4,10 +4,12 @@ import jakarta.validation.Valid
 import kr.kro.btr.adapter.`in`.web.payload.CreateFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailFeedResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyFeedRequest
+import kr.kro.btr.adapter.`in`.web.payload.MyFeedsResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchFeedsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.FeedProxy
 import kr.kro.btr.base.extension.toDetailFeedResponse
+import kr.kro.btr.base.extension.toMyFeedsResponse
 import kr.kro.btr.base.extension.toSearchFeedResponse
 import kr.kro.btr.domain.port.model.result.FeedDetailResult
 import kr.kro.btr.domain.port.model.result.FeedResult
@@ -61,5 +63,12 @@ class FeedController(
     ): ResponseEntity<Page<SearchFeedsResponse>> {
         val feedPage: Page<FeedResult> = feedProxy.searchAll(request, my, lastFeedId, PageRequest.of(0, size))
         return ResponseEntity.ok(feedPage.map { it.toSearchFeedResponse() })
+    }
+
+    @GetMapping("/my-feeds", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun searchMyFeeds(@AuthUser my: TokenDetail): ResponseEntity<MyFeedsResponse> {
+        val feeds = feedProxy.searchMyFeeds(my.id)
+        val response = feeds.toMyFeedsResponse()
+        return ResponseEntity.ok(response)
     }
 }

@@ -17,4 +17,5 @@ interface FeedPort {
     fun create(command: CreateFeedCommand)
     fun remove(command: RemoveFeedCommand)
     fun modify(command: ModifyFeedCommand)
+    fun searchMyFeeds(myUserId: Long): List<FeedResult>
 }

@@ -6,6 +6,8 @@ import kr.kro.btr.base.extension.toCrewEntity
 import kr.kro.btr.domain.entity.CrewEntity
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.model.ModifyCrewQuery
+import kr.kro.btr.domain.port.model.result.CrewMemberRankingResult
+import kr.kro.btr.domain.port.model.result.CrewRankingResult
 import kr.kro.btr.infrastructure.model.CreateCrewQuery
 import kr.kro.btr.support.exception.NotFoundException
 import org.springframework.stereotype.Component
@@ -38,5 +40,13 @@ class CrewGateway(
 
     fun searchMembersByCrewId(crewId: Long): List<UserEntity> {
         return userRepository.findAllByCrewId(crewId)
+    }
+
+    fun searchRankings(): List<CrewRankingResult> {
+        return crewRepository.findCrewRankings()
+    }
+
+    fun searchMemberRankings(crewId: Long): List<CrewMemberRankingResult> {
+        return userRepository.findCrewMemberRankings(crewId)
     }
 }

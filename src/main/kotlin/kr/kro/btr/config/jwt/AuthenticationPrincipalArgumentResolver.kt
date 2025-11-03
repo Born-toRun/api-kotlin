@@ -3,6 +3,7 @@ package kr.kro.btr.config.jwt
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
 import org.springframework.core.MethodParameter
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
@@ -27,6 +28,10 @@ class AuthenticationPrincipalArgumentResolver : HandlerMethodArgumentResolver {
 
         if (authentication is JwtAuthenticationToken) {
             return TokenDetail(authentication)
+        }
+
+        if (authentication is UsernamePasswordAuthenticationToken && authentication.principal is TokenDetail) {
+            return authentication.principal as TokenDetail
         }
 
         return TokenDetail.defaultUser()

@@ -747,6 +747,100 @@ class ActivityControllerTest (
             }
         }
     }
+
+    describe("GET : $baseUrl/my-participations") {
+        val url = "$baseUrl/my-participations"
+        val activityResults = listOf(
+            ActivityResult(
+                id = 1L,
+                title = "서울 한강 런닝",
+                contents = "contents",
+                startAt = LocalDateTime.of(2024, 3, 15, 19, 0),
+                venue = "한강공원",
+                venueUrl = "venueUrl",
+                participantsLimit = 10,
+                participantsQty = 5,
+                participationFee = 0,
+                course = "10K",
+                courseDetail = "courseDetail",
+                path = "path",
+                isOpen = false,
+                updatedAt = LocalDateTime.now(),
+                registeredAt = LocalDateTime.now(),
+                recruitmentType = ActivityRecruitmentType.ALREADY_PARTICIPATING,
+                imageUrls = emptyList(),
+                host = ActivityResult.Host(
+                    userId = 1,
+                    crewId = 1,
+                    userProfileUri = "userProfileUri",
+                    userName = "userName",
+                    crewName = "crewName",
+                    isManager = true,
+                    isAdmin = false
+                )
+            ),
+            ActivityResult(
+                id = 2L,
+                title = "부산 해운대 런닝",
+                contents = "contents",
+                startAt = LocalDateTime.of(2024, 4, 20, 7, 0),
+                venue = "해운대",
+                venueUrl = "venueUrl",
+                participantsLimit = 15,
+                participantsQty = 8,
+                participationFee = 5000,
+                course = "5K",
+                courseDetail = "courseDetail",
+                path = "path",
+                isOpen = false,
+                updatedAt = LocalDateTime.now(),
+                registeredAt = LocalDateTime.now(),
+                recruitmentType = ActivityRecruitmentType.ALREADY_PARTICIPATING,
+                imageUrls = emptyList(),
+                host = ActivityResult.Host(
+                    userId = 2,
+                    crewId = 1,
+                    userProfileUri = "userProfileUri2",
+                    userName = "userName2",
+                    crewName = "crewName",
+                    isManager = false,
+                    isAdmin = false
+                )
+            )
+        )
+
+        context("나의 참여 목록을 조회하면") {
+            val request = request(HttpMethod.GET, url)
+                .contentType(APPLICATION_JSON)
+
+            it("200 OK") {
+                every { proxy.searchMyParticipations(any()) } returns activityResults
+
+                mockMvc.perform(request)
+                    .andExpect(status().isOk)
+                    .andExpectData(
+                        jsonPath("$.participations[0].activityId") shouldBe activityResults[0].id,
+                        jsonPath("$.participations[0].title") shouldBe activityResults[0].title,
+                        jsonPath("$.participations[0].startAt") shouldBe "2024-03-15 19:00:00",
+                        jsonPath("$.participations[0].course") shouldBe activityResults[0].course,
+                        jsonPath("$.participations[1].activityId") shouldBe activityResults[1].id,
+                        jsonPath("$.participations[1].title") shouldBe activityResults[1].title,
+                        jsonPath("$.participations[1].startAt") shouldBe "2024-04-20 07:00:00",
+                        jsonPath("$.participations[1].course") shouldBe activityResults[1].course
+                    )
+                    .andDocument(
+                        "search-my-participations",
+                        responseBody(
+                            "participations" type ARRAY means "참여 목록" isRequired true,
+                            "participations[].activityId" type NUMBER means "행사 식별자" isRequired true,
+                            "participations[].title" type STRING means "행사명" isRequired true,
+                            "participations[].startAt" type STRING means "일자 (yyyy-MM-dd HH:mm:ss)" isRequired true,
+                            "participations[].course" type STRING means "코스" isRequired false
+                        )
+                    )
+            }
+        }
+    }
 }) {
     companion object {
         fun getParticipantsResponseSnippet(): List<FieldDescriptor> {

@@ -12,7 +12,9 @@ import kr.kro.btr.domain.port.model.result.AnnounceResult
 import kr.kro.btr.domain.port.model.result.BornToRunUser
 import kr.kro.btr.domain.port.model.result.CommentDetailResult
 import kr.kro.btr.domain.port.model.result.CommentResult
+import kr.kro.btr.domain.port.model.result.CrewMemberRankingResult
 import kr.kro.btr.domain.port.model.result.CrewMemberResult
+import kr.kro.btr.domain.port.model.result.CrewRankingResult
 import kr.kro.btr.domain.port.model.result.CrewResult
 import kr.kro.btr.domain.port.model.result.FeedDetailResult
 import kr.kro.btr.domain.port.model.result.FeedResult
@@ -53,6 +55,35 @@ fun List<ActivityResult>.toSearchActivityResponse(): SearchActivitiesResponse {
     }
 
     return SearchActivitiesResponse(activities)
+}
+
+fun List<ActivityResult>.toMyParticipationsResponse(): MyParticipationsResponse {
+    val participations = this.map { activityResult ->
+        MyParticipationsResponse.Participation(
+            activityId = activityResult.id,
+            title = activityResult.title,
+            startAt = activityResult.startAt.getDateTimeByFormat(),
+            course = activityResult.course
+        )
+    }
+
+    return MyParticipationsResponse(participations)
+}
+
+fun List<FeedResult>.toMyFeedsResponse(): MyFeedsResponse {
+    val feeds = this.map { feedResult ->
+        MyFeedsResponse.Feed(
+            feedId = feedResult.id,
+            contents = feedResult.contents
+        )
+    }
+
+    return MyFeedsResponse(feeds)
+}
+
+private fun LocalDateTime.getDateTimeByFormat(): String {
+    val formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    return this.format(formatter)
 }
 
 fun ActivityResult.toSearchActivityDetailResponse(): DetailActivityResponse {
@@ -593,6 +624,37 @@ fun UserEntity.toCommentDetailWriter(): CommentDetailResult.Writer {
 fun List<CrewResult>.toSearchCrewResponse(): SearchCrewsResponse {
     val crewDetails = this.map { it.toCrewDetail() }
     return SearchCrewsResponse(crewDetails)
+}
+
+fun List<CrewRankingResult>.toCrewRankingResponse(): CrewRankingResponse {
+    val crewRanks = this.mapIndexed { index, result ->
+        CrewRankingResponse.CrewRank(
+            rank = index + 1,
+            id = result.crewId,
+            crewName = result.crewName,
+            contents = result.contents,
+            region = result.region,
+            imageUri = result.imageUri,
+            logoUri = result.logoUri,
+            crewSnsUri = result.sns,
+            activityCount = result.activityCount
+        )
+    }
+    return CrewRankingResponse(crewRanks)
+}
+
+fun List<CrewMemberRankingResult>.toCrewMemberRankingResponse(): CrewMemberRankingResponse {
+    val memberRanks = this.mapIndexed { index, result ->
+        CrewMemberRankingResponse.MemberRank(
+            rank = index + 1,
+            userId = result.userId,
+            userName = result.userName,
+            profileImageUri = result.profileImageUri,
+            instagramId = result.instagramId,
+            participationCount = result.participationCount
+        )
+    }
+    return CrewMemberRankingResponse(memberRanks)
 }
 
 fun CrewResult.toCrewDetail(): SearchCrewsResponse.Detail {

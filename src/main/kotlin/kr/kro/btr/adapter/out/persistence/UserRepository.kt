@@ -1,6 +1,7 @@
 package kr.kro.btr.adapter.out.persistence
 
 import kr.kro.btr.domain.entity.UserEntity
+import kr.kro.btr.domain.port.model.result.CrewMemberRankingResult
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
@@ -57,4 +58,23 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
         """
     )
     fun findAllByCrewId(crewId: Long): List<UserEntity>
+
+    @Query(
+        """
+        SELECT new kr.kro.btr.domain.port.model.result.CrewMemberRankingResult(
+            u.id,
+            u.name,
+            img.fileUri,
+            u.instagramId,
+            COUNT(ap.id)
+        )
+        FROM UserEntity u
+        LEFT JOIN u.profileImageEntity img
+        LEFT JOIN u.activityParticipationEntities ap
+        WHERE u.crewId = :crewId
+        GROUP BY u.id, u.name, img.fileUri, u.instagramId
+        ORDER BY COUNT(ap.id) DESC
+        """
+    )
+    fun findCrewMemberRankings(crewId: Long): List<CrewMemberRankingResult>
 }

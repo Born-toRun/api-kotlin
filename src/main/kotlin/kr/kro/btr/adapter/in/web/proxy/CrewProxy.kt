@@ -5,9 +5,10 @@ import kr.kro.btr.adapter.`in`.web.payload.ModifyCrewRequest
 import kr.kro.btr.base.extension.toCreateCrewCommand
 import kr.kro.btr.base.extension.toModifyCrewCommand
 import kr.kro.btr.domain.port.CrewPort
+import kr.kro.btr.domain.port.model.result.CrewMemberRankingResult
 import kr.kro.btr.domain.port.model.result.CrewMemberResult
+import kr.kro.btr.domain.port.model.result.CrewRankingResult
 import kr.kro.btr.domain.port.model.result.CrewResult
-import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.exception.AuthorizationException
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict
@@ -50,5 +51,15 @@ class CrewProxy(
     @Cacheable(key = "'members: ' + #crewId")
     fun searchMembers(crewId: Long): List<CrewMemberResult> {
         return crewPort.searchMembers(crewId)
+    }
+
+    @Cacheable(key = "'crewRankings'")
+    fun searchRankings(): List<CrewRankingResult> {
+        return crewPort.searchRankings()
+    }
+
+    @Cacheable(key = "'memberRankings: ' + #crewId")
+    fun searchMemberRankings(crewId: Long): List<CrewMemberRankingResult> {
+        return crewPort.searchMemberRankings(crewId)
     }
 }

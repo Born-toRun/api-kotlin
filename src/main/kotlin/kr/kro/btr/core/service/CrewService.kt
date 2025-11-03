@@ -10,7 +10,9 @@ import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.port.CrewPort
 import kr.kro.btr.domain.port.model.CreateCrewCommand
 import kr.kro.btr.domain.port.model.ModifyCrewCommand
+import kr.kro.btr.domain.port.model.result.CrewMemberRankingResult
 import kr.kro.btr.domain.port.model.result.CrewMemberResult
+import kr.kro.btr.domain.port.model.result.CrewRankingResult
 import kr.kro.btr.domain.port.model.result.CrewResult
 import kr.kro.btr.infrastructure.CrewGateway
 import org.springframework.stereotype.Service
@@ -55,5 +57,15 @@ class CrewService(
     override fun searchMembers(crewId: Long): List<CrewMemberResult> {
         val userEntities: List<UserEntity> = crewGateway.searchMembersByCrewId(crewId)
         return userEntities.toCrewMembers()
+    }
+
+    @Transactional(readOnly = true)
+    override fun searchRankings(): List<CrewRankingResult> {
+        return crewGateway.searchRankings()
+    }
+
+    @Transactional(readOnly = true)
+    override fun searchMemberRankings(crewId: Long): List<CrewMemberRankingResult> {
+        return crewGateway.searchMemberRankings(crewId)
     }
 }

@@ -5,11 +5,13 @@ import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.DetailActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
+import kr.kro.btr.adapter.`in`.web.payload.MyParticipationsResponse
 import kr.kro.btr.adapter.`in`.web.payload.OpenActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.ParticipationActivityResponse
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesResponse
 import kr.kro.btr.adapter.`in`.web.proxy.ActivityProxy
+import kr.kro.btr.base.extension.toMyParticipationsResponse
 import kr.kro.btr.base.extension.toOpenActivityResponse
 import kr.kro.btr.base.extension.toParticipationActivityResponse
 import kr.kro.btr.base.extension.toSearchActivityDetailResponse
@@ -114,5 +116,14 @@ class ActivityController(
     ): ResponseEntity<Void> {
         activityProxy.attendance(request, activityId, my.id)
         return ResponseEntity.ok().build()
+    }
+
+    @GetMapping("/my-participations", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun searchMyParticipations(
+        @AuthUser my: TokenDetail
+    ): ResponseEntity<MyParticipationsResponse> {
+        val activities = activityProxy.searchMyParticipations(my.id)
+        val response = activities.toMyParticipationsResponse()
+        return ResponseEntity.ok(response)
     }
 }

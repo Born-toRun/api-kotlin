@@ -66,4 +66,9 @@ class FeedProxy(
         val command = request.toModifyFeedCommand(feedId)
         feedPort.modify(command)
     }
+
+    @Cacheable(key = "'myFeeds: ' + #myUserId")
+    fun searchMyFeeds(myUserId: Long): List<FeedResult> {
+        return feedPort.searchMyFeeds(myUserId)
+    }
 }

@@ -165,6 +165,11 @@ class ActivityGateway(
         return activityParticipationRepository.findAllByActivityId(activityId)
     }
 
+    fun searchMyParticipations(myUserId: Long): List<ActivityEntity> {
+        val participations = activityParticipationRepository.findAllByUserId(myUserId)
+        return participations.mapNotNull { it.activityEntity }
+    }
+
     companion object {
         private const val ACCESS_CODE_KEY_PREFIX = "accessCode"
     }

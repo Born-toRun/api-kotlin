@@ -379,6 +379,72 @@ class FeedControllerTest (
             }
         }
     }
+
+    describe("GET : $baseUrl/my-feeds") {
+        val url = "$baseUrl/my-feeds"
+        val feedResults = listOf(
+            FeedResult(
+                id = 1L,
+                contents = "내가 작성한 첫 번째 피드",
+                viewQty = 10,
+                recommendationQty = 5,
+                commentQty = 3,
+                registeredAt = LocalDateTime.of(2024, 3, 15, 19, 0),
+                writer = FeedResult.Writer(
+                    userName = "userName",
+                    crewName = "crewName",
+                    profileImageUri = "profileImageUri",
+                    isAdmin = false,
+                    isManager = true
+                ),
+                hasRecommendation = true,
+                hasComment = false
+            ),
+            FeedResult(
+                id = 2L,
+                contents = "내가 작성한 두 번째 피드",
+                viewQty = 20,
+                recommendationQty = 10,
+                commentQty = 7,
+                registeredAt = LocalDateTime.of(2024, 4, 20, 7, 0),
+                writer = FeedResult.Writer(
+                    userName = "userName",
+                    crewName = "crewName",
+                    profileImageUri = "profileImageUri",
+                    isAdmin = false,
+                    isManager = true
+                ),
+                hasRecommendation = false,
+                hasComment = true
+            )
+        )
+
+        context("나의 피드 목록을 조회하면") {
+            val request = request(HttpMethod.GET, url)
+                .contentType(APPLICATION_JSON)
+
+            it("200 OK") {
+                every { proxy.searchMyFeeds(any()) } returns feedResults
+
+                mockMvc.perform(request)
+                    .andExpect(status().isOk)
+                    .andExpectData(
+                        jsonPath("$.feeds[0].feedId") shouldBe feedResults[0].id,
+                        jsonPath("$.feeds[0].contents") shouldBe feedResults[0].contents,
+                        jsonPath("$.feeds[1].feedId") shouldBe feedResults[1].id,
+                        jsonPath("$.feeds[1].contents") shouldBe feedResults[1].contents
+                    )
+                    .andDocument(
+                        "search-my-feeds",
+                        responseBody(
+                            "feeds" type ARRAY means "피드 목록" isRequired true,
+                            "feeds[].feedId" type NUMBER means "피드 식별자" isRequired true,
+                            "feeds[].contents" type STRING means "피드 내용" isRequired true
+                        )
+                    )
+            }
+        }
+    }
 }) {
     companion object {
         fun getImageDetailsResponseSnippet(): List<FieldDescriptor> {
