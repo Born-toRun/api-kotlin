@@ -130,6 +130,7 @@ class SecurityConfig(
             .userDetailsService(userDetailsService)
             .oauth2Login { oauth2 ->
                 oauth2.authorizationEndpoint { it.baseUri("/oauth2/authorization").authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()) }
+                    .redirectionEndpoint { it.baseUri("/*/oauth2/code/*") }
                     .userInfoEndpoint { it.userService(oAuth2UserService) }
                     .successHandler(oAuth2AuthenticationSuccessHandler())
                     .failureHandler(oAuth2AuthenticationFailureHandler())
