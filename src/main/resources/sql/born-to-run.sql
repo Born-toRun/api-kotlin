@@ -228,6 +228,21 @@ CREATE TABLE `marathon`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;
 
+CREATE TABLE `feedback`
+(
+    `id`            bigint(20)   NOT NULL AUTO_INCREMENT,
+    `user_id`       bigint(20)   NOT NULL COMMENT '작성자 식별자',
+    `content`       varchar(2000) NOT NULL COMMENT '피드백 내용',
+    `feedback_type` varchar(20)  NOT NULL COMMENT '피드백 타입 (INQUIRY: 문의, BUG: 버그, IDEA: 아이디어)',
+    `registered_at` datetime     NOT NULL DEFAULT current_timestamp() COMMENT '작성일자',
+    PRIMARY KEY (`id`),
+    KEY `idx__user_id` (`user_id`),
+    KEY `idx__feedback_type` (`feedback_type`),
+    KEY `idx__registered_at` (`registered_at`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci;
+
 ########################################################################################################################
 
 # Constraints
@@ -309,4 +324,8 @@ ALTER TABLE marathon_bookmark
 ALTER TABLE marathon_bookmark
     ADD CONSTRAINT fk__marathon_bookmark__marathon
         FOREIGN KEY (marathon_id) REFERENCES marathon (id) ON DELETE CASCADE;
+
+ALTER TABLE feedback
+    ADD CONSTRAINT fk__feedback__user
+        FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
 

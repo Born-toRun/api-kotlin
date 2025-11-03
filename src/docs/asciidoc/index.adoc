@@ -146,3 +146,7 @@ operation::detail-announces[snippets="http-request,path-parameters,http-response
 operation::modify-announces[snippets="http-request,path-parameters,request-fields,http-response,response-fields"]
 === 삭제
 operation::remove-announces[snippets="http-request,path-parameters,http-response"]
+
+== 피드백
+=== 등록
+operation::create-feedbacks[snippets="http-request,request-fields,http-response"]

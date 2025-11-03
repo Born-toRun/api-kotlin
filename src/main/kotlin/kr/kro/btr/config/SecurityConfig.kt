@@ -56,6 +56,7 @@ class SecurityConfig(
         val privacyBased = "/api/v1/privacy"
         val yellowCardBased = "/api/v1/yellow-cards"
         val announceBased = "/api/v1/announces"
+        val feedbackBased = "/api/v1/feedbacks"
 
         return httpSecurity
             .headers { headers ->
@@ -96,7 +97,8 @@ class SecurityConfig(
                         "$activityBased/**",
                         "$marathonBookmarkBased/{marathonId}",
                         yellowCardBased,
-                        feedsBased)
+                        feedsBased,
+                        feedbackBased)
                     .authenticated()
                     .requestMatchers(HttpMethod.GET,
                         "$privacyBased/users",

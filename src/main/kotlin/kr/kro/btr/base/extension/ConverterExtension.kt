@@ -1522,3 +1522,28 @@ fun List<AnnounceResult>.toSearchAnnouncesResponse(): SearchAnnouncesResponse {
     val details =  this.map { it.toSearchAnnouncesResponseDetail() }
     return SearchAnnouncesResponse(details)
 }
+
+// feedback
+fun CreateFeedbackRequest.toCreateFeedbackCommand(userId: Long): CreateFeedbackCommand {
+    return CreateFeedbackCommand(
+        userId = userId,
+        content = this.content,
+        feedbackType = this.feedbackType
+    )
+}
+
+fun CreateFeedbackCommand.toCreateFeedbackQuery(): CreateFeedbackQuery {
+    return CreateFeedbackQuery(
+        userId = this.userId,
+        content = this.content,
+        feedbackType = this.feedbackType
+    )
+}
+
+fun CreateFeedbackQuery.toFeedbackEntity(): FeedbackEntity {
+    return FeedbackEntity(
+        userId = this.userId,
+        content = this.content,
+        feedbackType = this.feedbackType
+    )
+}
