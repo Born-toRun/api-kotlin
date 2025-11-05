@@ -129,8 +129,21 @@ class OAuth2AuthenticationSuccessHandler(
         return appProperties.oauth2.authorizedRedirectUris
             .any { authorizedRedirectUri ->
                 val authorizedURI = URI.create(authorizedRedirectUri)
-                authorizedURI.host.equals(clientRedirectUri.host, ignoreCase = true)
-                    && authorizedURI.port == clientRedirectUri.port
+                val hostMatches = authorizedURI.host.equals(clientRedirectUri.host, ignoreCase = true)
+
+                val authorizedPort = if (authorizedURI.port == -1) {
+                    if (authorizedURI.scheme.equals("https", ignoreCase = true)) 443 else 80
+                } else {
+                    authorizedURI.port
+                }
+
+                val clientPort = if (clientRedirectUri.port == -1) {
+                    if (clientRedirectUri.scheme.equals("https", ignoreCase = true)) 443 else 80
+                } else {
+                    clientRedirectUri.port
+                }
+
+                hostMatches && authorizedPort == clientPort
             }
     }
 }
