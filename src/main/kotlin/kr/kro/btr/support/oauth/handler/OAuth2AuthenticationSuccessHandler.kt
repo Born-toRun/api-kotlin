@@ -103,7 +103,7 @@ class OAuth2AuthenticationSuccessHandler(
         val cookieMaxAge = (refreshTokenExpiry / 60).toInt()
 
         CookieSupport.deleteCookie(request, response, REFRESH_TOKEN)
-        CookieSupport.addCookie(response, REFRESH_TOKEN, refreshToken.token, cookieMaxAge)
+        CookieSupport.addCookie(request, response, REFRESH_TOKEN, refreshToken.token, cookieMaxAge)
 
         return UriComponentsBuilder.fromUriString(targetUrl)
             .queryParam("isMember", bornToRunUser.crewId != null)

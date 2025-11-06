@@ -13,13 +13,30 @@ object CookieSupport {
         return cookies.firstOrNull { it.name == name }
     }
 
-    fun addCookie(response: HttpServletResponse, name: String, value: String, maxAge: Int) {
+    fun addCookie(request: HttpServletRequest, response: HttpServletResponse, name: String, value: String, maxAge: Int) {
         val cookie = Cookie(name, value).apply {
             path = "/"
             isHttpOnly = true
             this.maxAge = maxAge
         }
-        response.addCookie(cookie)
+
+        val isSecure = request.getHeader("X-Forwarded-Proto")?.equals("https", ignoreCase = true)
+            ?: request.isSecure
+
+        val cookieHeader = buildString {
+            append("${cookie.name}=${cookie.value}")
+            append("; Path=${cookie.path}")
+            append("; Max-Age=${cookie.maxAge}")
+            append("; HttpOnly")
+
+            if (isSecure) {
+                append("; SameSite=None; Secure")
+            } else {
+                append("; SameSite=Lax")
+            }
+        }
+
+        response.addHeader("Set-Cookie", cookieHeader)
     }
 
     fun deleteCookie(request: HttpServletRequest, response: HttpServletResponse, name: String) {

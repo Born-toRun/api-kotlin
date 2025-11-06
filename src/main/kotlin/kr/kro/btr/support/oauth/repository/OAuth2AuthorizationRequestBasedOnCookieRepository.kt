@@ -33,6 +33,7 @@ class OAuth2AuthorizationRequestBasedOnCookieRepository :
         }
 
         CookieSupport.addCookie(
+            request,
             response,
             OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME,
             CookieSupport.serialize(authorizationRequest),
@@ -41,7 +42,7 @@ class OAuth2AuthorizationRequestBasedOnCookieRepository :
 
         val redirectUriAfterLogin = request.getParameter(REDIRECT_URI)
         if (StringUtils.isNotBlank(redirectUriAfterLogin)) {
-            CookieSupport.addCookie(response, REDIRECT_URI, redirectUriAfterLogin, COOKIE_EXPIRE_SECONDS)
+            CookieSupport.addCookie(request, response, REDIRECT_URI, redirectUriAfterLogin, COOKIE_EXPIRE_SECONDS)
         }
     }
 
