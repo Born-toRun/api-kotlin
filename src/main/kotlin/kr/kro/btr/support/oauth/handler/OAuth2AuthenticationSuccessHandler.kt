@@ -60,11 +60,18 @@ class OAuth2AuthenticationSuccessHandler(
     ): String {
         val redirectUri = CookieSupport.getCookie(request, REDIRECT_URI)?.value
 
+        logger.info("=== OAuth2 Redirect URI Validation ===")
+        logger.info("Received redirect URI: $redirectUri")
+        logger.info("Authorized redirect URIs: ${appProperties.oauth2.authorizedRedirectUris}")
+
         if (redirectUri != null && !isAuthorizedRedirectUri(redirectUri)) {
+            logger.error("VALIDATION FAILED - Unauthorized redirect URI: $redirectUri")
             throw InternalServerException(
                 "Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication"
             )
         }
+
+        logger.info("Validation passed. Using redirect URI: ${redirectUri ?: defaultTargetUrl}")
 
         val targetUrl = redirectUri ?: defaultTargetUrl
 
@@ -125,8 +132,9 @@ class OAuth2AuthenticationSuccessHandler(
 
     private fun isAuthorizedRedirectUri(uri: String): Boolean {
         val clientRedirectUri = URI.create(uri)
+        logger.info("Validating client redirect URI: scheme=${clientRedirectUri.scheme}, host=${clientRedirectUri.host}, port=${clientRedirectUri.port}")
 
-        return appProperties.oauth2.authorizedRedirectUris
+        val result = appProperties.oauth2.authorizedRedirectUris
             .any { authorizedRedirectUri ->
                 val authorizedURI = URI.create(authorizedRedirectUri)
                 val hostMatches = authorizedURI.host.equals(clientRedirectUri.host, ignoreCase = true)
@@ -143,7 +151,13 @@ class OAuth2AuthenticationSuccessHandler(
                     clientRedirectUri.port
                 }
 
-                hostMatches && authorizedPort == clientPort
+                val matches = hostMatches && authorizedPort == clientPort
+                logger.info("  Comparing with: ${authorizedURI.host}:$authorizedPort vs ${clientRedirectUri.host}:$clientPort => $matches")
+
+                matches
             }
+
+        logger.info("Final validation result: $result")
+        return result
     }
 }
