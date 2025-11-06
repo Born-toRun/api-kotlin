@@ -60,10 +60,6 @@ class OAuth2AuthenticationSuccessHandler(
     ): String {
         val redirectUri = CookieSupport.getCookie(request, REDIRECT_URI)?.value
 
-        logger.info("=== OAuth2 Redirect URI Validation ===")
-        logger.info("Received redirect URI: $redirectUri")
-        logger.info("Authorized redirect URIs: ${appProperties.oauth2.authorizedRedirectUris}")
-
         if (redirectUri != null && !isAuthorizedRedirectUri(redirectUri)) {
             logger.error("VALIDATION FAILED - Unauthorized redirect URI: $redirectUri")
             throw InternalServerException(
