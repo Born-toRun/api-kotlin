@@ -11,30 +11,21 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
         """
         SELECT u FROM UserEntity u
         LEFT JOIN FETCH u.crewEntity
-        INNER JOIN FETCH u.userPrivacyEntity
         LEFT JOIN FETCH u.profileImageEntity
+        LEFT JOIN FETCH u.userPrivacyEntity
         WHERE u.id = :id
         """
     )
-    fun findByIdOrNull(id: Long): UserEntity?
+    fun findAllEntitiesById(id: Long): UserEntity?
 
     @Query(
         """
         SELECT DISTINCT u FROM UserEntity u
         LEFT JOIN FETCH u.crewEntity
         LEFT JOIN FETCH u.profileImageEntity
-        LEFT JOIN FETCH u.userPrivacyEntity
-        LEFT JOIN FETCH u.feedEntities
-        LEFT JOIN FETCH u.activityEntities
-        LEFT JOIN FETCH u.activityParticipationEntities
-        LEFT JOIN FETCH u.commentEntities
-        LEFT JOIN FETCH u.marathonBookmarkEntities
-        LEFT JOIN FETCH u.recommendationEntities
-        WHERE u.id = :id
+        WHERE u.name LIKE %:userName%
         """
     )
-    fun findAllEntitiesById(id: Long): UserEntity?
-
     fun findAllByNameContaining(userName: String): List<UserEntity>
 
     @Query(
@@ -63,14 +54,14 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
         """
         SELECT new kr.kro.btr.domain.port.model.result.CrewMemberRankingResult(
             u.id,
-            u.name,
-            img.fileUri,
-            u.instagramId,
-            COUNT(ap.id)
+            COALESCE(u.name, ''),
+            COALESCE(img.fileUri, ''),
+            COALESCE(u.instagramId, ''),
+            CAST(COUNT(ap.id) AS int)
         )
         FROM UserEntity u
-        LEFT JOIN u.profileImageEntity img
-        LEFT JOIN u.activityParticipationEntities ap
+        LEFT JOIN ObjectStorageEntity img ON img.id = u.imageId
+        LEFT JOIN ActivityParticipationEntity ap ON ap.userId = u.id
         WHERE u.crewId = :crewId
         GROUP BY u.id, u.name, img.fileUri, u.instagramId
         ORDER BY COUNT(ap.id) DESC

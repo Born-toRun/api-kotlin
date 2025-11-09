@@ -15,5 +15,4 @@ interface CommentPort {
     fun qty(feedId: Long): Int
     fun remove(commentId: Long)
     fun modify(command: ModifyCommentCommand): CommentResult
-    fun search(commentId: Long): CommentEntity
 }

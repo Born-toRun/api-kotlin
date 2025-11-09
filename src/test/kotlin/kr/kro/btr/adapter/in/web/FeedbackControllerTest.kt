@@ -1,16 +1,15 @@
 package kr.kro.btr.adapter.`in`.web
 
 import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
-import io.mockk.every
 import kr.kro.btr.adapter.`in`.web.payload.CreateFeedbackRequest
 import kr.kro.btr.adapter.`in`.web.proxy.FeedbackProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.constant.FeedbackType
 import kr.kro.btr.utils.restdocs.STRING
 import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.isRequired
 import kr.kro.btr.utils.restdocs.requestBody
 import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
 import kr.kro.btr.utils.restdocs.type

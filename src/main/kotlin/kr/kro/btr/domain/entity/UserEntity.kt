@@ -3,6 +3,7 @@ package kr.kro.btr.domain.entity
 import jakarta.persistence.*
 import kr.kro.btr.domain.constant.ProviderType
 import kr.kro.btr.domain.constant.RoleType
+import org.hibernate.annotations.BatchSize
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
@@ -36,32 +37,35 @@ class UserEntity(
     @JoinColumn(name = "imageId", insertable = false, updatable = false)
     val profileImageEntity: ObjectStorageEntity? = null,
 
-    // TODO: 리프레시 토큰 작업
-//    @OneToOne(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
-//    var userRefreshTokenEntity: UserRefreshTokenEntity? = null,
-
     @OneToOne(mappedBy = "userEntity", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
     var userPrivacyEntity: UserPrivacyEntity? = null
 ) {
-    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     val objectStorageEntities: MutableSet<ObjectStorageEntity> = mutableSetOf()
 
-    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     val feedEntities: MutableSet<FeedEntity> = mutableSetOf()
 
-    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     val activityEntities: MutableSet<ActivityEntity> = mutableSetOf()
 
-    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     val activityParticipationEntities: MutableSet<ActivityParticipationEntity> = mutableSetOf()
 
-    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     val commentEntities: MutableSet<CommentEntity> = mutableSetOf()
 
-    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     val marathonBookmarkEntities: MutableSet<MarathonBookmarkEntity> = mutableSetOf()
 
-    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE])
+    @OneToMany(mappedBy = "userEntity", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     val recommendationEntities: MutableSet<RecommendationEntity> = mutableSetOf()
 
     fun getProfileImageUri(): String? {

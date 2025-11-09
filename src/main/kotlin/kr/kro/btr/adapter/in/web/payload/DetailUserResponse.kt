@@ -13,7 +13,4 @@ data class DetailUserResponse(
     @JsonIgnore
     val instagramId: String?,
     val isInstagramIdPublic: Boolean?
-) {
-    val instagramUri: String?
-        get() = instagramId?.let { "https://www.instagram.com/$it" }
-}
+)

@@ -1,6 +1,7 @@
 package kr.kro.btr.domain.entity
 
 import jakarta.persistence.*
+import org.hibernate.annotations.BatchSize
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
@@ -34,10 +35,8 @@ class CommentEntity(
     @JoinColumn(name = "parentId", insertable = false, updatable = false)
     var parent: CommentEntity? = null
 ) {
-    @OneToMany(mappedBy = "commentEntity", cascade = [CascadeType.REMOVE])
-    val recommendationEntities: MutableSet<RecommendationEntity> = mutableSetOf()
-
-    @OneToMany(mappedBy = "parent", cascade = [CascadeType.REMOVE], orphanRemoval = true)
+    @OneToMany(mappedBy = "parent", cascade = [CascadeType.REMOVE], orphanRemoval = true, fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     val child: MutableSet<CommentEntity> = mutableSetOf()
 
     fun isRootComment(): Boolean {

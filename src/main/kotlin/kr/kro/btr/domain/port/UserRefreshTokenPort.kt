@@ -5,6 +5,5 @@ import kr.kro.btr.domain.port.model.CreateRefreshTokenCommand
 
 
 interface UserRefreshTokenPort {
-    fun searchByUserId(userId: Long): UserRefreshTokenEntity?
     fun create(command: CreateRefreshTokenCommand): UserRefreshTokenEntity
 }

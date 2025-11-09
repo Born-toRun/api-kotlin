@@ -11,10 +11,6 @@ import org.springframework.stereotype.Component
 class Notification(
     private val discordAdapter: DiscordAdapter
 ) {
-    fun send(message: String) {
-        discordAdapter.send(message)
-    }
-
     fun send(title: String, description: String, embedFieldMap: Map<String, String>) {
         val embedFields = embedFieldMap.map { (key, value) ->
             EmbedField(true, key, value.truncate())

@@ -6,7 +6,6 @@ import kr.kro.btr.domain.constant.*
 import kr.kro.btr.domain.entity.*
 import kr.kro.btr.domain.model.*
 import kr.kro.btr.domain.port.model.*
-import kr.kro.btr.infrastructure.event.*
 import kr.kro.btr.domain.port.model.result.ActivityResult
 import kr.kro.btr.domain.port.model.result.AnnounceResult
 import kr.kro.btr.domain.port.model.result.BornToRunUser
@@ -23,6 +22,7 @@ import kr.kro.btr.domain.port.model.result.MarathonResult
 import kr.kro.btr.domain.port.model.result.ObjectStorageResult
 import kr.kro.btr.domain.port.model.result.ParticipantResult
 import kr.kro.btr.domain.port.model.result.UserPrivacyResult
+import kr.kro.btr.infrastructure.event.*
 import kr.kro.btr.infrastructure.model.*
 import kr.kro.btr.support.TokenDetail
 import java.time.LocalDateTime
@@ -253,33 +253,6 @@ fun SearchByCrewIdActivityCommand.toSearchByCrewIdActivityQuery(): SearchAllActi
     )
 }
 
-fun List<ActivityEntity>.toActivityResults(userId: Long): List<ActivityResult> {
-    return this.map { it.toActivityResult(userId) }
-}
-
-fun ActivityEntity.toActivityResult(userId: Long): ActivityResult {
-    return ActivityResult(
-        id = this.id,
-        title = this.title,
-        contents = this.contents,
-        startAt = this.startAt,
-        venue = this.venue,
-        venueUrl = this.venueUrl,
-        participantsLimit = this.participantsLimit,
-        participantsQty = this.activityParticipationEntities.size,
-        participationFee = this.participationFee,
-        course = this.course,
-        courseDetail = this.courseDetail,
-        path = this.path,
-        isOpen = this.isOpen,
-        updatedAt = this.updatedAt,
-        registeredAt = this.registeredAt,
-        recruitmentType = convertRecruitmentType(userId),
-        imageUrls = this.getImageUris(),
-        host = this.toHost()
-    )
-}
-
 fun ActivityEntity.toActivityResult(accessCode: Int): ActivityResult {
     return ActivityResult(
         id = this.id,
@@ -391,43 +364,56 @@ fun ActivityEntity.toHost(): ActivityResult.Host {
     )
 }
 
-fun ActivityEntity.convertRecruitmentType(myUserId: Long): ActivityRecruitmentType {
-    // First check if user is already participating
-    if (this.activityParticipationEntities.any { it.userEntity?.id == myUserId }) {
+fun ActivityEntity.convertRecruitmentType(
+    participantsQty: Int,
+    hasUserParticipation: Boolean
+): ActivityRecruitmentType {
+    if (hasUserParticipation) {
         return ActivityRecruitmentType.ALREADY_PARTICIPATING
     }
 
     val now = LocalDateTime.now()
-    val participantsQty = this.activityParticipationEntities.size
 
-    // Status calculation based on requirements:
-    // NOTE: Original requirement had "participantsLimit == participationFee" which compared
-    // person count with money. This has been corrected to use participantsQty.
-
-    // CLOSED (종료): isOpen == true AND startAt < now()
-    // NOTE: This logic seems inverted. Typically isOpen=true means "event is active/check-in enabled"
-    // But requirement states isOpen=true means CLOSED. Implementing as specified.
     if (this.isOpen && this.startAt.isBefore(now)) {
         return ActivityRecruitmentType.CLOSED
     }
 
-    // FULL (정원마감): isOpen == false AND startAt > now() AND participantsLimit == participantsQty
     if (!this.isOpen && this.startAt.isAfter(now) && this.participantsLimit == participantsQty) {
         return ActivityRecruitmentType.FULL
     }
 
-    // RECRUITING (모집중): isOpen == false AND startAt > now()
     if (!this.isOpen && this.startAt.isAfter(now)) {
         return ActivityRecruitmentType.RECRUITING
     }
 
-    // Fallback: If activity has started but not explicitly opened, or other edge cases
-    // Default to CLOSED if event date has passed
     return if (this.startAt.isBefore(now)) {
         ActivityRecruitmentType.CLOSED
     } else {
         ActivityRecruitmentType.RECRUITING
     }
+}
+
+fun ActivityAggregationData.toActivityResult(userId: Long): ActivityResult {
+    return ActivityResult(
+        id = this.activityEntity.id,
+        title = this.activityEntity.title,
+        contents = this.activityEntity.contents,
+        startAt = this.activityEntity.startAt,
+        venue = this.activityEntity.venue,
+        venueUrl = this.activityEntity.venueUrl,
+        participantsLimit = this.activityEntity.participantsLimit,
+        participantsQty = this.participantsCount,
+        participationFee = this.activityEntity.participationFee,
+        course = this.activityEntity.course,
+        courseDetail = this.activityEntity.courseDetail,
+        path = this.activityEntity.path,
+        isOpen = this.activityEntity.isOpen,
+        updatedAt = this.activityEntity.updatedAt,
+        registeredAt = this.activityEntity.registeredAt,
+        recruitmentType = this.activityEntity.convertRecruitmentType(this.participantsCount, this.hasUserParticipation),
+        imageUrls = this.activityEntity.getImageUris(),
+        host = this.activityEntity.toHost()
+    )
 }
 
 // comment
@@ -528,12 +514,12 @@ fun ModifyCommentRequest.toModifyCommentCommand(commentId: Long): ModifyCommentC
     )
 }
 
-fun CommentEntity.toCommentResult(userId: Long): CommentResult {
+fun CommentEntity.toCommentResult(userId: Long, replyCount: Int): CommentResult {
     val writer = this.userEntity!!
     return CommentResult(
         id = this.id,
         parentId = this.parentId,
-        reCommentQty = this.child.size,
+        reCommentQty = replyCount,
         feedId = this.feedId,
         contents = this.contents,
         registeredAt = this.registeredAt,
@@ -554,10 +540,6 @@ fun CommentEntity.toCommentResult(): CommentResult {
         updatedAt = this.updatedAt,
         writer = writer.toCommentResultWriter()
     )
-}
-
-fun List<CommentEntity>.toCommentResults(userId: Long): List<CommentResult> {
-    return this.map { it.toCommentResult(userId) }
 }
 
 fun CommentEntity.toCommentDetail(commentResults: List<CommentResult>): CommentDetailResult {
@@ -916,9 +898,9 @@ fun CreateFeedQuery.toFeedEntity(): FeedEntity {
     )
 }
 
-fun FeedEntity.toFeedResult(my: TokenDetail): FeedDetailResult {
-    val writer = this.userEntity!!
-    val images = this.feedImageMappingEntities.mapNotNull { image ->
+fun FeedAggregationData.toFeedDetailResult(): FeedDetailResult {
+    val writer = this.feedEntity.userEntity!!
+    val images = this.feedEntity.feedImageMappingEntities.mapNotNull { image ->
         image.objectStorageEntity?.let {
             FeedDetailResult.Image(
                 id = it.id,
@@ -928,19 +910,19 @@ fun FeedEntity.toFeedResult(my: TokenDetail): FeedDetailResult {
     }
 
     return FeedDetailResult(
-        id = this.id,
-        contents = this.contents,
-        category = this.category,
-        accessLevel = this.accessLevel,
-        viewQty = this.viewQty,
-        registeredAt = this.registeredAt,
-        updatedAt = this.updatedAt,
+        id = this.feedEntity.id,
+        contents = this.feedEntity.contents,
+        category = this.feedEntity.category,
+        accessLevel = this.feedEntity.accessLevel,
+        viewQty = this.feedEntity.viewQty,
+        registeredAt = this.feedEntity.registeredAt,
+        updatedAt = this.feedEntity.updatedAt,
         images = images.ifEmpty { null },
         writer = writer.toFeedResultWriter(),
-        recommendationQty = this.recommendationEntities.size,
-        hasMyRecommendation = this.hasMyRecommendation(my.id),
-        commentQty = this.commentEntities.size,
-        hasMyComment = this.hasMyComment(my.id)
+        recommendationQty = this.recommendationCount,
+        hasMyRecommendation = this.hasUserRecommendation,
+        commentQty = this.commentCount,
+        hasMyComment = this.hasUserComment
     )
 }
 
@@ -966,18 +948,18 @@ fun SearchAllFeedCommand.toSearchAllFeedQuery(userIds: List<Long>): SearchAllFee
     )
 }
 
-fun FeedEntity.toFeedCard(userId: Long): FeedResult {
-    val writer = this.userEntity!!
+fun FeedAggregationData.toFeedCard(): FeedResult {
+    val writer = this.feedEntity.userEntity!!
     return FeedResult(
-        id = this.id,
-        imageUris = this.getImageUris(),
-        contents = this.contents,
-        viewQty = this.viewQty,
-        recommendationQty = this.getRecommendationQty(),
-        commentQty = this.getCommentQty(),
-        registeredAt = this.registeredAt,
-        hasRecommendation = this.hasMyRecommendation(userId),
-        hasComment = this.hasMyComment(userId),
+        id = this.feedEntity.id,
+        imageUris = this.feedEntity.getImageUris(),
+        contents = this.feedEntity.contents,
+        viewQty = this.feedEntity.viewQty,
+        recommendationQty = this.recommendationCount,
+        commentQty = this.commentCount,
+        registeredAt = this.feedEntity.registeredAt,
+        hasRecommendation = this.hasUserRecommendation,
+        hasComment = this.hasUserComment,
         writer = writer.toFeedCardWriter()
     )
 }
@@ -1108,22 +1090,18 @@ fun SearchAllMarathonCommand.toSearchMarathonQuery(): SearchMarathonQuery {
     )
 }
 
-fun List<MarathonEntity>.toMarathons(userId: Long): List<MarathonResult> {
-    return this.map { it.toMarathon(userId) }
-}
-
-fun MarathonEntity.toMarathon(userId: Long): MarathonResult {
+fun MarathonEntity.toMarathon(bookmarkedMarathonIds: Set<Long>): MarathonResult {
     return MarathonResult(
         id = this.id,
         title = this.title,
         schedule = this.schedule,
         venue = this.venue,
         course = this.course,
-        isBookmarking = this.marathonBookmarkEntities.any { userId == it.userId }
+        isBookmarking = this.id in bookmarkedMarathonIds
     )
 }
 
-fun MarathonEntity.toMarathonDetail(userId: Long): MarathonDetailResult {
+fun MarathonEntity.toMarathonDetail(isBookmarked: Boolean): MarathonDetailResult {
     return MarathonDetailResult(
         id = this.id,
         title = this.title,
@@ -1140,7 +1118,7 @@ fun MarathonEntity.toMarathonDetail(userId: Long): MarathonDetailResult {
         venueDetail = this.venueDetail,
         remark = this.remark,
         registeredAt = this.registeredAt,
-        isBookmarking = this.marathonBookmarkEntities.any { userId == it.userId }
+        isBookmarking = isBookmarked
     )
 }
 

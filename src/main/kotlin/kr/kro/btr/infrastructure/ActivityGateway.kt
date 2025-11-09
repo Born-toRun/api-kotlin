@@ -7,7 +7,6 @@ import kr.kro.btr.adapter.out.persistence.querydsl.ActivityQuery
 import kr.kro.btr.adapter.out.thirdparty.RedisClient
 import kr.kro.btr.base.extension.toActivityEntity
 import kr.kro.btr.base.extension.toActivityParticipationEntity
-import kr.kro.btr.domain.constant.ActivityRecruitmentType.*
 import kr.kro.btr.domain.entity.ActivityEntity
 import kr.kro.btr.domain.entity.ActivityImageMappingEntity
 import kr.kro.btr.domain.entity.ActivityParticipationEntity
@@ -56,16 +55,6 @@ class ActivityGateway(
         activityRepository.save(activityEntity)
     }
 
-    fun removeAll(userId: Long) {
-        val participationIds = activityParticipationRepository.findAllByUserId(userId)
-            .map { it.id }
-        activityParticipationRepository.deleteAllById(participationIds)
-
-        val activityIds = activityRepository.findAllByUserId(userId)
-            .map { it.id }
-        activityRepository.deleteAllById(activityIds)
-    }
-
     fun remove(activityId: Long) {
         activityRepository.deleteById(activityId)
     }
@@ -84,42 +73,48 @@ class ActivityGateway(
     }
 
     fun searchAll(query: SearchAllActivityQuery): List<ActivityEntity> {
-        val activityEntities = activityQuery.searchAllByFilter(query)
+        return activityQuery.searchAllByFilter(query)
+    }
 
-        query.recruitmentType?.let { recruitmentType ->
-            val now = LocalDateTime.now()
+    fun searchAllWithAggregation(query: SearchAllActivityQuery, userId: Long): List<kr.kro.btr.infrastructure.model.ActivityAggregationData> {
+        val activities = searchAll(query)
+        if (activities.isEmpty()) return emptyList()
 
-            return when (recruitmentType) {
-                // CLOSED (종료): isOpen == true AND startAt < now()
-                CLOSED -> activityEntities.filter { a ->
-                    a.isOpen && a.startAt.isBefore(now)
-                }
+        val activityIds = activities.map { it.id }
 
-                // FULL (정원마감): isOpen == false AND startAt > now() AND participantsLimit == participantsQty
-                FULL -> activityEntities.filter { a ->
-                    val participantsQty = a.activityParticipationEntities.size
-                    !a.isOpen && a.startAt.isAfter(now) && a.participantsLimit == participantsQty
-                }
-
-                // RECRUITING (모집중): isOpen == false AND startAt > now()
-                RECRUITING -> activityEntities.filter { a ->
-                    !a.isOpen && a.startAt.isAfter(now)
-                }
-
-                // ALREADY_PARTICIPATING (참여완료): User is already participating
-                ALREADY_PARTICIPATING -> activityEntities.filter { a ->
-                    a.activityParticipationEntities.any { ap ->
-                        ap.userEntity?.id == query.myUserId
-                    }
-                }
+        val participationCountMap = activityParticipationRepository.countGroupByActivityId(activityIds)
+            .associate {
+                (it["activityId"] as Long) to ((it["count"] as Long).toInt())
             }
-        }
 
-        return activityEntities
+        val userParticipatedIds = activityParticipationRepository
+            .findUserParticipatedActivityIds(userId, activityIds)
+            .toSet()
+
+        return activities.map { activity ->
+            kr.kro.btr.infrastructure.model.ActivityAggregationData(
+                activityEntity = activity,
+                participantsCount = participationCountMap[activity.id] ?: 0,
+                hasUserParticipation = activity.id in userParticipatedIds
+            )
+        }
     }
 
     fun search(activityId: Long): ActivityEntity {
         return activityRepository.findByIdOrNull(activityId) ?: throw NotFoundException("모임을 찾지 못했습니다.");
+    }
+
+    fun searchWithAggregation(activityId: Long, userId: Long): kr.kro.btr.infrastructure.model.ActivityAggregationData {
+        val activity = search(activityId)
+
+        val participantsCount = activityParticipationRepository.countByActivityId(activityId)
+        val hasUserParticipation = activityParticipationRepository.existsByActivityIdAndUserId(activityId, userId)
+
+        return kr.kro.btr.infrastructure.model.ActivityAggregationData(
+            activityEntity = activity,
+            participantsCount = participantsCount,
+            hasUserParticipation = hasUserParticipation
+        )
     }
 
     fun open(activityId: Long): ActivityEntity {
@@ -168,6 +163,14 @@ class ActivityGateway(
     fun searchMyParticipations(myUserId: Long): List<ActivityEntity> {
         val participations = activityParticipationRepository.findAllByUserId(myUserId)
         return participations.mapNotNull { it.activityEntity }
+    }
+
+    fun getParticipationCountMap(activityIds: List<Long>): Map<Long, Int> {
+        if (activityIds.isEmpty()) return emptyMap()
+        return activityParticipationRepository.countGroupByActivityId(activityIds)
+            .associate {
+                (it["activityId"] as Long) to ((it["count"] as Long).toInt())
+            }
     }
 
     companion object {

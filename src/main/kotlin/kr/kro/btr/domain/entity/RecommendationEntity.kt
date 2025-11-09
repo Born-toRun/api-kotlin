@@ -20,13 +20,5 @@ class RecommendationEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", insertable = false, updatable = false)
-    val userEntity: UserEntity? = null,
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contentId", insertable = false, updatable = false)
-    val feedEntity: FeedEntity? = null,
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contentId", insertable = false, updatable = false)
-    val commentEntity: CommentEntity? = null
+    val userEntity: UserEntity? = null
 )

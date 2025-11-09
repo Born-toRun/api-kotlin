@@ -119,13 +119,6 @@ class OAuth2AuthenticationSuccessHandler(
         authorizationRequestRepository.removeAuthorizationRequestCookies(request, response)
     }
 
-    private fun hasAuthority(
-        authorities: Collection<GrantedAuthority>?,
-        authority: String
-    ): Boolean {
-        return authorities?.any { it.authority == authority } ?: false
-    }
-
     private fun isAuthorizedRedirectUri(uri: String): Boolean {
         val clientRedirectUri = URI.create(uri)
         logger.info("Validating client redirect URI: scheme=${clientRedirectUri.scheme}, host=${clientRedirectUri.host}, port=${clientRedirectUri.port}")

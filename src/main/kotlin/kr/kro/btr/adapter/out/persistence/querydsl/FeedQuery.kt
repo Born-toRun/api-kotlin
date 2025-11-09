@@ -2,7 +2,6 @@ package kr.kro.btr.adapter.out.persistence.querydsl
 
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.Expressions
-import com.querydsl.jpa.impl.JPAQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
 import kr.kro.btr.domain.constant.FeedAccessLevel
 import kr.kro.btr.domain.entity.FeedEntity
@@ -30,31 +29,63 @@ class FeedQuery(private val queryFactory: JPAQueryFactory) {
         val userPrivacy = QUserPrivacyEntity.userPrivacyEntity
         val feedImageMapping = QFeedImageMappingEntity.feedImageMappingEntity
         val objectStorage = QObjectStorageEntity.objectStorageEntity
-        val comment = QCommentEntity.commentEntity
-        val recommendation = QRecommendationEntity.recommendationEntity
         val whereClause = buildWhereClause(query, feed)
 
-        val feedQuery: JPAQuery<FeedEntity> = queryFactory
+        val total = if (query.isMyCrew || query.searchedUserIds?.isNotEmpty() == true) {
+            queryFactory
+                .select(feed.countDistinct())
+                .from(feed)
+                .innerJoin(feed.userEntity, user)
+                .where(whereClause)
+                .fetchOne() ?: 0L
+        } else {
+            queryFactory
+                .select(feed.count())
+                .from(feed)
+                .where(whereClause)
+                .fetchOne() ?: 0L
+        }
+
+        val contents = queryFactory
             .selectFrom(feed)
             .innerJoin(feed.userEntity, user).fetchJoin()
-            .innerJoin(user.userPrivacyEntity, userPrivacy).fetchJoin()
-            .innerJoin(user.crewEntity, crew).fetchJoin()
-            .leftJoin(feed.feedImageMappingEntities, feedImageMapping).fetchJoin()
-            .leftJoin(feedImageMapping.objectStorageEntity, objectStorage).fetchJoin()
-            .leftJoin(feed.commentEntities, comment).fetchJoin()
-            .leftJoin(feed.recommendationEntities, recommendation).fetchJoin()
-            .distinct()
+            .leftJoin(user.userPrivacyEntity, userPrivacy).fetchJoin()
+            .leftJoin(user.crewEntity, crew).fetchJoin()
             .where(whereClause)
-
-        val total = feedQuery.fetch().size
-
-        val contents = feedQuery
             .orderBy(feed.id.desc())
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
             .fetch()
 
-        return PageImpl(contents, pageable, total.toLong())
+        if (contents.isNotEmpty()) {
+            val feedIds = contents.map { it.id }
+            queryFactory
+                .selectFrom(feedImageMapping)
+                .leftJoin(feedImageMapping.objectStorageEntity, objectStorage).fetchJoin()
+                .where(feedImageMapping.feedId.`in`(feedIds))
+                .fetch()
+        }
+
+        if (contents.isNotEmpty()) {
+            val feedIds = contents.map { it.id }
+
+            val recommendation = QRecommendationEntity.recommendationEntity
+            queryFactory
+                .selectFrom(recommendation)
+                .where(
+                    recommendation.recommendationType.eq(kr.kro.btr.domain.constant.RecommendationType.FEED)
+                        .and(recommendation.contentId.`in`(feedIds))
+                )
+                .fetch()
+
+            val comment = QCommentEntity.commentEntity
+            queryFactory
+                .selectFrom(comment)
+                .where(comment.feedId.`in`(feedIds))
+                .fetch()
+        }
+
+        return PageImpl(contents, pageable, total)
     }
 
     private fun buildWhereClause(query: SearchAllFeedQuery, feed: QFeedEntity): BooleanExpression {

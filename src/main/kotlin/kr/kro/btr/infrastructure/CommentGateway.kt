@@ -14,11 +14,7 @@ class CommentGateway(
 ) {
 
     fun searchAll(feedId: Long): List<CommentEntity> {
-        return commentRepository.findAllByFeedId(feedId)
-    }
-
-    fun searchAll(feedIds: List<Long>): List<CommentEntity> {
-        return commentRepository.findAllByFeedIdIn(feedIds)
+        return commentRepository.findAllByFeedIdOrderByIdDesc(feedId)
     }
 
     fun create(query: CreateCommentQuery) {
@@ -37,6 +33,10 @@ class CommentGateway(
         return commentRepository.findByIdOrNull(commentId) ?: throw NotFoundException("댓글을 찾을 수 없습니다.")
     }
 
+    fun searchWithReplies(commentId: Long): CommentEntity {
+        return commentRepository.findByIdWithReplies(commentId) ?: throw NotFoundException("댓글을 찾을 수 없습니다.")
+    }
+
     fun searchReComments(commentId: Long): List<CommentEntity> {
         return commentRepository.findAllByParentId(commentId)
     }
@@ -45,19 +45,18 @@ class CommentGateway(
         commentRepository.deleteById(commentId)
     }
 
-    fun removeAll(commentIds: List<Long>) {
-        commentRepository.deleteAllById(commentIds)
-    }
-
-    fun removeAll(userId: Long) {
-        val commentIds = commentRepository.findAllByUserId(userId).map { it.id }
-        commentRepository.deleteAllById(commentIds)
-    }
-
     fun modify(query: ModifyCommentQuery): CommentEntity {
         val comment = search(query.commentId)
         comment.contents = query.contents
 
         return commentRepository.save(comment)
+    }
+
+    fun getReplyCountMap(parentIds: List<Long>): Map<Long, Int> {
+        if (parentIds.isEmpty()) return emptyMap()
+        return commentRepository.countGroupByParentId(parentIds)
+            .associate {
+                it.getParentId() to it.getCount().toInt()
+            }
     }
 }

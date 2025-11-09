@@ -6,6 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface UserRefreshTokenRepository : JpaRepository<UserRefreshTokenEntity, Long> {
 
     fun findByUserId(userId: Long): UserRefreshTokenEntity?
-
-    fun findByUserIdAndRefreshToken(userId: Long, refreshToken: String): UserRefreshTokenEntity
 }

@@ -5,7 +5,6 @@ import kr.kro.btr.base.extension.toRecommendationEntity
 import kr.kro.btr.domain.entity.RecommendationEntity
 import kr.kro.btr.infrastructure.model.CreateRecommendationQuery
 import kr.kro.btr.infrastructure.model.RemoveRecommendationQuery
-import kr.kro.btr.infrastructure.model.SearchAllRecommendationQuery
 import kr.kro.btr.support.exception.NotFoundException
 import org.springframework.stereotype.Component
 
@@ -13,14 +12,6 @@ import org.springframework.stereotype.Component
 class RecommendationGateway(
     private val recommendationRepository: RecommendationRepository,
 ) {
-
-    fun searchAll(query: SearchAllRecommendationQuery): List<RecommendationEntity> {
-        return recommendationRepository.findAllByRecommendationTypeAndContentIdIn(
-            query.recommendationType,
-            query.contentIds
-        )
-    }
-
     fun create(query: CreateRecommendationQuery) {
         val recommendationEntity = recommendationRepository
             .findByUserIdAndRecommendationTypeAndContentId(
@@ -40,11 +31,5 @@ class RecommendationGateway(
                 query.contentId
             ) ?: throw NotFoundException("좋아요를 하지 않았습니다.")
         recommendationRepository.deleteById(recommendationEntity.id)
-    }
-
-    fun removeAll(userId: Long) {
-        val ids = recommendationRepository.findAllByUserId(userId)
-            .map { it.id }
-        recommendationRepository.deleteAllById(ids)
     }
 }

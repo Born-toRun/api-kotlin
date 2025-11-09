@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import kr.kro.btr.domain.model.ModifyActivityQuery
+import org.hibernate.annotations.BatchSize
 import org.hibernate.annotations.DynamicInsert
 import java.time.LocalDateTime
 
@@ -42,9 +43,11 @@ class ActivityEntity(
     val userEntity: UserEntity? = null
 ) {
     @OneToMany(mappedBy = "activityEntity", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     val activityParticipationEntities: MutableSet<ActivityParticipationEntity> = mutableSetOf()
 
     @OneToMany(mappedBy = "activityEntity", cascade = [CascadeType.REMOVE], orphanRemoval = true)
+    @BatchSize(size = 100)
     val activityImageMappingEntities: MutableSet<ActivityImageMappingEntity> = mutableSetOf()
 
     fun add(activityImageMappingEntities: List<ActivityImageMappingEntity>?) {

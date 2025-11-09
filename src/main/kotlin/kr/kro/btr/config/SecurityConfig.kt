@@ -46,7 +46,6 @@ class SecurityConfig(
     ): SecurityFilterChain {
         val usersBased = "/api/v1/users"
         val feedsBased = "/api/v1/feeds"
-        val crewsBased = "/api/v1/crews"
         val marathonBookmarkBased = "/api/v1/marathons/bookmark"
         val commentBased = "/api/v1/comments"
         val objectStorageBased = "/api/v1/object-storage"

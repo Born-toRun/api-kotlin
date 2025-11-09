@@ -21,7 +21,6 @@ interface CrewRepository : JpaRepository<CrewEntity, Long> {
             SELECT c FROM CrewEntity c
                 LEFT JOIN FETCH c.imageEntity
                 LEFT JOIN FETCH c.logoEntity
-                LEFT JOIN FETCH c.userEntities
             WHERE c.id = :id
         """
     )
@@ -37,15 +36,15 @@ interface CrewRepository : JpaRepository<CrewEntity, Long> {
             img.fileUri,
             logo.fileUri,
             c.sns,
-            COUNT(a.id)
+            CAST(COUNT(DISTINCT a.id) AS long)
         )
         FROM CrewEntity c
         LEFT JOIN c.imageEntity img
         LEFT JOIN c.logoEntity logo
-        LEFT JOIN c.userEntities u
-        LEFT JOIN u.activityEntities a
+        LEFT JOIN UserEntity u ON u.crewId = c.id
+        LEFT JOIN ActivityEntity a ON a.userId = u.id
         GROUP BY c.id, c.name, c.contents, c.region, img.fileUri, logo.fileUri, c.sns
-        ORDER BY COUNT(a.id) DESC
+        ORDER BY COUNT(DISTINCT a.id) DESC
         """
     )
     fun findCrewRankings(): List<CrewRankingResult>

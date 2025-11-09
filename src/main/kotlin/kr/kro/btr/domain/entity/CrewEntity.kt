@@ -1,6 +1,7 @@
 package kr.kro.btr.domain.entity
 
 import jakarta.persistence.*
+import org.hibernate.annotations.BatchSize
 
 @Entity
 @Table(name = "crew")
@@ -24,7 +25,8 @@ class CrewEntity(
     @JoinColumn(name = "logoId", insertable = false, updatable = false)
     val logoEntity: ObjectStorageEntity? = null
 ) {
-    @OneToMany(mappedBy = "crewEntity")
+    @OneToMany(mappedBy = "crewEntity", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     val userEntities: MutableSet<UserEntity> = mutableSetOf()
 
     fun modify(query: kr.kro.btr.domain.model.ModifyCrewQuery) {

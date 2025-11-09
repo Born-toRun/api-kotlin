@@ -11,14 +11,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserRefreshTokenService(
-    private val userRefreshTokenGateway: UserRefreshTokenGateway,
-    private val userGateway: UserGateway,
+    private val userRefreshTokenGateway: UserRefreshTokenGateway
 ) : UserRefreshTokenPort {
-
-    @Transactional(readOnly = true)
-    override fun searchByUserId(userId: Long): UserRefreshTokenEntity? {
-        return userRefreshTokenGateway.searchByUserId(userId)
-    }
 
     @Transactional
     override fun create(command: CreateRefreshTokenCommand): UserRefreshTokenEntity {

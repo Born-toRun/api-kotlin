@@ -23,6 +23,15 @@ class MarathonGateway(
         return marathonRepository.findByIdOrNull(marathonId) ?: throw NotFoundException("해당 대회를 찾을 수 없습니다.")
     }
 
+    fun getBookmarkedMarathonIds(userId: Long, marathonIds: List<Long>): Set<Long> {
+        if (marathonIds.isEmpty()) return emptySet()
+        return marathonBookmarkRepository.findBookmarkedMarathonIds(userId, marathonIds).toSet()
+    }
+
+    fun isMarathonBookmarked(userId: Long, marathonId: Long): Boolean {
+        return marathonBookmarkRepository.existsByMarathonIdAndUserId(marathonId, userId)
+    }
+
     fun bookmark(query: BookmarkMarathonQuery) {
         val bookmark = marathonBookmarkRepository.findByUserIdAndMarathonId(query.myUserId, query.marathonId)
             ?: query.toMarathonBookmarkEntity()

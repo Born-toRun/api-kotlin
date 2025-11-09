@@ -9,15 +9,13 @@ interface ActivityRepository : JpaRepository<ActivityEntity, Long> {
 
     @Query(
         """
-        SELECT DISTINCT a FROM ActivityEntity a 
-        LEFT JOIN FETCH a.activityParticipationEntities
-        INNER JOIN FETCH a.userEntity
-        LEFT JOIN FETCH a.userEntity.profileImageEntity
-        INNER JOIN FETCH a.userEntity.crewEntity
+        SELECT a FROM ActivityEntity a
+        INNER JOIN FETCH a.userEntity u
+        LEFT JOIN FETCH u.profileImageEntity
+        INNER JOIN FETCH u.crewEntity
         WHERE a.id = :id
         """
     )
     fun findByIdOrNull(id: Long): ActivityEntity?
-    fun findAllByUserId(userId: Long): List<ActivityEntity>
     fun findByStartAtAndUserId(startAt: LocalDateTime, userId: Long): ActivityEntity?
 }

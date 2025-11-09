@@ -2,7 +2,6 @@ package kr.kro.btr.core.service
 
 import kr.kro.btr.base.extension.toCommentDetail
 import kr.kro.btr.base.extension.toCommentResult
-import kr.kro.btr.base.extension.toCommentResults
 import kr.kro.btr.base.extension.toCreateCommentQuery
 import kr.kro.btr.base.extension.toModifyCommentQuery
 import kr.kro.btr.domain.entity.CommentEntity
@@ -24,10 +23,18 @@ class CommentService(
 
     @Transactional(readOnly = true)
     override fun searchAll(command: SearchAllCommentCommand): List<CommentResult> {
-        val commentEntities = commentGateway.searchAll(command.feedId).toList()
+        val commentEntities = commentGateway.searchAll(command.feedId)
+
+        if (commentEntities.isEmpty()) return emptyList()
+
+        val parentCommentIds = commentEntities
+            .filter { it.isRootComment() }
+            .map { it.id }
+
+        val replyCountMap = commentGateway.getReplyCountMap(parentCommentIds)
 
         // 댓글/대댓글 정렬
-        commentEntities.sortedWith(
+        val sortedEntities = commentEntities.sortedWith(
             compareBy<CommentEntity>(
                 { if (it.isRootComment()) it.id else it.parentId },
                 { if (it.isRootComment()) 0L else -1L },
@@ -35,14 +42,21 @@ class CommentService(
             ).reversed()
         )
 
-        return commentEntities.toCommentResults(command.myUserId)
+        return sortedEntities.map { comment ->
+            if (comment.isRootComment()) {
+                comment.toCommentResult(command.myUserId, replyCountMap[comment.id] ?: 0)
+            } else {
+                comment.toCommentResult(command.myUserId, 0)
+            }
+        }
     }
 
     @Transactional(readOnly = true)
     override fun detail(command: DetailCommentCommand): CommentDetailResult {
-        val parentComment = commentGateway.search(command.commentId)
-        val reCommentResults = parentComment.child
-            .map { it.toCommentResult(command.myUserId) }
+        val parentComment = commentGateway.searchWithReplies(command.commentId)
+
+        val reCommentResults = commentGateway.searchReComments(command.commentId)
+            .map { it.toCommentResult(command.myUserId, 0) }
             .sortedByDescending { it.id }
 
         return parentComment.toCommentDetail(reCommentResults)
@@ -69,10 +83,5 @@ class CommentService(
         val query = command.toModifyCommentQuery()
         val modified = commentGateway.modify(query)
         return modified.toCommentResult()
-    }
-
-    @Transactional(readOnly = true)
-    override fun search(commentId: Long): CommentEntity {
-        return commentGateway.search(commentId)
     }
 }

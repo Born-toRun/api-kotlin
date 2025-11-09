@@ -1,7 +1,6 @@
 package kr.kro.btr.core.service
 
 import kr.kro.btr.base.extension.toActivityResult
-import kr.kro.btr.base.extension.toActivityResults
 import kr.kro.btr.base.extension.toAttendanceActivityQuery
 import kr.kro.btr.base.extension.toCreateActivityQuery
 import kr.kro.btr.base.extension.toModifyActivityQuery
@@ -40,11 +39,6 @@ class ActivityService(
     }
 
     @Transactional
-    override fun removeAll(userId: Long) {
-        activityGateway.removeAll(userId)
-    }
-
-    @Transactional
     override fun remove(activityId: Long) {
         activityGateway.remove(activityId)
     }
@@ -63,22 +57,25 @@ class ActivityService(
     @Transactional(readOnly = true)
     override fun searchAll(command: SearchAllActivityCommand): List<ActivityResult> {
         val query = command.toSearchAllActivityQuery()
-        val activityEntities = activityGateway.searchAll(query)
-        return activityEntities.toActivityResults(command.myUserId)
+        val activityAggregations = activityGateway.searchAllWithAggregation(query, command.myUserId)
+
+        return activityAggregations.map { it.toActivityResult(command.myUserId) }
     }
 
     @Transactional(readOnly = true)
     override fun searchByCrewId(command: SearchByCrewIdActivityCommand): List<ActivityResult> {
         val query = command.toSearchByCrewIdActivityQuery()
-        val activityEntities = activityGateway.searchAll(query)
-        // Use a default userId of 0 for public access since no user context is available
-        return activityEntities.toActivityResults(0L)
+
+        val activityAggregations = activityGateway.searchAllWithAggregation(query, 0L)
+
+        return activityAggregations.map { it.toActivityResult(0L) }
     }
 
     @Transactional(readOnly = true)
     override fun search(activityId: Long, myUserId: Long): ActivityResult {
-        val activityEntity = activityGateway.search(activityId)
-        return activityEntity.toActivityResult(myUserId)
+        val activityAggregation = activityGateway.searchWithAggregation(activityId, myUserId)
+
+        return activityAggregation.toActivityResult(myUserId)
     }
 
     @Transactional
@@ -107,6 +104,19 @@ class ActivityService(
     @Transactional(readOnly = true)
     override fun searchMyParticipations(myUserId: Long): List<ActivityResult> {
         val activityEntities = activityGateway.searchMyParticipations(myUserId)
-        return activityEntities.toActivityResults(myUserId)
+
+        if (activityEntities.isEmpty()) return emptyList()
+
+        val activityIds = activityEntities.map { it.id }
+
+        val participationCountMap = activityGateway.getParticipationCountMap(activityIds)
+
+        return activityEntities.map { activity ->
+            kr.kro.btr.infrastructure.model.ActivityAggregationData(
+                activityEntity = activity,
+                participantsCount = participationCountMap[activity.id] ?: 0,
+                hasUserParticipation = true
+            ).toActivityResult(myUserId)
+        }
     }
 }

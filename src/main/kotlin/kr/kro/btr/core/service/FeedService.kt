@@ -2,7 +2,7 @@ package kr.kro.btr.core.service
 
 import kr.kro.btr.base.extension.toCreateFeedQuery
 import kr.kro.btr.base.extension.toFeedCard
-import kr.kro.btr.base.extension.toFeedResult
+import kr.kro.btr.base.extension.toFeedDetailResult
 import kr.kro.btr.base.extension.toModifyFeedQuery
 import kr.kro.btr.base.extension.toSearchAllFeedQuery
 import kr.kro.btr.domain.entity.FeedImageMappingEntity
@@ -19,7 +19,6 @@ import kr.kro.btr.infrastructure.FeedImageMappingGateway
 import kr.kro.btr.infrastructure.UserGateway
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -32,8 +31,9 @@ class FeedService(
 
     @Transactional(readOnly = true)
     override fun searchDetail(command: SearchFeedDetailCommand): FeedDetailResult {
-        val feedEntity = feedGateway.search(command.feedId)
-        return feedEntity.toFeedResult(command.my)
+        val aggregationData = feedGateway.searchWithAggregation(command.feedId, command.my.id)
+
+        return aggregationData.toFeedDetailResult()
     }
 
     @Transactional(readOnly = true)
@@ -45,14 +45,13 @@ class FeedService(
             } ?: emptyList()
 
         val query = command.toSearchAllFeedQuery(searchedUserIds)
-        val feedPage = feedGateway.searchAllByFilter(query, pageable)
+        val aggregationPage = feedGateway.searchAllByFilter(query, pageable)
 
-        return feedPage.map { entity ->
-            entity.toFeedCard(command.my.id)
+        return aggregationPage.map { aggregationData ->
+            aggregationData.toFeedCard()
         }
     }
 
-    @Async
     @Transactional
     override fun increaseViewQty(feedId: Long) {
         feedGateway.increaseViewQty(feedId)
@@ -83,9 +82,9 @@ class FeedService(
 
     @Transactional(readOnly = true)
     override fun searchMyFeeds(myUserId: Long): List<FeedResult> {
-        val feedEntities = feedGateway.searchMyFeeds(myUserId)
-        return feedEntities.map { entity ->
-            entity.toFeedCard(myUserId)
+        val aggregatedFeeds = feedGateway.searchMyFeedsWithAggregation(myUserId)
+        return aggregatedFeeds.map { aggregationData ->
+            aggregationData.toFeedCard()
         }
     }
 }

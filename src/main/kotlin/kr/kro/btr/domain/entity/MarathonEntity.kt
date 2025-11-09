@@ -1,6 +1,7 @@
 package kr.kro.btr.domain.entity
 
 import jakarta.persistence.*
+import org.hibernate.annotations.BatchSize
 import java.time.LocalDateTime
 
 @Entity
@@ -26,6 +27,7 @@ class MarathonEntity(
     val remark: String? = null,
     val registeredAt: LocalDateTime = LocalDateTime.now()
 ) {
-    @OneToMany(mappedBy = "marathonEntity", cascade = [CascadeType.REMOVE])
+    @OneToMany(mappedBy = "marathonEntity", cascade = [CascadeType.REMOVE], fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
     val marathonBookmarkEntities: MutableSet<MarathonBookmarkEntity> = mutableSetOf()
 }
