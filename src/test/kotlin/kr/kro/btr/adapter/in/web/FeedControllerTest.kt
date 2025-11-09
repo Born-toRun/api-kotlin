@@ -321,6 +321,8 @@ class FeedControllerTest (
                 .param("isMyCrew", queryParam.isMyCrew.toString())
                 .param("searchKeyword", queryParam.searchKeyword)
                 .param("category", queryParam.category?.name)
+                .param("lastFeedId", "0")
+                .param("size", "10")
 
             it("200 OK") {
                 every { proxy.searchAll(any(), any(), any(), any()) } returns page
@@ -345,6 +347,8 @@ class FeedControllerTest (
                     .andDocument(
                         "search-feeds",
                         queryParameters(
+                            "lastFeedId" isRequired false pathMeans "이전 페이지의 마지막 피드 식별자" default "0",
+                            "size" isRequired false pathMeans "페이징 사이즈" default "10",
                             "category" isRequired false pathMeans "카테고리",
                             "searchKeyword" isRequired false pathMeans "검색 키워드",
                             "isMyCrew" isRequired false pathMeans "나의 크루 보기 여부"

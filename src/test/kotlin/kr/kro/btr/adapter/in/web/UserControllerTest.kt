@@ -187,7 +187,7 @@ class UserControllerTest (
                             "isManager" type BOOLEAN means "크루장 여부" isRequired true,
                             "yellowCardQty" type NUMBER means "신고 개수" isRequired true,
                             "isInstagramIdPublic" type BOOLEAN means "인스타그램 공개 여부" isRequired false,
-                            "instagramUri" type STRING means "인스타그램 uri" isRequired false
+                            "instagramId" type STRING means "인스타그램 아이디" isRequired false
                         )
                     )
             }
@@ -239,7 +239,7 @@ class UserControllerTest (
                             "isManager" type BOOLEAN means "크루장 여부" isRequired true,
                             "yellowCardQty" type NUMBER means "신고 개수" isRequired true,
                             "isInstagramIdPublic" type BOOLEAN means "인스타그램 공개 여부" isRequired false,
-                            "instagramUri" type STRING means "인스타그램 uri" isRequired false
+                            "instagramId" type STRING means "인스타그램 아이디" isRequired false
                         )
                     )
             }

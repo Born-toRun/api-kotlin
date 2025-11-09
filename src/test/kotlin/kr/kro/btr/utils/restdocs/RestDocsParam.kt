@@ -9,11 +9,10 @@ class RestDocsParam(
 	val descriptor: ParameterDescriptor
 ) {
 
-    private var default: String
-        get() = descriptor.attributes["default"] as String
-        set(value) {
-            descriptor.attributes["default"] = value
-        }
+    infix fun default(default: String): RestDocsParam {
+        descriptor.attributes["default"] = default
+        return this
+    }
 
     infix fun pathMeans(description: String): RestDocsParam {
         descriptor.description(description)
