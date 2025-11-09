@@ -53,7 +53,11 @@ class FeedQuery(private val queryFactory: JPAQueryFactory) {
             .leftJoin(user.crewEntity, crew).fetchJoin()
             .where(whereClause)
             .orderBy(feed.id.desc())
-            .offset(pageable.offset)
+            .apply {
+                if (query.lastFeedId == 0L) {
+                    offset(pageable.offset)
+                }
+            }
             .limit(pageable.pageSize.toLong())
             .fetch()
 
