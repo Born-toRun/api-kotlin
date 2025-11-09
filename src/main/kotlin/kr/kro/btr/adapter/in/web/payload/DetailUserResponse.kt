@@ -1,7 +1,5 @@
 package kr.kro.btr.adapter.`in`.web.payload
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-
 data class DetailUserResponse(
     val userId: Long,
     val userName: String?,
@@ -10,7 +8,6 @@ data class DetailUserResponse(
     val isAdmin: Boolean,
     val isManager: Boolean,
     val yellowCardQty: Int,
-    @JsonIgnore
     val instagramId: String?,
     val isInstagramIdPublic: Boolean?
 )

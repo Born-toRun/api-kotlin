@@ -24,7 +24,7 @@ class UserGateway(
     }
 
     fun searchById(userId: Long): UserEntity {
-        return userRepository.findByIdOrThrow(userId)
+        return userRepository.findAllEntitiesById(userId)
             ?: throw NotFoundException("회원을 찾을 수 없습니다.")
     }
 
