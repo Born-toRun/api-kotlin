@@ -31,8 +31,8 @@ class FeedProxy(
     }
 
     @Cacheable(
-        key = "#request == null ? 'searchAll: ' + #my.id + #pageable.offset : " +
-                "'searchAll: ' + #my.id + #request.hashCode() + #pageable.offset"
+        key = "#request == null ? 'searchAll: ' + #my.id + #pageable.pageSize + #lastFeedId : " +
+                "'searchAll: ' + #my.id + #request.hashCode() + #pageable.pageSize + #lastFeedId"
     )
     fun searchAll(
         request: SearchFeedRequest,
