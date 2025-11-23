@@ -96,6 +96,8 @@ pipeline {
                         MAX_RETRIES=30
                         RETRY_COUNT=0
                         HEALTH_CHECK_PASSED=0
+
+                        sleep 30
         
                         while [ \$RETRY_COUNT -lt \$MAX_RETRIES ]; do
                             RESPONSE=\$(curl -f -s -o /dev/null -w '%{http_code}' http://\$HOST_IP:${env.ACTIVE_PORT}/)
