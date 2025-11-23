@@ -74,55 +74,38 @@ pipeline {
 
                     echo "Starting new container: ${env.INACTIVE_CONTAINER}"
 
-                    // Jenkins Credentials를 사용하여 민감한 정보 주입
-                    withCredentials([
-                        string(credentialsId: 'MYSQL_HOSTNAME', variable: 'MYSQL_HOSTNAME'),
-                        string(credentialsId: 'MYSQL_PORT', variable: 'MYSQL_PORT'),
-                        string(credentialsId: 'B2R_DATABASE', variable: 'B2R_DATABASE'),
-                        string(credentialsId: 'B2R_DATABASE_USER', variable: 'B2R_DATABASE_USER'),
-                        string(credentialsId: 'B2R_DATABASE_PASSWORD', variable: 'B2R_DATABASE_PASSWORD'),
-                        string(credentialsId: 'KAKAO_API_KEY', variable: 'KAKAO_API_KEY'),
-                        string(credentialsId: 'KAKAO_CLIENT_SECRET', variable: 'KAKAO_CLIENT_SECRET'),
-                        string(credentialsId: 'B2R_DISCORD', variable: 'B2R_DISCORD'),
-                        string(credentialsId: 'MINIO_ACCESS_KEY', variable: 'MINIO_ACCESS_KEY'),
-                        string(credentialsId: 'MINIO_SECRET_KEY', variable: 'MINIO_SECRET_KEY'),
-                        string(credentialsId: 'REDIS_PHOST', variable: 'REDIS_PHOST'),
-                        string(credentialsId: 'REDIS_PORT', variable: 'REDIS_PORT'),
-                        string(credentialsId: 'REDIS_PASSWORD', variable: 'REDIS_PASSWORD')
-                    ]) {
-                        def jvmAppOptions = """-Dserver.port=${INTERNAL_PORT} \
-                            -Dserver.forward-headers-strategy=NATIVE \
-                            -Dserver.servlet.session.cookie.secure=true \
-                            -Dserver.servlet.session.cookie.http-only=true \
-                            -Dserver.servlet.session.cookie.same-site=Lax \
-                            -Ddatabase.host=${MYSQL_HOSTNAME} \
-                            -Ddatabase.port=${MYSQL_PORT} \
-                            -Ddatabase.database=${B2R_DATABASE} \
-                            -Ddatabase.username=${B2R_DATABASE_USER} \
-                            -Ddatabase.password=${B2R_DATABASE_PASSWORD} \
-                            -Dkakao.apikey=${KAKAO_API_KEY} \
-                            -Dkakao.client-secret=${KAKAO_CLIENT_SECRET} \
-                            -Ddiscord.webhook=${B2R_DISCORD} \
-                            -Dcors.origin=https://b2r.kro.kr,b2r-web.vercel.app,http://localhost:3000,http://localhost:8080,http://localhost:3001,https://client-gamma-khaki.vercel.app \
-                            -Dminio.access-key=${MINIO_ACCESS_KEY} \
-                            -Dminio.secret-key=${MINIO_SECRET_KEY} \
-                            -Dminio.node=http://b2r.kro.kr:9000 \
-                            -Dcdn.host=https://cdn.b2r.kro.kr \
-                            -Dredis.host=${REDIS_PHOST} \
-                            -Dredis.port=${REDIS_PORT} \
-                            -Dredis.password=${REDIS_PASSWORD} \
-                            -Dkakao.redirectUrl=https://b2r.kro.kr:8443/login/oauth2/code/kakao \
-                            -Dlogging.level.root=INFO"""
+                    def jvmAppOptions = """-Dserver.port=${INTERNAL_PORT} \
+                        -Dserver.forward-headers-strategy=NATIVE \
+                        -Dserver.servlet.session.cookie.secure=true \
+                        -Dserver.servlet.session.cookie.http-only=true \
+                        -Dserver.servlet.session.cookie.same-site=Lax \
+                        -Ddatabase.host=${env.MYSQL_HOSTNAME} \
+                        -Ddatabase.port=${env.MYSQL_PORT} \
+                        -Ddatabase.database=${env.B2R_DATABASE} \
+                        -Ddatabase.username=${env.B2R_DATABASE_USER} \
+                        -Ddatabase.password=${env.B2R_DATABASE_PASSWORD} \
+                        -Dkakao.apikey=${env.KAKAO_API_KEY} \
+                        -Dkakao.client-secret=${env.KAKAO_CLIENT_SECRET} \
+                        -Ddiscord.webhook=${env.B2R_DISCORD} \
+                        -Dcors.origin=https://b2r.kro.kr,b2r-web.vercel.app,http://localhost:3000,http://localhost:8080,http://localhost:3001,https://client-gamma-khaki.vercel.app \
+                        -Dminio.access-key=${env.MINIO_ACCESS_KEY} \
+                        -Dminio.secret-key=${env.MINIO_SECRET_KEY} \
+                        -Dminio.node=http://b2r.kro.kr:9000 \
+                        -Dcdn.host=https://cdn.b2r.kro.kr \
+                        -Dredis.host=${env.REDIS_PHOST} \
+                        -Dredis.port=${env.REDIS_PORT} \
+                        -Dredis.password=${env.REDIS_PASSWORD} \
+                        -Dkakao.redirectUrl=https://b2r.kro.kr:8443/login/oauth2/code/kakao \
+                        -Dlogging.level.root=INFO"""
 
-                        sh """
-                            docker run -d \
-                                --name ${env.INACTIVE_CONTAINER} \
-                                -p ${env.INACTIVE_PORT}:8080 \
-                                -e JAVA_OPTS='${JVM_OPTS} ${jvmAppOptions}' \
-                                --restart unless-stopped \
-                                ${DOCKER_IMAGE}
-                        """
-                    }
+                    sh """
+                        docker run -d \
+                            --name ${env.INACTIVE_CONTAINER} \
+                            -p ${env.INACTIVE_PORT}:8080 \
+                            -e JAVA_OPTS='${JVM_OPTS} ${jvmAppOptions}' \
+                            --restart unless-stopped \
+                            ${DOCKER_IMAGE}
+                    """
 
                     echo "Waiting for container to start..."
                     sleep(time: 10, unit: 'SECONDS')
