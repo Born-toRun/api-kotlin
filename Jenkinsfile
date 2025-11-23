@@ -89,42 +89,32 @@ pipeline {
             steps {
                 script {
                     echo "Performing health check on ${env.INACTIVE_CONTAINER}..."
-
-                    def maxRetries = 30
-                    def retryCount = 0
-                    def healthCheckPassed = false
-
-                    while (retryCount < maxRetries && !healthCheckPassed) {
-                        try {
-                            def response = sh(
-                                script: """
-                                HOST_IP=\$(ip route | grep default | awk '{print \$3}')
-                                echo "Using host IP: \$HOST_IP"
-                                
-                                curl -f -s -o /dev/null -w '%{http_code}' http://$HOST_IP:${env.ACTIVE_PORT}/
-                                """,
-                                returnStdout: true
-                            ).trim()
-
-                            if (response == '200') {
-                                healthCheckPassed = true
-                                echo "Health check passed! Response code: ${response}"
-                            } else {
-                                echo "Health check attempt ${retryCount + 1}/${maxRetries} - Response code: ${response}"
-                            }
-                        } catch (Exception e) {
-                            echo "Health check attempt ${retryCount + 1}/${maxRetries} failed: ${e.message}"
-                        }
-
-                        if (!healthCheckPassed) {
-                            sleep(time: 5, unit: 'SECONDS')
-                            retryCount++
-                        }
-                    }
-
-                    if (!healthCheckPassed) {
-                        error("Health check failed after ${maxRetries} attempts")
-                    }
+                    sh """
+                        HOST_IP=\$(ip route | grep default | awk '{print \$3}')
+                        echo "Using host IP: \$HOST_IP"
+        
+                        MAX_RETRIES=30
+                        RETRY_COUNT=0
+                        HEALTH_CHECK_PASSED=0
+        
+                        while [ \$RETRY_COUNT -lt \$MAX_RETRIES ]; do
+                            RESPONSE=\$(curl -f -s -o /dev/null -w '%{http_code}' http://\$HOST_IP:${env.INACTIVE_PORT}/)
+                            if [ "\$RESPONSE" = "200" ]; then
+                                echo "Health check passed! Response code: \$RESPONSE"
+                                HEALTH_CHECK_PASSED=1
+                                break
+                            else
+                                echo "Health check attempt \$((RETRY_COUNT+1))/\$MAX_RETRIES - Response code: \$RESPONSE"
+                            fi
+                            sleep 5
+                            RETRY_COUNT=\$((RETRY_COUNT+1))
+                        done
+        
+                        if [ \$HEALTH_CHECK_PASSED -ne 1 ]; then
+                            echo "Health check failed after \$MAX_RETRIES attempts"
+                            exit 1
+                        fi
+                    """
                 }
             }
         }
