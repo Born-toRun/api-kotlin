@@ -40,7 +40,7 @@ jobs:
 
     # docker image build
     - name: docker image build
-      run: docker build --platform linux/arm64/v8 -t ${{ secrets.DOCKERHUB_USERNAME }}/born-to-run-api -f docker/Dockerfile .
+      run: docker build --platform linux/arm64/v8 -t ${{ secrets.DOCKERHUB_USERNAME }}/b2r-api -f docker/Dockerfile .
 
     # docker hub login
     - name: docker login
@@ -51,7 +51,7 @@ jobs:
 
     # docker hub image push
     - name: docker Hub push
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/born-to-run-api
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/b2r-api
 
     # discord notify
     - name: discord 알림 전송
