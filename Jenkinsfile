@@ -97,7 +97,7 @@ pipeline {
                     while (retryCount < maxRetries && !healthCheckPassed) {
                         try {
                             def response = sh(
-                                script: "curl -f -s -o /dev/null -w '%{http_code}' http://${env.INACTIVE_CONTAINER}:8080/",
+                                script: "curl -f -s -o /dev/null -w '%{http_code}' http://${env.INACTIVE_CONTAINER}:48080/",
                                 returnStdout: true
                             ).trim()
 
