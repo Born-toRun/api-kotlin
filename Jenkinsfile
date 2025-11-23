@@ -21,6 +21,30 @@ pipeline {
            -XX:+UseStringDeduplication \
            -XX:+ParallelRefProcEnabled"""
 
+           JVM_APP_OPTIONS = """-Dserver.port=${INTERNAL_PORT} \
+           -Dserver.forward-headers-strategy=NATIVE \
+           -Dserver.servlet.session.cookie.secure=true \
+           -Dserver.servlet.session.cookie.http-only=true \
+           -Dserver.servlet.session.cookie.same-site=Lax \
+           -Ddatabase.host=${MYSQL_HOSTNAME} \
+           -Ddatabase.port=${MYSQL_PORT} \
+           -Ddatabase.database=${B2R_DATABASE} \
+           -Ddatabase.username=${B2R_DATABASE_USER} \
+           -Ddatabase.password=${B2R_DATABASE_PASSWORD} \
+           -Dkakao.apikey=${KAKAO_API_KEY} \
+           -Dkakao.client-secret=${KAKAO_CLIENT_SECRET} \
+           -Ddiscord.webhook=${B2R_DISCORD} \
+           -Dcors.origin=https://b2r.kro.kr,b2r-web.vercel.app,http://localhost:3000,http://localhost:8080,http://localhost:3001,https://client-gamma-khaki.vercel.app \
+           -Dminio.access-key=${MINIO_ACCESS_KEY} \
+           -Dminio.secret-key=${MINIO_SECRET_KEY} \
+           -Dminio.node=http://b2r.kro.kr:9000 \
+           -Dcdn.host=https://cdn.b2r.kro.kr \
+           -Dredis.host=${REDIST_PHOST} \
+           -Dredis.port=${REDIST_PORT} \
+           -Dredis.password=${REDIS_PASSWORD} \
+           -Dkakao.redirectUrl=https://b2r.kro.kr:8443/login/oauth2/code/kakao \
+           -Dlogging.level.root=INFO"""
+
         // Application Options
         INTERNAL_PORT = '8080'
     }
@@ -75,36 +99,12 @@ pipeline {
 
                     echo "Starting new container: ${env.INACTIVE_CONTAINER}"
 
-                    def jvmAppOptions = """-Dserver.port=${INTERNAL_PORT} \
-                        -Dserver.forward-headers-strategy=NATIVE \
-                        -Dserver.servlet.session.cookie.secure=true \
-                        -Dserver.servlet.session.cookie.http-only=true \
-                        -Dserver.servlet.session.cookie.same-site=Lax \
-                        -Ddatabase.host=${MYSQL_HOSTNAME} \
-                        -Ddatabase.port=${MYSQL_PORT} \
-                        -Ddatabase.database=${B2R_DATABASE} \
-                        -Ddatabase.username=${B2R_DATABASE_USER} \
-                        -Ddatabase.password=${B2R_DATABASE_PASSWORD} \
-                        -Dkakao.apikey=${KAKAO_API_KEY} \
-                        -Dkakao.client-secret=${KAKAO_CLIENT_SECRET} \
-                        -Ddiscord.webhook=${B2R_DISCORD} \
-                        -Dcors.origin=https://b2r.kro.kr,b2r-web.vercel.app,http://localhost:3000,http://localhost:8080,http://localhost:3001,https://client-gamma-khaki.vercel.app \
-                        -Dminio.access-key=${MINIO_ACCESS_KEY} \
-                        -Dminio.secret-key=${MINIO_SECRET_KEY} \
-                        -Dminio.node=http://b2r.kro.kr:9000 \
-                        -Dcdn.host=https://cdn.b2r.kro.kr \
-                        -Dredis.host=${REDIS_PHOST} \
-                        -Dredis.port=${REDIS_PORT} \
-                        -Dredis.password=${REDIS_PASSWORD} \
-                        -Dkakao.redirectUrl=https://b2r.kro.kr:8443/login/oauth2/code/kakao \
-                        -Dlogging.level.root=INFO"""
-
                     sh """
                         docker run -d \
                             --name ${env.INACTIVE_CONTAINER} \
                             --network ${DOCKER_NETWORK} \
                             -p ${env.INACTIVE_PORT}:8080 \
-                            -e JAVA_OPTS='${JVM_OPTS} ${jvmAppOptions}' \
+                            -e JAVA_OPTS='${JVM_OPTS} ${JVM_APP_OPTIONS}' \
                             --restart unless-stopped \
                             ${DOCKER_IMAGE}
                     """
