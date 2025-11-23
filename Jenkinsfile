@@ -8,6 +8,7 @@ pipeline {
         BLUE_PORT = '8443'
         GREEN_PORT = '8444'
         NGINX_PORT = '80'
+        DOCKER_NETWORK = 'bridge'
 
         // JVM Options
         JVM_OPTS = """-Xms512m \
@@ -101,6 +102,7 @@ pipeline {
                     sh """
                         docker run -d \
                             --name ${env.INACTIVE_CONTAINER} \
+                            --network ${DOCKER_NETWORK} \
                             -p ${env.INACTIVE_PORT}:8080 \
                             -e JAVA_OPTS='${JVM_OPTS} ${jvmAppOptions}' \
                             --restart unless-stopped \
@@ -125,7 +127,7 @@ pipeline {
                     while (retryCount < maxRetries && !healthCheckPassed) {
                         try {
                             def response = sh(
-                                script: "curl -f -s -o /dev/null -w '%{http_code}' http://localhost:${env.INACTIVE_PORT}/",
+                                script: "curl -f -s -o /dev/null -w '%{http_code}' http://${env.INACTIVE_CONTAINER}:8080/",
                                 returnStdout: true
                             ).trim()
 
