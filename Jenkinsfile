@@ -94,13 +94,15 @@ pipeline {
                     def retryCount = 0
                     def healthCheckPassed = false
 
-                    HOST_IP=\$(ip route | grep default | awk '{print \$3}')
-                    echo "Using host IP: \$HOST_IP"
-
                     while (retryCount < maxRetries && !healthCheckPassed) {
                         try {
                             def response = sh(
-                                script: "curl -f -s -o /dev/null -w '%{http_code}' http://$HOST_IP:${env.ACTIVE_PORT}/",
+                                script: """
+                                HOST_IP=\$(ip route | grep default | awk '{print \$3}')
+                                echo "Using host IP: \$HOST_IP"
+                                
+                                curl -f -s -o /dev/null -w '%{http_code}' http://$HOST_IP:${env.ACTIVE_PORT}/
+                                """,
                                 returnStdout: true
                             ).trim()
 
