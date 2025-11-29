@@ -120,7 +120,7 @@ openapi3 {
     } as Closure<Server>
 
     val dev = closureOf<Server> {
-        url("https://born-to-run.kro.kr:8443")
+        url("https://be.b2r.kro.kr")
         description("dev Server")
     } as Closure<Server>
 
