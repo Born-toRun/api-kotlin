@@ -74,8 +74,8 @@ app:
     oauth2:
         authorizedRedirectUris:
             - 'http://localhost:3000'
-            - 'https://born-to-run.kro.kr'
-            - 'https://born-to-run.kro.kr:8443'
+            - 'https://b2r.kro.kr'
+            - 'https://be.b2r.kro.kr'
 adapter:
     discord:
         host: 'https://discord.com'
