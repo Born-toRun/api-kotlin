@@ -159,8 +159,16 @@ pipeline {
 
     post {
         success {
-            echo "Blue-Green deployment completed successfully!"
+            echo "✅ Blue-Green deployment completed successfully!"
             echo "Active Environment: ${env.NEW_ENV}"
+            script {
+                discordSend(
+                    webhookURL: "${B2R_DEPLOY_DISCORD}",
+                    title: "🚀 api Jenkins 빌드 성공",
+                    description: "배포가 성공적으로 완료되었습니다.\nActive Environment: ${env.NEW_ENV}\nPort: ${env.INACTIVE_PORT}",
+                    result: "SUCCESS"
+                )
+            }
         }
         failure {
             echo "Deployment failed! Rolling back..."
@@ -171,9 +179,18 @@ pipeline {
                     docker rm ${env.INACTIVE_CONTAINER} || true
                 """
                 echo "Rollback completed. Active environment remains: ${env.ACTIVE_CONTAINER}"
+
+                discordSend(
+                    webhookURL: "${B2R_DEPLOY_DISCORD}",
+                    title: "❌ api Jenkins 빌드 실패",
+                    description: "배포 중 오류가 발생했습니다.\nActive environment: ${env.ACTIVE_CONTAINER}",
+                    result: "FAILURE"
+                )
             }
         }
         always {
+            echo "🔒 Logging out from Docker Hub..."
+            sh "docker logout || true"
             // 로그 정리
             sh "docker system prune -f || true"
         }
