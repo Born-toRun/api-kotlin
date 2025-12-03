@@ -24,6 +24,7 @@ class UserEntity(
     var roleType: RoleType = RoleType.GUEST,
     var name: String? = null,
     var crewId: Long? = null,
+    var managedCrewId: Long? = null,
     var instagramId: String? = null,
     var lastLoginAt: LocalDateTime = LocalDateTime.now(),
     var imageId: Long? = null,
@@ -32,6 +33,10 @@ class UserEntity(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crewId", insertable = false, updatable = false)
     val crewEntity: CrewEntity? = null,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "managedCrewId", insertable = false, updatable = false)
+    val managedCrewEntity: CrewEntity? = null,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "imageId", insertable = false, updatable = false)

@@ -9,6 +9,7 @@ data class TokenDetail(
     val userName: String? = null,
     val authority: String? = null,
     val crewId: Long? = null,
+    val managedCrewId: Long? = null,
     val isAdmin: Boolean = false,
     val isManager: Boolean = false
 ) {
@@ -17,6 +18,7 @@ data class TokenDetail(
         userName = token.token.getClaimAsString(AuthToken.USER_NAME_KEY),
         authority = token.token.getClaimAsString(AuthToken.AUTHORITIES_KEY),
         crewId = token.token.getClaimAsString(AuthToken.CREW_ID_KEY)?.toLongOrNull(),
+        managedCrewId = token.token.getClaimAsString(AuthToken.MANAGED_CREW_ID_KEY)?.toLongOrNull(),
         isAdmin = token.token.getClaimAsString(AuthToken.AUTHORITIES_KEY) == RoleType.ADMIN.code,
         isManager = token.token.getClaimAsString(AuthToken.AUTHORITIES_KEY) == RoleType.MANAGER.code
     )

@@ -33,7 +33,7 @@ class CrewProxy(
 
     @Cacheable(key = "'detail: ' + #crewId")
     fun detailMyCrew(crewId: Long?): CrewResult {
-        return crewPort.detailMyCrew(crewId ?: throw AuthorizationException("사용자가 크루에 소속되어 있지 않습니다."))
+        return crewPort.detail(crewId ?: throw AuthorizationException("사용자가 크루에 소속되어 있지 않습니다."))
     }
 
     @CacheEvict(allEntries = true)

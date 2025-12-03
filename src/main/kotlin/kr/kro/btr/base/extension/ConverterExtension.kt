@@ -652,7 +652,7 @@ fun CrewResult.toCrewDetail(): SearchCrewsResponse.Detail {
     )
 }
 
-fun CrewResult.toDetailCrewResponse(): DetailCrewResponse {
+fun CrewResult.toDetailCrewResponse(isManager: Boolean, isAdmin: Boolean): DetailCrewResponse {
     return DetailCrewResponse(
         id = this.id,
         crewName = this.name,
@@ -660,7 +660,9 @@ fun CrewResult.toDetailCrewResponse(): DetailCrewResponse {
         region = this.region,
         imageUri = this.imageUri,
         logoUri = this.logoUri,
-        crewSnsUri = this.sns
+        crewSnsUri = this.sns,
+        isManager = isManager,
+        isAdmin = isAdmin
     )
 }
 

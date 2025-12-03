@@ -125,7 +125,9 @@ class CrewControllerTest (
             region = crewResult.region,
             imageUri = crewResult.imageUri,
             logoUri = crewResult.logoUri,
-            crewSnsUri = crewResult.sns
+            crewSnsUri = crewResult.sns,
+            isManager = false,
+            isAdmin = false
         )
 
         context("조회를 하면") {
@@ -144,7 +146,9 @@ class CrewControllerTest (
                         jsonPath("$.region") shouldBe response.region,
                         jsonPath("$.imageUri") shouldBe response.imageUri,
                         jsonPath("$.logoUri") shouldBe response.logoUri,
-                        jsonPath("$.crewSnsUri") shouldBe response.crewSnsUri
+                        jsonPath("$.crewSnsUri") shouldBe response.crewSnsUri,
+                        jsonPath("$.isManager") shouldBe response.isManager,
+                        jsonPath("$.isAdmin") shouldBe response.isAdmin
                     )
                     .andDocument(
                         "search-crew-detail",
@@ -158,7 +162,9 @@ class CrewControllerTest (
                             "region" type STRING means "크루 활동 지역" isRequired true,
                             "imageUri" type STRING means "크루 대표 이미지 uri" isRequired false,
                             "logoUri" type STRING means "크루 로고 uri" isRequired false,
-                            "crewSnsUri" type STRING means "크루 sns uri" isRequired false
+                            "crewSnsUri" type STRING means "크루 sns uri" isRequired false,
+                            "isManager" type BOOLEAN means "매니저 여부" isRequired true,
+                            "isAdmin" type BOOLEAN means "관리자 여부" isRequired true
                         )
                     )
             }
@@ -167,7 +173,6 @@ class CrewControllerTest (
 
     describe("GET : $baseUrl/my") {
         val url = "$baseUrl/my"
-        val crewId = 1L
         val crewResult = CrewResult(
             id = 1,
             name = "crewName",

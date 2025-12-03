@@ -43,9 +43,14 @@ class CrewController(
     }
 
     @GetMapping("/{crewId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun detail(@PathVariable crewId: Long): ResponseEntity<DetailCrewResponse> {
+    fun detail(
+        @PathVariable crewId: Long,
+        @AuthUser my: TokenDetail
+    ): ResponseEntity<DetailCrewResponse> {
         val crew = crewProxy.detail(crewId)
-        val response = crew.toDetailCrewResponse()
+        val isManager = my.managedCrewId == crewId
+        val isAdmin = my.isAdmin
+        val response = crew.toDetailCrewResponse(isManager, isAdmin)
         return ResponseEntity.ok(response)
     }
 

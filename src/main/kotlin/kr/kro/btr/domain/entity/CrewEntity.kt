@@ -29,6 +29,10 @@ class CrewEntity(
     @BatchSize(size = 100)
     val userEntities: MutableSet<UserEntity> = mutableSetOf()
 
+    @OneToMany(mappedBy = "managedCrewEntity", fetch = FetchType.LAZY)
+    @BatchSize(size = 100)
+    val managers: MutableSet<UserEntity> = mutableSetOf()
+
     fun modify(query: kr.kro.btr.domain.model.ModifyCrewQuery) {
         query.name.takeIf { it != name }?.let { name = it }
         query.contents.takeIf { it != contents }?.let { contents = it }

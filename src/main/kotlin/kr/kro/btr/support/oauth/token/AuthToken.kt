@@ -116,6 +116,7 @@ class AuthToken(
         const val AUTHORITIES_KEY = "role"
         const val USER_NAME_KEY = "userName"
         const val CREW_ID_KEY = "crewId"
+        const val MANAGED_CREW_ID_KEY = "managedCrewId"
 
         fun from(token: String, key: SecretKey): AuthToken {
             return AuthToken(token, key)

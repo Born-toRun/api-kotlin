@@ -7,5 +7,7 @@ data class DetailCrewResponse(
     val region: String,
     val imageUri: String?,
     val logoUri: String?,
-    val crewSnsUri: String?
+    val crewSnsUri: String?,
+    val isManager: Boolean,
+    val isAdmin: Boolean
 )
