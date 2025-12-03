@@ -8,5 +8,6 @@ data class MyCrewDetailResponse(
     val imageUri: String?,
     val logoUri: String?,
     val crewSnsUri: String?,
-    val isManager: Boolean
+    val isManager: Boolean,
+    val isAdmin: Boolean
 )

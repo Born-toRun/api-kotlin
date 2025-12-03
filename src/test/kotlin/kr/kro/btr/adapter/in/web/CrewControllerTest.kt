@@ -190,7 +190,8 @@ class CrewControllerTest (
             imageUri = crewResult.imageUri,
             logoUri = crewResult.logoUri,
             crewSnsUri = crewResult.sns,
-            isManager = false
+            isManager = false,
+            isAdmin = false
         )
 
         context("로그인 사용자의 크루 상세 조회를 하면") {
@@ -210,7 +211,8 @@ class CrewControllerTest (
                         jsonPath("$.imageUri") shouldBe response.imageUri,
                         jsonPath("$.logoUri") shouldBe response.logoUri,
                         jsonPath("$.crewSnsUri") shouldBe response.crewSnsUri,
-                        jsonPath("$.isManager") shouldBe response.isManager
+                        jsonPath("$.isManager") shouldBe response.isManager,
+                        jsonPath("$.isAdmin") shouldBe response.isAdmin
                     )
                     .andDocument(
                         "search-my-crew-detail",
@@ -222,7 +224,8 @@ class CrewControllerTest (
                             "imageUri" type STRING means "크루 대표 이미지 uri" isRequired false,
                             "logoUri" type STRING means "크루 로고 uri" isRequired false,
                             "crewSnsUri" type STRING means "크루 sns uri" isRequired false,
-                            "isManager" type BOOLEAN means "매니저 여부" isRequired true
+                            "isManager" type BOOLEAN means "매니저 여부" isRequired true,
+                            "isAdmin" type BOOLEAN means "관리자 여부" isRequired true
                         )
                     )
             }

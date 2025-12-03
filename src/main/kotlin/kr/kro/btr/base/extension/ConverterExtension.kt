@@ -666,7 +666,7 @@ fun CrewResult.toDetailCrewResponse(isManager: Boolean, isAdmin: Boolean): Detai
     )
 }
 
-fun CrewResult.toMyCrewDetailResponse(isManager: Boolean): MyCrewDetailResponse {
+fun CrewResult.toMyCrewDetailResponse(isManager: Boolean, isAdmin: Boolean): MyCrewDetailResponse {
     return MyCrewDetailResponse(
         id = this.id,
         crewName = this.name,
@@ -675,7 +675,8 @@ fun CrewResult.toMyCrewDetailResponse(isManager: Boolean): MyCrewDetailResponse 
         imageUri = this.imageUri,
         logoUri = this.logoUri,
         crewSnsUri = this.sns,
-        isManager = isManager
+        isManager = isManager,
+        isAdmin = isAdmin
     )
 }
 
