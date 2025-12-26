@@ -34,6 +34,7 @@ class SecurityConfig(
     private val appProperties: AppProperties,
     private val userRefreshTokenPort: UserRefreshTokenPort,
     private val userPort: UserPort,
+    private val passwordEncoder: BCryptPasswordEncoder
 ){
 
     @Bean
@@ -137,9 +138,6 @@ class SecurityConfig(
             .build()
     }
 
-    @Bean
-    fun passwordEncoder(): BCryptPasswordEncoder = BCryptPasswordEncoder()
-
     fun tokenAuthenticationFilter(tokenProvider: AuthTokenProvider): TokenAuthenticationFilter {
         return TokenAuthenticationFilter(tokenProvider)
     }
@@ -157,7 +155,7 @@ class SecurityConfig(
             userPort,
             userRefreshTokenPort,
             oAuth2AuthorizationRequestBasedOnCookieRepository(),
-            passwordEncoder()
+            passwordEncoder
         )
     }
 
