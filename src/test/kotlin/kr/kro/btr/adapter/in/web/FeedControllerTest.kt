@@ -4,12 +4,8 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
-import kr.kro.btr.adapter.`in`.web.payload.CreateFeedRequest
-import kr.kro.btr.adapter.`in`.web.payload.DetailFeedResponse
+import kr.kro.btr.adapter.`in`.web.payload.*
 import kr.kro.btr.adapter.`in`.web.payload.DetailFeedResponse.Image
-import kr.kro.btr.adapter.`in`.web.payload.ModifyFeedRequest
-import kr.kro.btr.adapter.`in`.web.payload.SearchFeedRequest
-import kr.kro.btr.adapter.`in`.web.payload.SearchFeedsResponse
 import kr.kro.btr.adapter.`in`.web.proxy.FeedProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.constant.FeedAccessLevel
@@ -17,21 +13,7 @@ import kr.kro.btr.domain.constant.FeedCategory
 import kr.kro.btr.domain.port.model.result.FeedDetailResult
 import kr.kro.btr.domain.port.model.result.FeedResult
 import kr.kro.btr.utils.andExpectData
-import kr.kro.btr.utils.restdocs.ARRAY
-import kr.kro.btr.utils.restdocs.BOOLEAN
-import kr.kro.btr.utils.restdocs.DATETIME
-import kr.kro.btr.utils.restdocs.NUMBER
-import kr.kro.btr.utils.restdocs.OBJECT
-import kr.kro.btr.utils.restdocs.RestDocsField
-import kr.kro.btr.utils.restdocs.STRING
-import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.isRequired
-import kr.kro.btr.utils.restdocs.pathParameters
-import kr.kro.btr.utils.restdocs.queryParameters
-import kr.kro.btr.utils.restdocs.requestBody
-import kr.kro.btr.utils.restdocs.responseBody
-import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
-import kr.kro.btr.utils.restdocs.type
+import kr.kro.btr.utils.restdocs.*
 import kr.kro.btr.utils.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -46,7 +28,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.context.WebApplicationContext
 import java.time.LocalDateTime
-import kotlin.collections.List
 
 @WebMvcTest(FeedController::class)
 class FeedControllerTest (

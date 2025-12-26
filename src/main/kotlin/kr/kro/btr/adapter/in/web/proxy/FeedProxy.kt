@@ -3,11 +3,7 @@ package kr.kro.btr.adapter.`in`.web.proxy
 import kr.kro.btr.adapter.`in`.web.payload.CreateFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyFeedRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchFeedRequest
-import kr.kro.btr.base.extension.toCreateFeedCommand
-import kr.kro.btr.base.extension.toModifyFeedCommand
-import kr.kro.btr.base.extension.toRemoveFeedCommand
-import kr.kro.btr.base.extension.toSearchAllFeedCommand
-import kr.kro.btr.base.extension.toSearchFeedDetailCommand
+import kr.kro.btr.base.extension.*
 import kr.kro.btr.domain.port.FeedPort
 import kr.kro.btr.domain.port.model.result.FeedDetailResult
 import kr.kro.btr.domain.port.model.result.FeedResult

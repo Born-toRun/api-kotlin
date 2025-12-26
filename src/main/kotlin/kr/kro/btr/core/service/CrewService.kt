@@ -1,10 +1,6 @@
 package kr.kro.btr.core.service
 
-import kr.kro.btr.base.extension.toCreateCrewQuery
-import kr.kro.btr.base.extension.toCrew
-import kr.kro.btr.base.extension.toCrewMembers
-import kr.kro.btr.base.extension.toCrews
-import kr.kro.btr.base.extension.toModifyCrewQuery
+import kr.kro.btr.base.extension.*
 import kr.kro.btr.domain.entity.CrewEntity
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.port.CrewPort

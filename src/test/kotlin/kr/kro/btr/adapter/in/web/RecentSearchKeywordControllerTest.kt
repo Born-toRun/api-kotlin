@@ -6,13 +6,7 @@ import io.mockk.just
 import io.mockk.runs
 import kr.kro.btr.adapter.`in`.web.proxy.RecentSearchKeywordProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.utils.restdocs.ARRAY
-import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.isRequired
-import kr.kro.btr.utils.restdocs.pathParameters
-import kr.kro.btr.utils.restdocs.responseBody
-import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
-import kr.kro.btr.utils.restdocs.type
+import kr.kro.btr.utils.restdocs.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.HttpMethod

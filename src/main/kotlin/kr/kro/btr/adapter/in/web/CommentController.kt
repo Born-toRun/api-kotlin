@@ -1,12 +1,7 @@
 package kr.kro.btr.adapter.`in`.web
 
 import jakarta.validation.Valid
-import kr.kro.btr.adapter.`in`.web.payload.CreateCommentRequest
-import kr.kro.btr.adapter.`in`.web.payload.DetailCommentResponse
-import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentRequest
-import kr.kro.btr.adapter.`in`.web.payload.ModifyCommentResponse
-import kr.kro.btr.adapter.`in`.web.payload.QtyCommentResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchCommentsResponse
+import kr.kro.btr.adapter.`in`.web.payload.*
 import kr.kro.btr.adapter.`in`.web.proxy.CommentProxy
 import kr.kro.btr.base.extension.toModifyCommentResponse
 import kr.kro.btr.base.extension.toSearchCommentDetailResponse

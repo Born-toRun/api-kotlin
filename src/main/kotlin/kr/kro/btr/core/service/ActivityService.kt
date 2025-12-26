@@ -1,20 +1,8 @@
 package kr.kro.btr.core.service
 
-import kr.kro.btr.base.extension.toActivityResult
-import kr.kro.btr.base.extension.toAttendanceActivityQuery
-import kr.kro.btr.base.extension.toCreateActivityQuery
-import kr.kro.btr.base.extension.toModifyActivityQuery
-import kr.kro.btr.base.extension.toParticipantResult
-import kr.kro.btr.base.extension.toParticipateActivityQuery
-import kr.kro.btr.base.extension.toSearchAllActivityQuery
-import kr.kro.btr.base.extension.toSearchByCrewIdActivityQuery
+import kr.kro.btr.base.extension.*
 import kr.kro.btr.domain.port.ActivityPort
-import kr.kro.btr.domain.port.model.AttendanceActivityCommand
-import kr.kro.btr.domain.port.model.CreateActivityCommand
-import kr.kro.btr.domain.port.model.ModifyActivityCommand
-import kr.kro.btr.domain.port.model.ParticipateActivityCommand
-import kr.kro.btr.domain.port.model.SearchAllActivityCommand
-import kr.kro.btr.domain.port.model.SearchByCrewIdActivityCommand
+import kr.kro.btr.domain.port.model.*
 import kr.kro.btr.domain.port.model.result.ActivityResult
 import kr.kro.btr.domain.port.model.result.ParticipantResult
 import kr.kro.btr.infrastructure.ActivityGateway

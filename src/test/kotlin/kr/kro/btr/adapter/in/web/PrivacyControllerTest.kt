@@ -10,12 +10,7 @@ import kr.kro.btr.adapter.`in`.web.proxy.PrivacyProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.port.model.result.UserPrivacyResult
 import kr.kro.btr.utils.andExpectData
-import kr.kro.btr.utils.restdocs.BOOLEAN
-import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.requestBody
-import kr.kro.btr.utils.restdocs.responseBody
-import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
-import kr.kro.btr.utils.restdocs.type
+import kr.kro.btr.utils.restdocs.*
 import kr.kro.btr.utils.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest

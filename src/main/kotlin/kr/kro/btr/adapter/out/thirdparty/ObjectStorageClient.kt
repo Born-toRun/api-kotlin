@@ -1,7 +1,10 @@
 package kr.kro.btr.adapter.out.thirdparty
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.minio.*
+import io.minio.MinioClient
+import io.minio.PutObjectArgs
+import io.minio.RemoveObjectArgs
+import io.minio.RemoveObjectsArgs
 import io.minio.errors.*
 import io.minio.messages.DeleteObject
 import kr.kro.btr.adapter.out.thirdparty.model.Remove

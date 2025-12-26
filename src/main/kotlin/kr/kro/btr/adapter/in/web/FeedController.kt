@@ -1,12 +1,7 @@
 package kr.kro.btr.adapter.`in`.web
 
 import jakarta.validation.Valid
-import kr.kro.btr.adapter.`in`.web.payload.CreateFeedRequest
-import kr.kro.btr.adapter.`in`.web.payload.DetailFeedResponse
-import kr.kro.btr.adapter.`in`.web.payload.ModifyFeedRequest
-import kr.kro.btr.adapter.`in`.web.payload.MyFeedsResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchFeedRequest
-import kr.kro.btr.adapter.`in`.web.payload.SearchFeedsResponse
+import kr.kro.btr.adapter.`in`.web.payload.*
 import kr.kro.btr.adapter.`in`.web.proxy.FeedProxy
 import kr.kro.btr.base.extension.toDetailFeedResponse
 import kr.kro.btr.base.extension.toMyFeedsResponse

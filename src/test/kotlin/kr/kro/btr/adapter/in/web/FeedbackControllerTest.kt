@@ -8,11 +8,7 @@ import kr.kro.btr.adapter.`in`.web.payload.CreateFeedbackRequest
 import kr.kro.btr.adapter.`in`.web.proxy.FeedbackProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.constant.FeedbackType
-import kr.kro.btr.utils.restdocs.STRING
-import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.requestBody
-import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
-import kr.kro.btr.utils.restdocs.type
+import kr.kro.btr.utils.restdocs.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.HttpMethod

@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
-import java.util.Date
+import java.util.*
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 

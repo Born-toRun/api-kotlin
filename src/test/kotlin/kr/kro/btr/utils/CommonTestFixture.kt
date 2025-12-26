@@ -1,7 +1,6 @@
 package kr.kro.btr.utils
 
 import org.springframework.mock.web.MockMultipartFile
-import kotlin.text.toByteArray
 
 object CommonTestFixture {
 

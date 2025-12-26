@@ -3,6 +3,7 @@ package kr.kro.btr.support.oauth.service
 /*
 * 로그인시 user loading
 */
+import UserPrincipal
 import kr.kro.btr.domain.constant.ProviderType
 import kr.kro.btr.domain.constant.RoleType
 import kr.kro.btr.domain.entity.UserEntity
@@ -17,7 +18,6 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.lang.Exception
 
 @Service
 class BornToRunOAuth2UserService(

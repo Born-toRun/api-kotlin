@@ -4,11 +4,7 @@ import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
 import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesRequest
-import kr.kro.btr.base.extension.toAttendanceActivityCommand
-import kr.kro.btr.base.extension.toCreateActivityCommand
-import kr.kro.btr.base.extension.toModifyActivityCommand
-import kr.kro.btr.base.extension.toSearchAllActivityCommand
-import kr.kro.btr.base.extension.toSearchByCrewIdActivityCommand
+import kr.kro.btr.base.extension.*
 import kr.kro.btr.domain.port.ActivityPort
 import kr.kro.btr.domain.port.model.ParticipateActivityCommand
 import kr.kro.btr.domain.port.model.result.ActivityResult

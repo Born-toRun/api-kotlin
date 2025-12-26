@@ -3,12 +3,7 @@ package kr.kro.btr.adapter.`in`.web
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
-import kr.kro.btr.adapter.`in`.web.payload.DetailUserResponse
-import kr.kro.btr.adapter.`in`.web.payload.ModifyUserRequest
-import kr.kro.btr.adapter.`in`.web.payload.ModifyUserResponse
-import kr.kro.btr.adapter.`in`.web.payload.RefreshTokenResponse
-import kr.kro.btr.adapter.`in`.web.payload.SignUpRequest
-import kr.kro.btr.adapter.`in`.web.payload.SignUpResponse
+import kr.kro.btr.adapter.`in`.web.payload.*
 import kr.kro.btr.adapter.`in`.web.proxy.UserProxy
 import kr.kro.btr.base.extension.toModifyUserResponse
 import kr.kro.btr.base.extension.toUserDetailResponse

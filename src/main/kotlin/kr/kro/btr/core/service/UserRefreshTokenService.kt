@@ -4,7 +4,6 @@ import kr.kro.btr.base.extension.toCreateRefreshTokenQuery
 import kr.kro.btr.domain.entity.UserRefreshTokenEntity
 import kr.kro.btr.domain.port.UserRefreshTokenPort
 import kr.kro.btr.domain.port.model.CreateRefreshTokenCommand
-import kr.kro.btr.infrastructure.UserGateway
 import kr.kro.btr.infrastructure.UserRefreshTokenGateway
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

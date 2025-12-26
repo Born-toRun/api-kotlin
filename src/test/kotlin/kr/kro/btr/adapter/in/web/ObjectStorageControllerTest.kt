@@ -11,14 +11,7 @@ import kr.kro.btr.domain.constant.Bucket
 import kr.kro.btr.domain.port.model.result.ObjectStorageResult
 import kr.kro.btr.utils.CommonTestFixture.getMultipartFile
 import kr.kro.btr.utils.andExpectData
-import kr.kro.btr.utils.restdocs.NUMBER
-import kr.kro.btr.utils.restdocs.STRING
-import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.isRequired
-import kr.kro.btr.utils.restdocs.pathParameters
-import kr.kro.btr.utils.restdocs.responseBody
-import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
-import kr.kro.btr.utils.restdocs.type
+import kr.kro.btr.utils.restdocs.*
 import kr.kro.btr.utils.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest

@@ -1,17 +1,9 @@
 package kr.kro.btr.core.service
 
-import kr.kro.btr.base.extension.toCreateFeedQuery
-import kr.kro.btr.base.extension.toFeedCard
-import kr.kro.btr.base.extension.toFeedDetailResult
-import kr.kro.btr.base.extension.toModifyFeedQuery
-import kr.kro.btr.base.extension.toSearchAllFeedQuery
+import kr.kro.btr.base.extension.*
 import kr.kro.btr.domain.entity.FeedImageMappingEntity
 import kr.kro.btr.domain.port.FeedPort
-import kr.kro.btr.domain.port.model.CreateFeedCommand
-import kr.kro.btr.domain.port.model.ModifyFeedCommand
-import kr.kro.btr.domain.port.model.RemoveFeedCommand
-import kr.kro.btr.domain.port.model.SearchAllFeedCommand
-import kr.kro.btr.domain.port.model.SearchFeedDetailCommand
+import kr.kro.btr.domain.port.model.*
 import kr.kro.btr.domain.port.model.result.FeedDetailResult
 import kr.kro.btr.domain.port.model.result.FeedResult
 import kr.kro.btr.infrastructure.FeedGateway

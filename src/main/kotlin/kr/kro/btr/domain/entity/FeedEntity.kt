@@ -3,7 +3,6 @@ package kr.kro.btr.domain.entity
 import jakarta.persistence.*
 import kr.kro.btr.domain.constant.FeedAccessLevel
 import kr.kro.btr.domain.constant.FeedCategory
-import kr.kro.btr.domain.model.ModifyFeedQuery
 import org.hibernate.annotations.BatchSize
 import org.hibernate.annotations.DynamicInsert
 import java.time.LocalDateTime

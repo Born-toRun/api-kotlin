@@ -16,7 +16,6 @@ import kr.kro.btr.support.oauth.info.OAuth2UserInfoFactory
 import kr.kro.btr.support.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository
 import kr.kro.btr.support.oauth.token.AuthTokenProvider
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REDIRECT_URI
@@ -26,7 +25,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
-import java.util.Date
+import java.util.*
 
 @Component
 class OAuth2AuthenticationSuccessHandler(

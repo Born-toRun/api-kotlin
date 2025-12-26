@@ -4,35 +4,14 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
-import kr.kro.btr.adapter.`in`.web.payload.AttendanceActivityRequest
-import kr.kro.btr.adapter.`in`.web.payload.CreateActivityRequest
-import kr.kro.btr.adapter.`in`.web.payload.DetailActivityResponse
-import kr.kro.btr.adapter.`in`.web.payload.ModifyActivityRequest
-import kr.kro.btr.adapter.`in`.web.payload.OpenActivityResponse
-import kr.kro.btr.adapter.`in`.web.payload.ParticipationActivityResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesRequest
-import kr.kro.btr.adapter.`in`.web.payload.SearchActivitiesResponse
+import kr.kro.btr.adapter.`in`.web.payload.*
 import kr.kro.btr.adapter.`in`.web.proxy.ActivityProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
 import kr.kro.btr.domain.constant.ActivityRecruitmentType
 import kr.kro.btr.domain.port.model.result.ActivityResult
 import kr.kro.btr.domain.port.model.result.ParticipantResult
 import kr.kro.btr.utils.andExpectData
-import kr.kro.btr.utils.restdocs.ARRAY
-import kr.kro.btr.utils.restdocs.BOOLEAN
-import kr.kro.btr.utils.restdocs.DATETIME
-import kr.kro.btr.utils.restdocs.NUMBER
-import kr.kro.btr.utils.restdocs.OBJECT
-import kr.kro.btr.utils.restdocs.RestDocsField
-import kr.kro.btr.utils.restdocs.STRING
-import kr.kro.btr.utils.restdocs.andDocument
-import kr.kro.btr.utils.restdocs.isRequired
-import kr.kro.btr.utils.restdocs.pathParameters
-import kr.kro.btr.utils.restdocs.queryParameters
-import kr.kro.btr.utils.restdocs.requestBody
-import kr.kro.btr.utils.restdocs.responseBody
-import kr.kro.btr.utils.restdocs.restDocMockMvcBuild
-import kr.kro.btr.utils.restdocs.type
+import kr.kro.btr.utils.restdocs.*
 import kr.kro.btr.utils.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -45,7 +24,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.context.WebApplicationContext
 import java.time.LocalDateTime
-import java.util.Collections
+import java.util.*
 
 @WebMvcTest(ActivityController::class)
 class ActivityControllerTest (

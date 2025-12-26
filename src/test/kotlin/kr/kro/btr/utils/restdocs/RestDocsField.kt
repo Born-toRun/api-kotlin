@@ -1,10 +1,6 @@
 package kr.kro.btr.utils.restdocs
 
-import org.springframework.restdocs.payload.FieldDescriptor
-import org.springframework.restdocs.payload.JsonFieldType
-import org.springframework.restdocs.payload.PayloadDocumentation
-import org.springframework.restdocs.payload.RequestFieldsSnippet
-import org.springframework.restdocs.payload.ResponseFieldsSnippet
+import org.springframework.restdocs.payload.*
 import org.springframework.restdocs.snippet.Attributes.Attribute
 
 class RestDocsField(

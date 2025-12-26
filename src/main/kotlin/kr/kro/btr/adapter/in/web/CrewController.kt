@@ -1,21 +1,9 @@
 package kr.kro.btr.adapter.`in`.web
 
 import jakarta.validation.Valid
-import kr.kro.btr.adapter.`in`.web.payload.CreateCrewRequest
-import kr.kro.btr.adapter.`in`.web.payload.CrewMemberRankingResponse
-import kr.kro.btr.adapter.`in`.web.payload.CrewRankingResponse
-import kr.kro.btr.adapter.`in`.web.payload.DetailCrewResponse
-import kr.kro.btr.adapter.`in`.web.payload.ModifyCrewRequest
-import kr.kro.btr.adapter.`in`.web.payload.MyCrewDetailResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchCrewMembersResponse
-import kr.kro.btr.adapter.`in`.web.payload.SearchCrewsResponse
+import kr.kro.btr.adapter.`in`.web.payload.*
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
-import kr.kro.btr.base.extension.toCrewMemberRankingResponse
-import kr.kro.btr.base.extension.toCrewRankingResponse
-import kr.kro.btr.base.extension.toDetailCrewResponse
-import kr.kro.btr.base.extension.toMyCrewDetailResponse
-import kr.kro.btr.base.extension.toSearchCrewMembersResponse
-import kr.kro.btr.base.extension.toSearchCrewResponse
+import kr.kro.btr.base.extension.*
 import kr.kro.btr.domain.port.model.result.CrewMemberRankingResult
 import kr.kro.btr.domain.port.model.result.CrewMemberResult
 import kr.kro.btr.domain.port.model.result.CrewRankingResult
@@ -27,7 +15,6 @@ import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.lang.Void
 
 @RestController
 @RequestMapping("/api/v1/crews")
