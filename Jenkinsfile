@@ -100,7 +100,7 @@ pipeline {
                         sleep 10
         
                         while [ \$RETRY_COUNT -lt \$MAX_RETRIES ]; do
-                            RESPONSE=\$(curl -f -s -o /dev/null -w '%{http_code}' http://\$HOST_IP:${env.INACTIVE_PORT})
+                            RESPONSE=\$(curl -s -o /dev/null -w '%{http_code}' http://\$HOST_IP:${env.INACTIVE_PORT} || echo "000")
                             if [ "\$RESPONSE" = "200" ]; then
                                 echo "Health check passed! Response code: \$RESPONSE"
                                 HEALTH_CHECK_PASSED=1
