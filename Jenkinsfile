@@ -88,6 +88,16 @@ pipeline {
         stage('Health Check') {
             steps {
                 script {
+                    echo "Checking container status and logs..."
+                    sh """
+                        echo "=== Container Status ==="
+                        docker ps -a | grep ${env.INACTIVE_CONTAINER} || true
+                        echo ""
+                        echo "=== Container Logs (last 50 lines) ==="
+                        docker logs ${env.INACTIVE_CONTAINER} --tail 50 || true
+                        echo ""
+                    """
+
                     echo "Performing health check on ${env.INACTIVE_CONTAINER}..."
                     sh """
                         HOST_IP=\$(ip route | grep default | awk '{print \$3}')
