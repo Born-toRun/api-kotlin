@@ -47,7 +47,6 @@ class UserService(
         val refreshTokenEntity = userRefreshTokenGateway.searchByUserId(userId)
             ?: throw InvalidTokenException("다시 로그인해주세요.")
 
-        // Validate refresh token using secure hash comparison
         if (!passwordEncoder.matches(refreshToken, refreshTokenEntity.refreshToken)) {
             throw InvalidTokenException("다시 로그인해주세요.")
         }
@@ -68,14 +67,12 @@ class UserService(
             Date(now.time + appProperties.auth.tokenExpiry)
         )
 
-        // Implement refresh token rotation: generate new refresh token
         val refreshTokenExpiry = appProperties.auth.refreshTokenExpiry
         val newRefreshToken = tokenProvider.createAuthToken(
             user.id,
             Date(now.time + refreshTokenExpiry)
         )
 
-        // Hash and save the new refresh token
         val hashedRefreshToken = passwordEncoder.encode(newRefreshToken.token)
         refreshTokenEntity.refreshToken = hashedRefreshToken
         userRefreshTokenGateway.save(
@@ -85,9 +82,12 @@ class UserService(
             )
         )
 
+        val cookieMaxAge = (refreshTokenExpiry / 1000).toInt()
+
         return RefreshTokenResult(
             accessToken = newAccessToken.token,
-            refreshToken = newRefreshToken.token
+            refreshToken = newRefreshToken.token,
+            cookieMaxAge = cookieMaxAge
         )
     }
 

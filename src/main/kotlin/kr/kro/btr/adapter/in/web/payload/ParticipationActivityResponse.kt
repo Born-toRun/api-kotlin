@@ -2,7 +2,6 @@ package kr.kro.btr.adapter.`in`.web.payload
 
 data class ParticipationActivityResponse(
     val host: Person,
-    // TODO: nullable
     val participants: List<Person>? = null
 ) {
     data class Person(

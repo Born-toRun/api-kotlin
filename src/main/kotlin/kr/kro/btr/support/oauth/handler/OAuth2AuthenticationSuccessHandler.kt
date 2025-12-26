@@ -102,7 +102,6 @@ class OAuth2AuthenticationSuccessHandler(
             Date(now.time + refreshTokenExpiry)
         )
 
-        // Hash the refresh token before storing in database
         val hashedRefreshToken = passwordEncoder.encode(refreshToken.token)
         val command = CreateRefreshTokenCommand(bornToRunUser.userId, hashedRefreshToken)
         userRefreshTokenPort.create(command)

@@ -12,7 +12,6 @@ import kr.kro.btr.adapter.`in`.web.payload.SignUpResponse
 import kr.kro.btr.adapter.`in`.web.proxy.UserProxy
 import kr.kro.btr.base.extension.toModifyUserResponse
 import kr.kro.btr.base.extension.toUserDetailResponse
-import kr.kro.btr.config.properties.AppProperties
 import kr.kro.btr.support.CookieSupport
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
@@ -25,8 +24,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/users")
 class UserController(
-    private val userProxy: UserProxy,
-    private val appProperties: AppProperties
+    private val userProxy: UserProxy
 ) {
 
     @PostMapping("/refresh", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -36,16 +34,13 @@ class UserController(
         request: HttpServletRequest,
         response: HttpServletResponse
     ): ResponseEntity<RefreshTokenResponse> {
-        // Remove "Bearer " prefix and validate
         val accessToken = authorizationHeader.removePrefix("Bearer ").trim()
         require(accessToken.isNotBlank()) { "Access token must not be blank" }
 
         val result = userProxy.refreshToken(accessToken, refreshToken)
 
-        // Set new refresh token as HttpOnly cookie
-        val cookieMaxAge = (appProperties.auth.refreshTokenExpiry / 1000).toInt()
         CookieSupport.deleteCookie(request, response, REFRESH_TOKEN)
-        CookieSupport.addCookie(request, response, REFRESH_TOKEN, result.refreshToken, cookieMaxAge)
+        CookieSupport.addCookie(request, response, REFRESH_TOKEN, result.refreshToken, result.cookieMaxAge)
 
         return ResponseEntity.ok(RefreshTokenResponse(result.accessToken, result.refreshToken))
     }

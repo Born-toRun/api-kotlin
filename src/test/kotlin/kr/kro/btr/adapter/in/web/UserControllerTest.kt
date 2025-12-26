@@ -9,7 +9,6 @@ import kr.kro.btr.adapter.`in`.web.payload.ModifyUserRequest
 import kr.kro.btr.adapter.`in`.web.payload.SignUpRequest
 import kr.kro.btr.adapter.`in`.web.proxy.UserProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
-import kr.kro.btr.config.properties.AppProperties
 import kr.kro.btr.domain.constant.ProviderType
 import kr.kro.btr.domain.constant.RoleType
 import kr.kro.btr.domain.port.model.result.BornToRunUser
@@ -49,8 +48,6 @@ import java.time.LocalDateTime
 class UserControllerTest (
     @MockkBean
     private val proxy: UserProxy,
-    @MockkBean
-    private val appProperties: AppProperties,
     @Autowired
     private val context: WebApplicationContext
 ): ControllerDescribeSpec ({
@@ -75,8 +72,11 @@ class UserControllerTest (
                 .cookie(Cookie("refresh_token", refreshTokenValue))
 
             it("액세스 토큰과 새 리프레시 토큰을 반환한다") {
-                every { proxy.refreshToken(any(), any()) } returns RefreshTokenResult(newAccessToken, newRefreshToken)
-                every { appProperties.auth.refreshTokenExpiry } returns 604800000L // 7 days in ms
+                every { proxy.refreshToken(any(), any()) } returns RefreshTokenResult(
+                    accessToken = newAccessToken,
+                    refreshToken = newRefreshToken,
+                    cookieMaxAge = 604800 // 7 days in seconds
+                )
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -160,7 +160,6 @@ class UserControllerTest (
             userId = 0,
             socialId = "socialId",
             providerType = ProviderType.KAKAO,
-//            refreshToken = "refreshToken",
             roleType = RoleType.ADMIN,
             userName = "userName",
             crewId = 0,
@@ -209,7 +208,6 @@ class UserControllerTest (
             userId = userId,
             socialId = "socialId",
             providerType = ProviderType.KAKAO,
-//            refreshToken = "refreshToken",
             roleType = RoleType.ADMIN,
             userName = "userName",
             crewId = 0,
@@ -264,7 +262,6 @@ class UserControllerTest (
             userId = 0,
             socialId = "socialId",
             providerType = ProviderType.KAKAO,
-//            refreshToken = "refreshToken",
             roleType = RoleType.ADMIN,
             userName = "userName",
             crewId = 0,
