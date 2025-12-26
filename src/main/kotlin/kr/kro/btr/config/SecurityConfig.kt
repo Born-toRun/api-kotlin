@@ -156,7 +156,8 @@ class SecurityConfig(
             appProperties,
             userPort,
             userRefreshTokenPort,
-            oAuth2AuthorizationRequestBasedOnCookieRepository()
+            oAuth2AuthorizationRequestBasedOnCookieRepository(),
+            passwordEncoder()
         )
     }
 

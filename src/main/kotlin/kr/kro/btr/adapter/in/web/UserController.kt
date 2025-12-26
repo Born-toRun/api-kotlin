@@ -1,5 +1,7 @@
 package kr.kro.btr.adapter.`in`.web
 
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import kr.kro.btr.adapter.`in`.web.payload.DetailUserResponse
 import kr.kro.btr.adapter.`in`.web.payload.ModifyUserRequest
@@ -10,6 +12,8 @@ import kr.kro.btr.adapter.`in`.web.payload.SignUpResponse
 import kr.kro.btr.adapter.`in`.web.proxy.UserProxy
 import kr.kro.btr.base.extension.toModifyUserResponse
 import kr.kro.btr.base.extension.toUserDetailResponse
+import kr.kro.btr.config.properties.AppProperties
+import kr.kro.btr.support.CookieSupport
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.support.annotation.AuthUser
 import org.springframework.http.HttpHeaders
@@ -22,15 +26,28 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/v1/users")
 class UserController(
     private val userProxy: UserProxy,
+    private val appProperties: AppProperties
 ) {
 
     @PostMapping("/refresh", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun refresh(
-        @RequestHeader(HttpHeaders.AUTHORIZATION) accessToken: String,
-        @CookieValue(REFRESH_TOKEN) refreshToken: String
+        @RequestHeader(HttpHeaders.AUTHORIZATION) authorizationHeader: String,
+        @CookieValue(REFRESH_TOKEN) refreshToken: String,
+        request: HttpServletRequest,
+        response: HttpServletResponse
     ): ResponseEntity<RefreshTokenResponse> {
-        val newAccessToken = userProxy.refreshToken(accessToken, refreshToken)
-        return ResponseEntity.ok(RefreshTokenResponse(newAccessToken))
+        // Remove "Bearer " prefix and validate
+        val accessToken = authorizationHeader.removePrefix("Bearer ").trim()
+        require(accessToken.isNotBlank()) { "Access token must not be blank" }
+
+        val result = userProxy.refreshToken(accessToken, refreshToken)
+
+        // Set new refresh token as HttpOnly cookie
+        val cookieMaxAge = (appProperties.auth.refreshTokenExpiry / 1000).toInt()
+        CookieSupport.deleteCookie(request, response, REFRESH_TOKEN)
+        CookieSupport.addCookie(request, response, REFRESH_TOKEN, result.refreshToken, cookieMaxAge)
+
+        return ResponseEntity.ok(RefreshTokenResponse(result.accessToken, result.refreshToken))
     }
 
     @PutMapping("/sign-up", produces = [MediaType.APPLICATION_JSON_VALUE])

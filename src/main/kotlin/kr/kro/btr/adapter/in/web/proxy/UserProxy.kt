@@ -6,6 +6,7 @@ import kr.kro.btr.base.extension.toModifyUserCommand
 import kr.kro.btr.base.extension.toSignUpCommand
 import kr.kro.btr.domain.port.UserPort
 import kr.kro.btr.domain.port.model.result.BornToRunUser
+import kr.kro.btr.domain.port.model.result.RefreshTokenResult
 import kr.kro.btr.support.TokenDetail
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict
@@ -24,7 +25,7 @@ class UserProxy(
         return userPort.signUp(command)
     }
 
-    fun refreshToken(accessToken: String, refreshToken: String): String {
+    fun refreshToken(accessToken: String, refreshToken: String): RefreshTokenResult {
         return userPort.refreshToken(accessToken, refreshToken)
     }
 

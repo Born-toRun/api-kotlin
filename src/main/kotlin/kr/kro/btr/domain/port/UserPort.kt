@@ -4,10 +4,11 @@ import kr.kro.btr.domain.port.model.CreateUserCommand
 import kr.kro.btr.domain.port.model.ModifyUserCommand
 import kr.kro.btr.domain.port.model.SignUpCommand
 import kr.kro.btr.domain.port.model.result.BornToRunUser
+import kr.kro.btr.domain.port.model.result.RefreshTokenResult
 
 interface UserPort {
     fun signUp(command: SignUpCommand): String
-    fun refreshToken(accessToken: String, refreshToken: String): String
+    fun refreshToken(accessToken: String, refreshToken: String): RefreshTokenResult
     fun remove(userId: Long)
     fun searchById(userId: Long): BornToRunUser
     fun searchBySocialId(socialId: String): BornToRunUser

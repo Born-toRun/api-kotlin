@@ -17,6 +17,7 @@ import kr.kro.btr.support.oauth.repository.OAuth2AuthorizationRequestBasedOnCook
 import kr.kro.btr.support.oauth.token.AuthTokenProvider
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REDIRECT_URI
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REFRESH_TOKEN
@@ -33,7 +34,8 @@ class OAuth2AuthenticationSuccessHandler(
     private val appProperties: AppProperties,
     private val userPort: UserPort,
     private val userRefreshTokenPort: UserRefreshTokenPort,
-    private val authorizationRequestRepository: OAuth2AuthorizationRequestBasedOnCookieRepository
+    private val authorizationRequestRepository: OAuth2AuthorizationRequestBasedOnCookieRepository,
+    private val passwordEncoder: BCryptPasswordEncoder
 ) : SimpleUrlAuthenticationSuccessHandler() {
 
     override fun onAuthenticationSuccess(
@@ -100,10 +102,12 @@ class OAuth2AuthenticationSuccessHandler(
             Date(now.time + refreshTokenExpiry)
         )
 
-        val command = CreateRefreshTokenCommand(bornToRunUser.userId, refreshToken.token)
+        // Hash the refresh token before storing in database
+        val hashedRefreshToken = passwordEncoder.encode(refreshToken.token)
+        val command = CreateRefreshTokenCommand(bornToRunUser.userId, hashedRefreshToken)
         userRefreshTokenPort.create(command)
 
-        val cookieMaxAge = (refreshTokenExpiry / 60).toInt()
+        val cookieMaxAge = (refreshTokenExpiry / 1000).toInt()
 
         CookieSupport.deleteCookie(request, response, REFRESH_TOKEN)
         CookieSupport.addCookie(request, response, REFRESH_TOKEN, refreshToken.token, cookieMaxAge)

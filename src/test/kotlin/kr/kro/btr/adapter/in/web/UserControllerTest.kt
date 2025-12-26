@@ -9,9 +9,11 @@ import kr.kro.btr.adapter.`in`.web.payload.ModifyUserRequest
 import kr.kro.btr.adapter.`in`.web.payload.SignUpRequest
 import kr.kro.btr.adapter.`in`.web.proxy.UserProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
+import kr.kro.btr.config.properties.AppProperties
 import kr.kro.btr.domain.constant.ProviderType
 import kr.kro.btr.domain.constant.RoleType
 import kr.kro.btr.domain.port.model.result.BornToRunUser
+import kr.kro.btr.domain.port.model.result.RefreshTokenResult
 import kr.kro.btr.support.TokenDetail
 import kr.kro.btr.utils.andExpectData
 import kr.kro.btr.utils.restdocs.BOOLEAN
@@ -47,6 +49,8 @@ import java.time.LocalDateTime
 class UserControllerTest (
     @MockkBean
     private val proxy: UserProxy,
+    @MockkBean
+    private val appProperties: AppProperties,
     @Autowired
     private val context: WebApplicationContext
 ): ControllerDescribeSpec ({
@@ -63,19 +67,22 @@ class UserControllerTest (
         val expiredAccessToken = "expired.access.token"
         val refreshTokenValue = "valid.refresh.token"
         val newAccessToken = "new.access.token"
+        val newRefreshToken = "new.refresh.token"
 
         context("유효한 리프레시 토큰으로 액세스 토큰을 갱신하면") {
             val request = request(HttpMethod.POST, url)
                 .header("Authorization", "Bearer $expiredAccessToken")
                 .cookie(Cookie("refresh_token", refreshTokenValue))
 
-            it("액세스 토큰을 반환한다") {
-                every { proxy.refreshToken(any(), any()) } returns newAccessToken
+            it("액세스 토큰과 새 리프레시 토큰을 반환한다") {
+                every { proxy.refreshToken(any(), any()) } returns RefreshTokenResult(newAccessToken, newRefreshToken)
+                every { appProperties.auth.refreshTokenExpiry } returns 604800000L // 7 days in ms
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
                     .andExpectData(
-                        jsonPath("$.accessToken") shouldBe newAccessToken
+                        jsonPath("$.accessToken") shouldBe newAccessToken,
+                        jsonPath("$.refreshToken") shouldBe newRefreshToken
                     )
                     .andDocument(
                         "refresh-token",
@@ -86,7 +93,8 @@ class UserControllerTest (
                             REFRESH_TOKEN cookieMeans "유효한 Refresh Token"
                         ),
                         responseBody(
-                            "accessToken" type STRING means "인증 토큰" isRequired true
+                            "accessToken" type STRING means "인증 토큰" isRequired true,
+                            "refreshToken" type STRING means "새로운 리프레시 토큰" isRequired true
                         )
                     )
             }

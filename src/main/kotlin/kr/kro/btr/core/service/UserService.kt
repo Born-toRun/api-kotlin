@@ -10,10 +10,12 @@ import kr.kro.btr.domain.port.model.CreateUserCommand
 import kr.kro.btr.domain.port.model.ModifyUserCommand
 import kr.kro.btr.domain.port.model.SignUpCommand
 import kr.kro.btr.domain.port.model.result.BornToRunUser
+import kr.kro.btr.domain.port.model.result.RefreshTokenResult
 import kr.kro.btr.infrastructure.UserGateway
 import kr.kro.btr.infrastructure.UserRefreshTokenGateway
 import kr.kro.btr.support.exception.InvalidTokenException
 import kr.kro.btr.support.oauth.token.AuthTokenProvider
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -23,7 +25,8 @@ class UserService(
     private val userGateway: UserGateway,
     private val userRefreshTokenGateway: UserRefreshTokenGateway,
     private val tokenProvider: AuthTokenProvider,
-    private val appProperties: AppProperties
+    private val appProperties: AppProperties,
+    private val passwordEncoder: BCryptPasswordEncoder
 ) : UserPort {
 
     @Transactional
@@ -33,7 +36,7 @@ class UserService(
     }
 
     @Transactional
-    override fun refreshToken(accessToken: String, refreshToken: String): String {
+    override fun refreshToken(accessToken: String, refreshToken: String): RefreshTokenResult {
         val authToken = tokenProvider.convertAuthToken(accessToken)
         val claims = authToken.getExpiredTokenClaims()
             ?: throw InvalidTokenException("다시 로그인해주세요.")
@@ -44,7 +47,8 @@ class UserService(
         val refreshTokenEntity = userRefreshTokenGateway.searchByUserId(userId)
             ?: throw InvalidTokenException("다시 로그인해주세요.")
 
-        if (refreshTokenEntity.refreshToken != refreshToken) {
+        // Validate refresh token using secure hash comparison
+        if (!passwordEncoder.matches(refreshToken, refreshTokenEntity.refreshToken)) {
             throw InvalidTokenException("다시 로그인해주세요.")
         }
 
@@ -64,7 +68,27 @@ class UserService(
             Date(now.time + appProperties.auth.tokenExpiry)
         )
 
-        return newAccessToken.token
+        // Implement refresh token rotation: generate new refresh token
+        val refreshTokenExpiry = appProperties.auth.refreshTokenExpiry
+        val newRefreshToken = tokenProvider.createAuthToken(
+            user.id,
+            Date(now.time + refreshTokenExpiry)
+        )
+
+        // Hash and save the new refresh token
+        val hashedRefreshToken = passwordEncoder.encode(newRefreshToken.token)
+        refreshTokenEntity.refreshToken = hashedRefreshToken
+        userRefreshTokenGateway.save(
+            kr.kro.btr.infrastructure.model.CreateRefreshTokenQuery(
+                userId = userId,
+                refreshToken = hashedRefreshToken
+            )
+        )
+
+        return RefreshTokenResult(
+            accessToken = newAccessToken.token,
+            refreshToken = newRefreshToken.token
+        )
     }
 
     @Transactional
