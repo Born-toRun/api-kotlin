@@ -86,11 +86,15 @@ class UserEntity(
     fun getIsManager(): Boolean = roleType == RoleType.MANAGER
 
     fun modify(instagramId: String?, profileImageId: Long?) {
-        if (profileImageId != 0L) {
-            this.imageId = profileImageId
+        // profileImageId가 null이 아닌 경우에만 업데이트 (부분 업데이트 지원)
+        // 0L은 프로필 이미지 삭제를 의미 (null로 설정)
+        // null은 필드를 수정하지 않음을 의미 (기존 값 유지)
+        profileImageId?.let {
+            this.imageId = if (it == 0L) null else it
         }
-        if (!instagramId.isNullOrBlank()) {
-            this.instagramId = instagramId
+        // instagramId가 null이 아니고 공백이 아닌 경우에만 업데이트
+        instagramId?.takeIf { it.isNotBlank() }?.let {
+            this.instagramId = it
         }
     }
 
