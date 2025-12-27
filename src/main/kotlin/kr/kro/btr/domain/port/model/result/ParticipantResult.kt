@@ -9,6 +9,6 @@ data class ParticipantResult(
         val userId: Long,
         val userName: String,
         val crewName: String,
-        val userProfileUri: String?
+        val profileImageUri: String?
     )
 }

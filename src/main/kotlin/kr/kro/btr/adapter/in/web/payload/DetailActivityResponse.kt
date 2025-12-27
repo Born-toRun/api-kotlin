@@ -1,6 +1,7 @@
 package kr.kro.btr.adapter.`in`.web.payload
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import kr.kro.btr.domain.constant.ActivityRecruitmentType
 import java.time.LocalDateTime
 
 data class DetailActivityResponse(
@@ -19,6 +20,8 @@ data class DetailActivityResponse(
     val path: String?,
     val host: Host,
     val isOpen: Boolean,
+    val recruitmentType: ActivityRecruitmentType?,
+    val imageUrls: List<String>,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     val updatedAt: LocalDateTime,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -28,7 +31,7 @@ data class DetailActivityResponse(
     data class Host(
         val userId: Long,
         val crewId: Long,
-        val userProfileUri: String?,
+        val profileImageUri: String?,
         val userName: String,
         val crewName: String,
         val isManager: Boolean,

@@ -15,9 +15,9 @@ class ActivityService(
 ) : ActivityPort {
 
     @Transactional
-    override fun create(command: CreateActivityCommand) {
+    override fun create(command: CreateActivityCommand): Long {
         val query = command.toCreateActivityQuery()
-        activityGateway.create(query)
+        return activityGateway.create(query)
     }
 
     @Transactional

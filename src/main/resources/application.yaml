@@ -32,6 +32,7 @@ spring:
                 jdbc:
                     batch_size: 50
                     fetch_size: 100
+                    time_zone: Asia/Seoul
                 order_inserts: true
                 order_updates: true
                 batch_versioned_data: true

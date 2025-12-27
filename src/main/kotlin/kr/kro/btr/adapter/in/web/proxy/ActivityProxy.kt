@@ -22,9 +22,9 @@ class ActivityProxy(
 ) {
 
     @CacheEvict(allEntries = true)
-    fun create(my: TokenDetail, request: CreateActivityRequest) {
+    fun create(my: TokenDetail, request: CreateActivityRequest): Long {
         val command = request.toCreateActivityCommand(my)
-        activityPort.create(command)
+        return activityPort.create(command)
     }
 
     @CacheEvict(allEntries = true)

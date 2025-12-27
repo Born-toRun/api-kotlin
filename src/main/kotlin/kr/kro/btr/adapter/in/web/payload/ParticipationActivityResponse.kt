@@ -9,7 +9,7 @@ data class ParticipationActivityResponse(
         val userId: Long,
         val userName: String,
         val crewName: String,
-        val userProfileUri: String?
+        val profileImageUri: String?
     )
 }
 

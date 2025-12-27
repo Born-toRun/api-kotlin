@@ -9,10 +9,12 @@ interface ActivityRepository : JpaRepository<ActivityEntity, Long> {
 
     @Query(
         """
-        SELECT a FROM ActivityEntity a
+        SELECT DISTINCT a FROM ActivityEntity a
         INNER JOIN FETCH a.userEntity u
         LEFT JOIN FETCH u.profileImageEntity
         INNER JOIN FETCH u.crewEntity
+        LEFT JOIN FETCH a.activityImageMappingEntities aim
+        LEFT JOIN FETCH aim.objectStorageEntity
         WHERE a.id = :id
         """
     )

@@ -18,9 +18,11 @@ class ActivityController(
 ) {
 
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun create(@AuthUser my: TokenDetail, @Valid @RequestBody request: CreateActivityRequest): ResponseEntity<Void> {
-        activityProxy.create(my, request)
-        return ResponseEntity(CREATED)
+    fun create(@AuthUser my: TokenDetail, @Valid @RequestBody request: CreateActivityRequest): ResponseEntity<CreateActivityResponse> {
+        val activityId = activityProxy.create(my, request)
+        val response = CreateActivityResponse(activityId)
+        return ResponseEntity.status(CREATED)
+            .body(response)
     }
 
     @PutMapping("/{activityId}", produces = [MediaType.APPLICATION_JSON_VALUE])

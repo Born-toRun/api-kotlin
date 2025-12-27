@@ -32,7 +32,7 @@ class ActivityGateway(
     private val redisClient: RedisClient
 ) {
 
-    fun create(query: CreateActivityQuery) {
+    fun create(query: CreateActivityQuery): Long {
         val activityEntity = activityRepository.findByStartAtAndUserId(query.startAt, query.myUserId) ?: query.toActivityEntity()
         activityRepository.save(activityEntity)
 
@@ -47,6 +47,8 @@ class ActivityGateway(
         if (activityImageMappingEntities != null) {
             activityImageMappingRepository.saveAll(activityImageMappingEntities)
         }
+
+        return activityEntity.id
     }
 
     fun modify(query: ModifyActivityQuery) {

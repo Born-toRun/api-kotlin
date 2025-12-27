@@ -27,7 +27,7 @@ fun List<ActivityResult>.toSearchActivityResponse(): SearchActivitiesResponse {
             host = SearchActivitiesResponse.Host(
                 userId = activityResult.host.userId,
                 crewId = activityResult.host.crewId,
-                userProfileUri = activityResult.host.userProfileUri,
+                profileImageUri = activityResult.host.profileImageUri,
                 userName = activityResult.host.userName,
                 crewName = activityResult.host.crewName,
                 isManager = activityResult.host.isManager,
@@ -93,12 +93,14 @@ fun ActivityResult.toSearchActivityDetailResponse(): DetailActivityResponse {
         courseDetail = this.courseDetail,
         path = this.path,
         isOpen = this.isOpen,
+        recruitmentType = this.recruitmentType,
+        imageUrls = this.imageUrls,
         updatedAt = this.updatedAt,
         registeredAt = this.registeredAt,
         host = DetailActivityResponse.Host(
             userId = this.host.userId,
             crewId = this.host.crewId,
-            userProfileUri = this.host.userProfileUri,
+            profileImageUri = this.host.profileImageUri,
             userName = this.host.userName,
             crewName = this.host.crewName,
             isManager = this.host.isManager,
@@ -121,7 +123,7 @@ fun ParticipantResult.toParticipationActivityResponse(): ParticipationActivityRe
             userId = participant.userId,
             userName = participant.userName,
             crewName = participant.crewName,
-            userProfileUri = participant.userProfileUri
+            profileImageUri = participant.profileImageUri
         )
     }
     return ParticipationActivityResponse(
@@ -129,7 +131,7 @@ fun ParticipantResult.toParticipationActivityResponse(): ParticipationActivityRe
             userId = this.host.userId,
             userName = this.host.userName,
             crewName = this.host.crewName,
-            userProfileUri = this.host.userProfileUri
+            profileImageUri = this.host.profileImageUri
         ),
         participants = participants
     )
@@ -322,7 +324,7 @@ fun List<ActivityParticipationEntity>.mapToParticipants(): List<ParticipantResul
             userId = userEntity.id,
             userName = userEntity.name!!,
             crewName = userEntity.crewEntity!!.name,
-            userProfileUri = userEntity.getProfileImageUri()
+            profileImageUri = userEntity.getProfileImageUri()
         )
     }
 }
@@ -332,7 +334,7 @@ fun UserEntity.toParticipant(): ParticipantResult.Participant {
         userId = this.id,
         userName = this.name!!,
         crewName = this.crewEntity!!.name,
-        userProfileUri = this.getProfileImageUri()
+        profileImageUri = this.getProfileImageUri()
     )
 }
 
@@ -347,7 +349,7 @@ fun ActivityEntity.toHost(): ActivityResult.Host {
     return ActivityResult.Host(
         userId = host.id,
         crewId = host.crewId!!,
-        userProfileUri = host.getProfileImageUri(),
+        profileImageUri = host.getProfileImageUri(),
         userName = host.name!!,
         crewName = host.crewEntity!!.name,
         isManager = host.getIsManager(),

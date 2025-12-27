@@ -1,9 +1,9 @@
 package kr.kro.btr.adapter.`in`.web
 
 import com.ninjasquad.springmockk.MockkBean
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
-import io.mockk.runs
 import kr.kro.btr.adapter.`in`.web.payload.*
 import kr.kro.btr.adapter.`in`.web.proxy.ActivityProxy
 import kr.kro.btr.common.base.ControllerDescribeSpec
@@ -64,7 +64,7 @@ class ActivityControllerTest (
                 .content(requestJson)
 
             it("201 Created") {
-                every { proxy.create(any(), any()) } just runs
+                every { proxy.create(any(), any()) } returns 1L
 
                 mockMvc.perform(request)
                     .andExpect(status().isCreated)
@@ -111,7 +111,7 @@ class ActivityControllerTest (
                 .content(requestJson)
 
             it("200 OK") {
-                every { proxy.modify(any(), any()) } just runs
+                every { proxy.modify(any(), any()) } just Runs
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -146,7 +146,7 @@ class ActivityControllerTest (
                 .contentType(APPLICATION_JSON)
 
             it("200 OK") {
-                every { proxy.remove(any()) } just runs
+                every { proxy.remove(any()) } just Runs
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -169,7 +169,7 @@ class ActivityControllerTest (
                 .contentType(APPLICATION_JSON)
 
             it("201 Created") {
-                every { proxy.participate(any(), any()) } just runs
+                every { proxy.participate(any(), any()) } just Runs
 
                 mockMvc.perform(request)
                     .andExpect(status().isCreated)
@@ -192,7 +192,7 @@ class ActivityControllerTest (
                 .contentType(APPLICATION_JSON)
 
             it("201 Created") {
-                every { proxy.participateCancel(any()) } just runs
+                every { proxy.participateCancel(any()) } just Runs
 
                 mockMvc.perform(request)
                     .andExpect(status().isCreated)
@@ -235,7 +235,7 @@ class ActivityControllerTest (
                 host = ActivityResult.Host(
                     userId = 0,
                     crewId = crewId,
-                    userProfileUri = "userProfileUri",
+                    profileImageUri = "profileImageUri",
                     userName = "userName",
                     crewName = "crewName",
                     isManager = true,
@@ -251,7 +251,7 @@ class ActivityControllerTest (
                     host = SearchActivitiesResponse.Host(
                         userId = activityResults[0].host.userId,
                         crewId = activityResults[0].host.crewId,
-                        userProfileUri = activityResults[0].host.userProfileUri,
+                        profileImageUri = activityResults[0].host.profileImageUri,
                         userName = activityResults[0].host.userName,
                         crewName = activityResults[0].host.crewName,
                         isManager = activityResults[0].host.isManager,
@@ -296,7 +296,7 @@ class ActivityControllerTest (
                         jsonPath("$.details[0].imageUrls[1]") shouldBe response.details[0].imageUrls[1],
                         jsonPath("$.details[0].host.userId") shouldBe response.details[0].host.userId,
                         jsonPath("$.details[0].host.crewId") shouldBe response.details[0].host.crewId,
-                        jsonPath("$.details[0].host.userProfileUri") shouldBe response.details[0].host.userProfileUri,
+                        jsonPath("$.details[0].host.profileImageUri") shouldBe response.details[0].host.profileImageUri,
                         jsonPath("$.details[0].host.userName") shouldBe response.details[0].host.userName,
                         jsonPath("$.details[0].host.crewName") shouldBe response.details[0].host.crewName,
                         jsonPath("$.details[0].host.isManager") shouldBe response.details[0].host.isManager,
@@ -348,7 +348,7 @@ class ActivityControllerTest (
                 host = ActivityResult.Host(
                     userId = 0,
                     crewId = 0,
-                    userProfileUri = "userProfileUri",
+                    profileImageUri = "profileImageUri",
                     userName = "userName",
                     crewName = "crewName",
                     isManager = true,
@@ -364,7 +364,7 @@ class ActivityControllerTest (
                     host = SearchActivitiesResponse.Host(
                         userId = activityResults[0].host.userId,
                         crewId = activityResults[0].host.crewId,
-                        userProfileUri = activityResults[0].host.userProfileUri,
+                        profileImageUri = activityResults[0].host.profileImageUri,
                         userName = activityResults[0].host.userName,
                         crewName = activityResults[0].host.crewName,
                         isManager = activityResults[0].host.isManager,
@@ -409,7 +409,7 @@ class ActivityControllerTest (
                         jsonPath("$.details[0].imageUrls[1]") shouldBe response.details[0].imageUrls[1],
                         jsonPath("$.details[0].host.userId") shouldBe response.details[0].host.userId,
                         jsonPath("$.details[0].host.crewId") shouldBe response.details[0].host.crewId,
-                        jsonPath("$.details[0].host.userProfileUri") shouldBe response.details[0].host.userProfileUri,
+                        jsonPath("$.details[0].host.profileImageUri") shouldBe response.details[0].host.profileImageUri,
                         jsonPath("$.details[0].host.userName") shouldBe response.details[0].host.userName,
                         jsonPath("$.details[0].host.crewName") shouldBe response.details[0].host.crewName,
                         jsonPath("$.details[0].host.isManager") shouldBe response.details[0].host.isManager,
@@ -450,10 +450,11 @@ class ActivityControllerTest (
             updatedAt = LocalDateTime.now(),
             registeredAt = LocalDateTime.now(),
             recruitmentType = ActivityRecruitmentType.RECRUITING,
+            imageUrls = listOf("https://example.com/image1.jpg", "https://example.com/image2.jpg"),
             host = ActivityResult.Host(
                 userId = 0,
                 crewId = 0,
-                userProfileUri = "userProfileUri",
+                profileImageUri = "profileImageUri",
                 userName = "userName",
                 crewName = "crewName",
                 isManager = true,
@@ -476,13 +477,15 @@ class ActivityControllerTest (
             host = DetailActivityResponse.Host(
                 userId = activityResult.host.userId,
                 crewId = activityResult.host.crewId,
-                userProfileUri = activityResult.host.userProfileUri,
+                profileImageUri = activityResult.host.profileImageUri,
                 userName = activityResult.host.userName,
                 crewName = activityResult.host.crewName,
                 isManager = activityResult.host.isManager,
                 isAdmin = activityResult.host.isAdmin
             ),
             isOpen = activityResult.isOpen,
+            recruitmentType = activityResult.recruitmentType,
+            imageUrls = activityResult.imageUrls,
             updatedAt = getDateTimeByFormat(activityResult.updatedAt),
             registeredAt = getDateTimeByFormat(activityResult.registeredAt),
         )
@@ -510,11 +513,12 @@ class ActivityControllerTest (
                         jsonPath("$.courseDetail") shouldBe response.courseDetail,
                         jsonPath("$.path") shouldBe response.path,
                         jsonPath("$.isOpen") shouldBe response.isOpen,
+                        jsonPath("$.recruitmentType") shouldBe response.recruitmentType?.name,
                         jsonPath("$.updatedAt") shouldBe response.updatedAt,
                         jsonPath("$.registeredAt") shouldBe response.registeredAt,
                         jsonPath("$.host.userId") shouldBe response.host.userId,
                         jsonPath("$.host.crewId") shouldBe response.host.crewId,
-                        jsonPath("$.host.userProfileUri") shouldBe response.host.userProfileUri,
+                        jsonPath("$.host.profileImageUri") shouldBe response.host.profileImageUri,
                         jsonPath("$.host.userName") shouldBe response.host.userName,
                         jsonPath("$.host.crewName") shouldBe response.host.crewName,
                         jsonPath("$.host.isManager") shouldBe response.host.isManager,
@@ -539,12 +543,14 @@ class ActivityControllerTest (
                             "courseDetail" type STRING means "코스 설명" isRequired false,
                             "path" type STRING means "경로" isRequired false,
                             "isOpen" type BOOLEAN means "오픈 여부" isRequired false,
+                            "recruitmentType" type STRING means "모집 상태" isRequired false,
+                            "imageUrls" type ARRAY means "이미지 URL 리스트" isRequired true,
                             "updatedAt" type DATETIME means "수정일자" isRequired true,
                             "registeredAt" type DATETIME means "등록일자" isRequired true,
                             "host" type OBJECT means "호스트" isRequired true,
                             "host.userId" type NUMBER means "식별자" isRequired true,
                             "host.crewId" type NUMBER means "소속 크루 식별자" isRequired true,
-                            "host.userProfileUri" type STRING means "프로필 이미지 uri" isRequired false,
+                            "host.profileImageUri" type STRING means "프로필 이미지 uri" isRequired false,
                             "host.userName" type STRING means "유저명" isRequired true,
                             "host.crewName" type STRING means "소속 크루명" isRequired true,
                             "host.isManager" type BOOLEAN means "크루장 여부" isRequired true,
@@ -576,10 +582,11 @@ class ActivityControllerTest (
             updatedAt = LocalDateTime.now(),
             registeredAt = LocalDateTime.now(),
             recruitmentType = ActivityRecruitmentType.RECRUITING,
+            imageUrls = emptyList(),
             host = ActivityResult.Host(
                 userId = 0,
                 crewId = 0,
-                userProfileUri = "userProfileUri",
+                profileImageUri = "profileImageUri",
                 userName = "userName",
                 crewName = "crewName",
                 isManager = true,
@@ -626,7 +633,7 @@ class ActivityControllerTest (
                 userId = 0,
                 userName = "userName",
                 crewName = "crewName",
-                userProfileUri = "userProfileUri"
+                profileImageUri = "profileImageUri"
             ),
             participants = listOf(
                 ParticipantResult.Participant(
@@ -634,7 +641,7 @@ class ActivityControllerTest (
                     userId = 0,
                     userName = "userName",
                     crewName = "crewName",
-                    userProfileUri = "userProfileUri"
+                    profileImageUri = "profileImageUri"
                 )
             )
         )
@@ -643,7 +650,7 @@ class ActivityControllerTest (
                 userId = participantResult.host.userId,
                 userName = participantResult.host.userName,
                 crewName = participantResult.host.crewName,
-                userProfileUri = participantResult.host.userProfileUri
+                profileImageUri = participantResult.host.profileImageUri
             ),
             participants = listOf(
                 ParticipationActivityResponse.Person(
@@ -651,7 +658,7 @@ class ActivityControllerTest (
                     userId = participantResult.participants[0].userId,
                     userName = participantResult.participants[0].userName,
                     crewName = participantResult.participants[0].crewName,
-                    userProfileUri = participantResult.participants[0].userProfileUri
+                    profileImageUri = participantResult.participants[0].profileImageUri
                 )
             )
         )
@@ -669,12 +676,12 @@ class ActivityControllerTest (
                         jsonPath("$.host.userId") shouldBe response.host.userId,
                         jsonPath("$.host.userName") shouldBe response.host.userName,
                         jsonPath("$.host.crewName") shouldBe response.host.crewName,
-                        jsonPath("$.host.userProfileUri") shouldBe response.host.userProfileUri,
+                        jsonPath("$.host.profileImageUri") shouldBe response.host.profileImageUri,
                         jsonPath("$.participants[0].participationId") shouldBe response.participants!![0].participationId,
                         jsonPath("$.participants[0].userId") shouldBe response.participants[0].userId,
                         jsonPath("$.participants[0].userName") shouldBe response.participants[0].userName,
                         jsonPath("$.participants[0].crewName") shouldBe response.participants[0].crewName,
-                        jsonPath("$.participants[0].userProfileUri") shouldBe response.participants[0].userProfileUri,
+                        jsonPath("$.participants[0].profileImageUri") shouldBe response.participants[0].profileImageUri,
                     )
                     .andDocument(
                         "search-activities-participation",
@@ -687,7 +694,7 @@ class ActivityControllerTest (
                             "host.userId" type NUMBER means "유저 식별자" isRequired true,
                             "host.userName" type STRING means "유저명" isRequired true,
                             "host.crewName" type STRING means "소속 크루명" isRequired true,
-                            "host.userProfileUri" type STRING means "프로필 이미지 uri" isRequired false,
+                            "host.profileImageUri" type STRING means "프로필 이미지 uri" isRequired false,
                             "participants" type ARRAY means "참여자 목록" isRequired true
                         )
                             .andWithPrefix("participants[]", getParticipantsResponseSnippet())
@@ -710,7 +717,7 @@ class ActivityControllerTest (
                 .content(requestJson)
 
             it("200 OK") {
-                every { proxy.attendance(any(), any(), any()) } just runs
+                every { proxy.attendance(any(), any(), any()) } just Runs
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -751,7 +758,7 @@ class ActivityControllerTest (
                 host = ActivityResult.Host(
                     userId = 1,
                     crewId = 1,
-                    userProfileUri = "userProfileUri",
+                    profileImageUri = "profileImageUri",
                     userName = "userName",
                     crewName = "crewName",
                     isManager = true,
@@ -779,7 +786,7 @@ class ActivityControllerTest (
                 host = ActivityResult.Host(
                     userId = 2,
                     crewId = 1,
-                    userProfileUri = "userProfileUri2",
+                    profileImageUri = "profileImageUri2",
                     userName = "userName2",
                     crewName = "crewName",
                     isManager = false,
@@ -828,7 +835,7 @@ class ActivityControllerTest (
                 "userId" type NUMBER means "유저 식별자" isRequired true,
                 "userName" type STRING means "유저명" isRequired false,
                 "crewName" type STRING means "소속 크루명" isRequired false,
-                "userProfileUri" type STRING means "프로필 이미지 Uri" isRequired false
+                "profileImageUri" type STRING means "프로필 이미지 Uri" isRequired false
             )
         }
 
@@ -848,7 +855,7 @@ class ActivityControllerTest (
                 "host" type OBJECT means "호스트" isRequired true,
                 "host.userId" type NUMBER means "식별자" isRequired true,
                 "host.crewId" type NUMBER means "소속 크루 식별자" isRequired false,
-                "host.userProfileUri" type STRING means "프로필 이미지 uri" isRequired false,
+                "host.profileImageUri" type STRING means "프로필 이미지 uri" isRequired false,
                 "host.userName" type STRING means "유저명" isRequired true,
                 "host.crewName" type STRING means "소속 크루명" isRequired false,
                 "host.isManager" type BOOLEAN means "크루장 여부" isRequired false,

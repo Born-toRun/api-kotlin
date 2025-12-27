@@ -5,7 +5,7 @@ import kr.kro.btr.domain.port.model.result.ActivityResult
 import kr.kro.btr.domain.port.model.result.ParticipantResult
 
 interface ActivityPort {
-    fun create(command: CreateActivityCommand)
+    fun create(command: CreateActivityCommand): Long
     fun modify(command: ModifyActivityCommand)
     fun remove(activityId: Long)
     fun participate(command: ParticipateActivityCommand)

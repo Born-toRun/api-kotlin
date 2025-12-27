@@ -11,7 +11,7 @@ data class SearchActivitiesResponse(
     data class Host(
         val userId: Long,
         val crewId: Long,
-        val userProfileUri: String?,
+        val profileImageUri: String?,
         val userName: String,
         val crewName: String,
         val isManager: Boolean,
