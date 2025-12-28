@@ -132,15 +132,19 @@ class ActivityGateway(
             throw ForBiddenException("모임 호스트만 오픈할 수 있습니다.")
         }
 
-        if (activity.isOpen) {
-            throw InvalidException("이미 오픈하였습니다.")
+        val existingCode = getAccessCode(activityId)
+        if (activity.isOpen && existingCode != null) {
+            throw InvalidException("이미 활성화된 출석 코드가 있습니다.")
         }
+
         val now = LocalDateTime.now()
         val openStartTime = activity.startAt.minusMinutes(10L)
         val openEndTime = activity.startAt.plusHours(2L)
 
         if (!now.isBefore(openStartTime) && now.isBefore(openEndTime)) {
-            activity.open()
+            if (!activity.isOpen) {
+                activity.open()
+            }
             return activityRepository.save(activity)
         }
 

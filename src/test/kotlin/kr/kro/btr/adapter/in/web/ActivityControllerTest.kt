@@ -550,6 +550,8 @@ class ActivityControllerTest (
                             "courseDetail" type STRING means "코스 설명" isRequired false,
                             "path" type STRING means "경로" isRequired false,
                             "routeImageUrl" type STRING means "경로 (별칭)" isRequired false,
+                            "attendanceCode" type NUMBER means "출석 코드 (4자리 숫자, 만료 시 null)" isRequired false,
+                            "attendanceExpiresAt" type STRING means "출석 코드 만료 시간 (ISO 8601 형식, 만료 시 null)" isRequired false,
                             "isOpen" type BOOLEAN means "오픈 여부" isRequired false,
                             "isMyActivity" type BOOLEAN means "내가 작성한 모임 여부" isRequired true,
                             "isParticipating" type BOOLEAN means "참여 여부" isRequired true,
