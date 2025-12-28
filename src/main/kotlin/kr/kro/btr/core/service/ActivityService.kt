@@ -67,10 +67,10 @@ class ActivityService(
     }
 
     @Transactional
-    override fun open(activityId: Long): ActivityResult {
-        val opened = activityGateway.open(activityId)
-        val accessCode = activityGateway.initAccessCode(activityId)
-        return opened.toActivityResult(accessCode)
+    override fun open(activityId: Long, myUserId: Long): ActivityResult {
+        val opened = activityGateway.open(activityId, myUserId)
+        val (accessCode, expiresAt) = activityGateway.initAccessCode(activityId)
+        return opened.toActivityResult(accessCode, expiresAt)
     }
 
     @Transactional

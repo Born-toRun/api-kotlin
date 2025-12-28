@@ -474,6 +474,8 @@ class ActivityControllerTest (
             course = activityResult.course,
             courseDetail = activityResult.courseDetail,
             path = activityResult.path,
+            attendanceCode = null,
+            attendanceExpiresAt = null,
             host = DetailActivityResponse.Host(
                 userId = activityResult.host.userId,
                 crewId = activityResult.host.crewId,
@@ -484,6 +486,8 @@ class ActivityControllerTest (
                 isAdmin = activityResult.host.isAdmin
             ),
             isOpen = activityResult.isOpen,
+            isMyActivity = activityResult.isMyActivity,
+            isParticipating = activityResult.isParticipating,
             recruitmentType = activityResult.recruitmentType,
             imageUrls = activityResult.imageUrls,
             updatedAt = getDateTimeByFormat(activityResult.updatedAt),
@@ -513,6 +517,8 @@ class ActivityControllerTest (
                         jsonPath("$.courseDetail") shouldBe response.courseDetail,
                         jsonPath("$.path") shouldBe response.path,
                         jsonPath("$.isOpen") shouldBe response.isOpen,
+                        jsonPath("$.isMyActivity") shouldBe response.isMyActivity,
+                        jsonPath("$.isParticipating") shouldBe response.isParticipating,
                         jsonPath("$.recruitmentType") shouldBe response.recruitmentType?.name,
                         jsonPath("$.updatedAt") shouldBe response.updatedAt,
                         jsonPath("$.registeredAt") shouldBe response.registeredAt,
@@ -539,10 +545,14 @@ class ActivityControllerTest (
                             "participantsLimit" type NUMBER means "참여제한" isRequired false,
                             "participantsQty" type NUMBER means "참여자 수" isRequired true,
                             "participationFee" type NUMBER means "참가비" isRequired true,
+                            "entryFee" type NUMBER means "참가비 (별칭)" isRequired true,
                             "course" type STRING means "코스" isRequired false,
                             "courseDetail" type STRING means "코스 설명" isRequired false,
                             "path" type STRING means "경로" isRequired false,
+                            "routeImageUrl" type STRING means "경로 (별칭)" isRequired false,
                             "isOpen" type BOOLEAN means "오픈 여부" isRequired false,
+                            "isMyActivity" type BOOLEAN means "내가 작성한 모임 여부" isRequired true,
+                            "isParticipating" type BOOLEAN means "참여 여부" isRequired true,
                             "recruitmentType" type STRING means "모집 상태" isRequired false,
                             "imageUrls" type ARRAY means "이미지 URL 리스트" isRequired true,
                             "updatedAt" type DATETIME means "수정일자" isRequired true,
@@ -595,7 +605,8 @@ class ActivityControllerTest (
         )
         val response = OpenActivityResponse(
             activityId = activityResult.id,
-            attendanceCode = activityResult.attendanceCode
+            attendanceCode = activityResult.attendanceCode,
+            expiresAt = activityResult.expiresAt
         )
 
         context("오픈을 하면") {
@@ -603,7 +614,7 @@ class ActivityControllerTest (
                 .contentType(APPLICATION_JSON)
 
             it("200 OK") {
-                every { proxy.open(any()) } returns activityResult
+                every { proxy.open(any(), any()) } returns activityResult
 
                 mockMvc.perform(request)
                     .andExpect(status().isOk)
@@ -619,6 +630,7 @@ class ActivityControllerTest (
                         responseBody(
                             "activityId" type NUMBER means "식별자" isRequired true,
                             "attendanceCode" type NUMBER means "참여코드" isRequired true,
+                            "expiresAt" type STRING means "만료 시간" isRequired false,
                         )
                     )
             }

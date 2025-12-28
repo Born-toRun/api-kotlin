@@ -11,10 +11,12 @@ import kr.kro.btr.domain.entity.ActivityEntity
 import kr.kro.btr.domain.entity.ActivityImageMappingEntity
 import kr.kro.btr.domain.entity.ActivityParticipationEntity
 import kr.kro.btr.domain.model.ModifyActivityQuery
+import kr.kro.btr.infrastructure.model.ActivityAggregationData
 import kr.kro.btr.infrastructure.model.AttendanceActivityQuery
 import kr.kro.btr.infrastructure.model.CreateActivityQuery
 import kr.kro.btr.infrastructure.model.ParticipateActivityQuery
 import kr.kro.btr.infrastructure.model.SearchAllActivityQuery
+import kr.kro.btr.support.exception.ForBiddenException
 import kr.kro.btr.support.exception.InvalidException
 import kr.kro.btr.support.exception.NotFoundException
 import org.springframework.stereotype.Component
@@ -112,21 +114,32 @@ class ActivityGateway(
         val participantsCount = activityParticipationRepository.countByActivityId(activityId)
         val hasUserParticipation = activityParticipationRepository.existsByActivityIdAndUserId(activityId, userId)
 
-        return kr.kro.btr.infrastructure.model.ActivityAggregationData(
+        val accessCodeInfo = getAccessCode(activityId)
+
+        return ActivityAggregationData(
             activityEntity = activity,
             participantsCount = participantsCount,
-            hasUserParticipation = hasUserParticipation
+            hasUserParticipation = hasUserParticipation,
+            attendanceCode = accessCodeInfo?.first,
+            attendanceExpiresAt = accessCodeInfo?.second
         )
     }
 
-    fun open(activityId: Long): ActivityEntity {
+    fun open(activityId: Long, requestUserId: Long): ActivityEntity {
         val activity = search(activityId)
+
+        if (activity.userId != requestUserId) {
+            throw ForBiddenException("모임 호스트만 오픈할 수 있습니다.")
+        }
+
         if (activity.isOpen) {
             throw InvalidException("이미 오픈하였습니다.")
         }
         val now = LocalDateTime.now()
+        val openStartTime = activity.startAt.minusMinutes(10L)
+        val openEndTime = activity.startAt.plusHours(2L)
 
-        if (now.isAfter(activity.startAt.minusMinutes(10L)) && now.isBefore(activity.startAt.plusMonths(10L))) {
+        if (!now.isBefore(openStartTime) && now.isBefore(openEndTime)) {
             activity.open()
             return activityRepository.save(activity)
         }
@@ -152,10 +165,28 @@ class ActivityGateway(
         }
     }
 
-    fun initAccessCode(activityId: Long): Int {
-        val accessCode = Random.nextInt(1, 101)  // 1부터 100까지 난수
+    fun initAccessCode(activityId: Long): Pair<Int, LocalDateTime> {
+        val accessCode = Random.nextInt(1000, 10000)  // 1000부터 9999까지 4자리 난수
+        val expiresAt = LocalDateTime.now().plusMinutes(5)
         redisClient.save(ACCESS_CODE_KEY_PREFIX + activityId, accessCode, 5.minutes.toJavaDuration())
-        return accessCode
+        return Pair(accessCode, expiresAt)
+    }
+
+    fun getAccessCode(activityId: Long): Pair<Int, LocalDateTime>? {
+        val accessCodeKey = ACCESS_CODE_KEY_PREFIX + activityId
+        if (!redisClient.exist(accessCodeKey)) {
+            return null
+        }
+
+        val accessCode = redisClient.get(accessCodeKey) as? Int ?: return null
+        val ttl = redisClient.ttl(accessCodeKey)
+
+        if (ttl <= 0) {
+            return null
+        }
+
+        val expiresAt = LocalDateTime.now().plusSeconds(ttl)
+        return Pair(accessCode, expiresAt)
     }
 
     fun searchParticipation(activityId: Long): List<ActivityParticipationEntity> {

@@ -61,14 +61,13 @@ class ActivityProxy(
         return activityPort.searchByCrewId(command)
     }
 
-    @Cacheable(key = "'search: ' + #my.id + #activityId")
     fun search(activityId: Long, my: TokenDetail): ActivityResult {
         return activityPort.search(activityId, my.id)
     }
 
     @CacheEvict(allEntries = true)
-    fun open(activityId: Long): ActivityResult {
-        return activityPort.open(activityId)
+    fun open(activityId: Long, myUserId: Long): ActivityResult {
+        return activityPort.open(activityId, myUserId)
     }
 
     @CacheEvict(allEntries = true)

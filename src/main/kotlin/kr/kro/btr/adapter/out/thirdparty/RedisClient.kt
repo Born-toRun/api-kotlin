@@ -46,4 +46,9 @@ class RedisClient(private val redissonClient: RedissonClient) {
     fun getList(key: String): List<Any> {
         return redissonClient.getList<Any>(key).readAll()
     }
+
+    fun ttl(key: String): Long {
+        val remainTimeToLive = redissonClient.getBucket<Any>(key).remainTimeToLive()
+        return remainTimeToLive / 1000
+    }
 }

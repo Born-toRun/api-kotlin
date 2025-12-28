@@ -13,7 +13,7 @@ interface ActivityPort {
     fun searchAll(command: SearchAllActivityCommand): List<ActivityResult>
     fun searchByCrewId(command: SearchByCrewIdActivityCommand): List<ActivityResult>
     fun search(activityId: Long, myUserId: Long): ActivityResult
-    fun open(activityId: Long): ActivityResult
+    fun open(activityId: Long, myUserId: Long): ActivityResult
     fun attendance(command: AttendanceActivityCommand)
     fun getParticipation(activityId: Long): ParticipantResult
     fun searchMyParticipations(myUserId: Long): List<ActivityResult>

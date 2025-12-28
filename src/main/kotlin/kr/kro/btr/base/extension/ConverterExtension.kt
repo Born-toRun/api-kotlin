@@ -92,7 +92,11 @@ fun ActivityResult.toSearchActivityDetailResponse(): DetailActivityResponse {
         course = this.course,
         courseDetail = this.courseDetail,
         path = this.path,
+        attendanceCode = if (this.attendanceCode != 0) this.attendanceCode else null,
+        attendanceExpiresAt = this.expiresAt,
         isOpen = this.isOpen,
+        isMyActivity = this.isMyActivity,
+        isParticipating = this.isParticipating,
         recruitmentType = this.recruitmentType,
         imageUrls = this.imageUrls,
         updatedAt = this.updatedAt,
@@ -112,7 +116,8 @@ fun ActivityResult.toSearchActivityDetailResponse(): DetailActivityResponse {
 fun ActivityResult.toOpenActivityResponse(): OpenActivityResponse {
     return OpenActivityResponse(
         activityId = this.id,
-        attendanceCode = this.attendanceCode
+        attendanceCode = this.attendanceCode,
+        expiresAt = this.expiresAt
     )
 }
 
@@ -246,7 +251,7 @@ fun SearchByCrewIdActivityCommand.toSearchByCrewIdActivityQuery(): SearchAllActi
     )
 }
 
-fun ActivityEntity.toActivityResult(accessCode: Int): ActivityResult {
+fun ActivityEntity.toActivityResult(accessCode: Int, expiresAt: LocalDateTime? = null): ActivityResult {
     return ActivityResult(
         id = this.id,
         title = this.title,
@@ -261,6 +266,7 @@ fun ActivityEntity.toActivityResult(accessCode: Int): ActivityResult {
         courseDetail = this.courseDetail,
         path = this.path,
         attendanceCode = accessCode,
+        expiresAt = expiresAt,
         isOpen = this.isOpen,
         updatedAt = this.updatedAt,
         registeredAt = this.registeredAt,
@@ -400,7 +406,11 @@ fun ActivityAggregationData.toActivityResult(userId: Long): ActivityResult {
         course = this.activityEntity.course,
         courseDetail = this.activityEntity.courseDetail,
         path = this.activityEntity.path,
+        attendanceCode = this.attendanceCode ?: 0,
+        expiresAt = this.attendanceExpiresAt,
         isOpen = this.activityEntity.isOpen,
+        isMyActivity = this.activityEntity.userId == userId,
+        isParticipating = this.hasUserParticipation,
         updatedAt = this.activityEntity.updatedAt,
         registeredAt = this.activityEntity.registeredAt,
         recruitmentType = this.activityEntity.convertRecruitmentType(this.participantsCount, this.hasUserParticipation),

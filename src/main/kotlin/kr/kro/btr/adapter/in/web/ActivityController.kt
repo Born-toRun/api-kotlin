@@ -27,6 +27,7 @@ class ActivityController(
 
     @PutMapping("/{activityId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun modify(
+        @AuthUser my: TokenDetail,
         @PathVariable activityId: Long,
         @Valid @RequestBody request: ModifyActivityRequest
     ): ResponseEntity<Void> {
@@ -35,7 +36,7 @@ class ActivityController(
     }
 
     @DeleteMapping("/{activityId}")
-    fun remove(@PathVariable activityId: Long): ResponseEntity<Void> {
+    fun remove(@AuthUser my: TokenDetail, @PathVariable activityId: Long): ResponseEntity<Void> {
         activityProxy.remove(activityId)
         return ResponseEntity.ok().build()
     }
@@ -71,8 +72,8 @@ class ActivityController(
     }
 
     @PutMapping("/open/{activityId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun open(@PathVariable activityId: Long): ResponseEntity<OpenActivityResponse> {
-        val activityResult = activityProxy.open(activityId)
+    fun open(@AuthUser my: TokenDetail, @PathVariable activityId: Long): ResponseEntity<OpenActivityResponse> {
+        val activityResult = activityProxy.open(activityId, my.id)
         val response = activityResult.toOpenActivityResponse()
         return ResponseEntity.ok(response)
     }

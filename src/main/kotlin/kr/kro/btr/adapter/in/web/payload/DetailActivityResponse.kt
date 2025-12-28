@@ -19,7 +19,12 @@ data class DetailActivityResponse(
     val courseDetail: String?,
     val path: String?,
     val host: Host,
+    val attendanceCode: Int?,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    val attendanceExpiresAt: LocalDateTime?,
     val isOpen: Boolean,
+    val isMyActivity: Boolean,
+    val isParticipating: Boolean,
     val recruitmentType: ActivityRecruitmentType?,
     val imageUrls: List<String>,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -27,6 +32,8 @@ data class DetailActivityResponse(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     val registeredAt: LocalDateTime
 ) {
+    val entryFee: Int get() = participationFee
+    val routeImageUrl: String? get() = path
 
     data class Host(
         val userId: Long,
