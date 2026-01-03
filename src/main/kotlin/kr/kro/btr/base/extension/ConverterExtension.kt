@@ -61,6 +61,13 @@ fun List<ActivityResult>.toMyParticipationsResponse(): MyParticipationsResponse 
     return MyParticipationsResponse(participations)
 }
 
+fun Long?.toAvailableAttendanceActivityResponse(): AvailableAttendanceActivityResponse {
+    return AvailableAttendanceActivityResponse(
+        hasAvailableActivity = this != null,
+        activityId = this
+    )
+}
+
 fun List<FeedResult>.toMyFeedsResponse(): MyFeedsResponse {
     val feeds = this.map { feedResult ->
         MyFeedsResponse.Feed(

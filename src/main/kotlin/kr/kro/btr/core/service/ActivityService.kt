@@ -107,4 +107,10 @@ class ActivityService(
             ).toActivityResult(myUserId)
         }
     }
+
+    @Transactional(readOnly = true)
+    override fun searchMyAvailableAttendanceActivity(myUserId: Long): Long? {
+        val availableActivity = activityGateway.searchMyAvailableAttendanceActivity(myUserId)
+        return availableActivity?.id
+    }
 }

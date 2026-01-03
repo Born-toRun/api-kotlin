@@ -17,4 +17,5 @@ interface ActivityPort {
     fun attendance(command: AttendanceActivityCommand)
     fun getParticipation(activityId: Long): ParticipantResult
     fun searchMyParticipations(myUserId: Long): List<ActivityResult>
+    fun searchMyAvailableAttendanceActivity(myUserId: Long): Long?
 }

@@ -841,6 +841,57 @@ class ActivityControllerTest (
             }
         }
     }
+
+    describe("GET : $baseUrl/participation/my/available-for-attendance") {
+        val url = "$baseUrl/participation/my/available-for-attendance"
+
+        context("출석 가능한 모임이 있는 경우") {
+            val request = request(HttpMethod.GET, url)
+                .contentType(APPLICATION_JSON)
+
+            it("200 OK - hasAvailableActivity=true, activityId 반환") {
+                val activityId = 1L
+                every { proxy.searchMyAvailableAttendanceActivity(any()) } returns activityId
+
+                mockMvc.perform(request)
+                    .andExpect(status().isOk)
+                    .andExpectData(
+                        jsonPath("$.hasAvailableActivity") shouldBe true,
+                        jsonPath("$.activityId") shouldBe activityId
+                    )
+                    .andDocument(
+                        "search-available-attendance-activity-exists",
+                        responseBody(
+                            "hasAvailableActivity" type BOOLEAN means "출석 가능한 모임 여부" isRequired true,
+                            "activityId" type NUMBER means "출석 가능한 모임 식별자" isRequired false
+                        )
+                    )
+            }
+        }
+
+        context("출석 가능한 모임이 없는 경우") {
+            val request = request(HttpMethod.GET, url)
+                .contentType(APPLICATION_JSON)
+
+            it("200 OK - hasAvailableActivity=false, activityId=null") {
+                every { proxy.searchMyAvailableAttendanceActivity(any()) } returns null
+
+                mockMvc.perform(request)
+                    .andExpect(status().isOk)
+                    .andExpectData(
+                        jsonPath("$.hasAvailableActivity") shouldBe false,
+                        jsonPath("$.activityId").doesNotExist()
+                    )
+                    .andDocument(
+                        "search-available-attendance-activity-not-exists",
+                        responseBody(
+                            "hasAvailableActivity" type BOOLEAN means "출석 가능한 모임 여부" isRequired true,
+                            "activityId" type NUMBER means "출석 가능한 모임 식별자 (없을 경우 null)" isRequired false
+                        )
+                    )
+            }
+        }
+    }
 }) {
     companion object {
         fun getParticipantsResponseSnippet(): List<FieldDescriptor> {

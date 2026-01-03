@@ -210,6 +210,20 @@ class ActivityGateway(
             }
     }
 
+    fun searchMyAvailableAttendanceActivity(myUserId: Long): ActivityEntity? {
+        val participations = activityParticipationRepository.findAllByUserId(myUserId)
+        val now = LocalDateTime.now()
+
+        return participations
+            .mapNotNull { it.activityEntity }
+            .firstOrNull { activity ->
+                val openStartTime = activity.startAt.minusMinutes(10L)
+                val openEndTime = activity.startAt.plusHours(2L)
+
+                !now.isBefore(openStartTime) && now.isBefore(openEndTime)
+            }
+    }
+
     companion object {
         private const val ACCESS_CODE_KEY_PREFIX = "accessCode"
     }

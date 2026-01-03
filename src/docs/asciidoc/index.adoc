@@ -134,6 +134,8 @@ operation::search-activities-participation[snippets="http-request,path-parameter
 operation::activities-attendance[snippets="http-request,path-parameters,request-fields,http-response"]
 === 나의 참여 목록 조회
 operation::search-my-participations[snippets="http-request,http-response,response-fields"]
+=== 출석체크 가능한 모임 조회
+operation::search-available-attendance-activity-exists[snippets="http-request,http-response,response-fields"]
 
 == 공지사항
 === 등록

@@ -117,4 +117,13 @@ class ActivityController(
         val response = activities.toMyParticipationsResponse()
         return ResponseEntity.ok(response)
     }
+
+    @GetMapping("/participation/my/available-for-attendance", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun searchMyAvailableAttendanceActivity(
+        @AuthUser tokenDetail: TokenDetail
+    ): ResponseEntity<AvailableAttendanceActivityResponse> {
+        val activityId = activityProxy.searchMyAvailableAttendanceActivity(tokenDetail.id)
+        val response = activityId.toAvailableAttendanceActivityResponse()
+        return ResponseEntity.ok(response)
+    }
 }

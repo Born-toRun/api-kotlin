@@ -85,4 +85,8 @@ class ActivityProxy(
     fun searchMyParticipations(myUserId: Long): List<ActivityResult> {
         return activityPort.searchMyParticipations(myUserId)
     }
+
+    fun searchMyAvailableAttendanceActivity(myUserId: Long): Long? {
+        return activityPort.searchMyAvailableAttendanceActivity(myUserId)
+    }
 }
