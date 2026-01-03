@@ -23,8 +23,8 @@ class AuthTokenProvider(keyGenerator: KeyGenerator) {
         return AuthToken(id, expiry, secretKey)
     }
 
-    fun createAuthToken(id: Long, userName: String?, crewId: Long?, role: String, expiry: Date): AuthToken {
-        return AuthToken(id, userName, crewId, role, expiry, secretKey)
+    fun createAuthToken(id: Long, userName: String?, crewId: Long?, managedCrewId: Long?, role: String, expiry: Date): AuthToken {
+        return AuthToken(id, userName, crewId, managedCrewId, role, expiry, secretKey)
     }
 
     fun convertAuthToken(token: String): AuthToken {

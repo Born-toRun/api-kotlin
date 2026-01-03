@@ -8,5 +8,6 @@ data class MinioProperties @ConstructorBinding constructor (
     val node: String,
     val accessKey: String,
     val secretKey: String,
-    val cdnHost: String
+    val cdnHost: String,
+    val region: String? = null
 )

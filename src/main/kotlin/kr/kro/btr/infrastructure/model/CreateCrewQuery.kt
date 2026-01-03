@@ -4,5 +4,6 @@ data class CreateCrewQuery(
     val name: String,
     val contents: String,
     val sns: String? = null,
-    val region: String
+    val region: String,
+    val userId: Long
 )

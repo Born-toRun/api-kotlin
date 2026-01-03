@@ -282,9 +282,27 @@ class CrewControllerTest (
             sns = "sns",
             region = "region"
         )
+        val crewResult = CrewResult(
+            id = 1,
+            name = "name",
+            contents = "contents",
+            region = "region",
+            imageUri = null,
+            logoUri = null,
+            sns = "sns"
+        )
+        val response = CreateCrewResponse(
+            id = crewResult.id,
+            crewName = crewResult.name,
+            contents = crewResult.contents,
+            region = crewResult.region,
+            crewSnsUri = crewResult.sns,
+            imageUri = crewResult.imageUri,
+            logoUri = crewResult.logoUri
+        )
 
         context("등록을 하면") {
-            every { proxy.create(any()) } just runs
+            every { proxy.create(any(), any()) } returns crewResult
 
             val requestJson = toJson(requestBody)
             val request = request(HttpMethod.POST, url)
@@ -294,6 +312,15 @@ class CrewControllerTest (
             it("201 Created") {
                 mockMvc.perform(request)
                     .andExpect(status().isCreated)
+                    .andExpectData(
+                        jsonPath("$.id") shouldBe response.id,
+                        jsonPath("$.crewName") shouldBe response.crewName,
+                        jsonPath("$.contents") shouldBe response.contents,
+                        jsonPath("$.region") shouldBe response.region,
+                        jsonPath("$.crewSnsUri") shouldBe response.crewSnsUri
+                    )
+                    .andExpect(jsonPath("$.imageUri").value(response.imageUri))
+                    .andExpect(jsonPath("$.logoUri").value(response.logoUri))
                     .andDocument(
                         "create-crews",
                         requestBody(
@@ -301,6 +328,15 @@ class CrewControllerTest (
                             "contents" type STRING means "크루소개" isRequired true,
                             "sns" type STRING means "크루 sns uri" isRequired false,
                             "region" type STRING means "크루 활동 지역" isRequired true
+                        ),
+                        responseBody(
+                            "id" type NUMBER means "생성된 크루 식별자" isRequired true,
+                            "crewName" type STRING means "크루명" isRequired true,
+                            "contents" type STRING means "크루 소개" isRequired true,
+                            "region" type STRING means "크루 활동 지역" isRequired true,
+                            "crewSnsUri" type STRING means "크루 sns uri" isRequired false,
+                            "imageUri" type STRING means "크루 대표 이미지 uri" isRequired false,
+                            "logoUri" type STRING means "크루 로고 uri" isRequired false
                         )
                     )
             }

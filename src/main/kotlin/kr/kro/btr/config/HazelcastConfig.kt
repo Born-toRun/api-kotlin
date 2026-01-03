@@ -28,7 +28,14 @@ class HazelcastConfig(
         val config = Config()
         config.instanceName = "borntorun"
         configureNetwork(config.networkConfig)
-        configureDefaultMapConfig(config.getMapConfig("default"))
+
+        configureCacheConfig(config.getMapConfig("user"))
+        configureCacheConfig(config.getMapConfig("crew"))
+        configureCacheConfig(config.getMapConfig("feed"))
+        configureCacheConfig(config.getMapConfig("activity"))
+        configureCacheConfig(config.getMapConfig("comment"))
+        configureCacheConfig(config.getMapConfig("default"))
+
         configureSerialization(config.serializationConfig)
         return config
     }
@@ -59,11 +66,13 @@ class HazelcastConfig(
         )
     }
 
-    private fun configureDefaultMapConfig(mapConfig: MapConfig) {
-        mapConfig.setTimeToLiveSeconds(60)
+    private fun configureCacheConfig(mapConfig: MapConfig) {
+        mapConfig
+            .setTimeToLiveSeconds(300)
+            .setMaxIdleSeconds(60)
             .setEvictionConfig(
                 EvictionConfig()
-                    .setEvictionPolicy(com.hazelcast.config.EvictionPolicy.LRU)
+                    .setEvictionPolicy(EvictionPolicy.LRU)
                     .setMaxSizePolicy(MaxSizePolicy.USED_HEAP_PERCENTAGE)
                     .setSize(20)
             )
@@ -73,6 +82,9 @@ class HazelcastConfig(
                     .setLocal(false)
                     .setIncludeValue(false)
             )
+            .setBackupCount(1)
+            .setAsyncBackupCount(0)
+            .setStatisticsEnabled(true)
     }
 
     private fun configureSerialization(serializationConfig: SerializationConfig) {

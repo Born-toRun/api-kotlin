@@ -23,9 +23,16 @@ class CrewGateway(
         return crewRepository.findAll()
     }
 
-    fun create(query: CreateCrewQuery) {
+    fun create(query: CreateCrewQuery): CrewEntity {
         val crewEntity = query.toCrewEntity()
-        crewRepository.save(crewEntity)
+        val savedCrew = crewRepository.save(crewEntity)
+
+        val user = userRepository.findById(query.userId)
+            .orElseThrow { throw NotFoundException("사용자를 찾을 수 없습니다.") }
+        user.managedCrewId = savedCrew.id
+        userRepository.save(user)
+
+        return savedCrew
     }
 
     fun modify(query: ModifyCrewQuery) {

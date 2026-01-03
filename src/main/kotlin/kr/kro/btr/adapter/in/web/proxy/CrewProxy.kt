@@ -37,9 +37,9 @@ class CrewProxy(
     }
 
     @CacheEvict(allEntries = true)
-    fun create(request: CreateCrewRequest) {
-        val command = request.toCreateCrewCommand()
-        crewPort.create(command)
+    fun create(request: CreateCrewRequest, userId: Long): CrewResult {
+        val command = request.toCreateCrewCommand(userId)
+        return crewPort.create(command)
     }
 
     @CacheEvict(allEntries = true)

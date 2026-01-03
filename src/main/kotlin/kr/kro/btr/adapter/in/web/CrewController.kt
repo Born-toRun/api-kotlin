@@ -58,9 +58,13 @@ class CrewController(
     }
 
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun create(@RequestBody @Valid request: CreateCrewRequest): ResponseEntity<Void> {
-        crewProxy.create(request)
-        return ResponseEntity(CREATED)
+    fun create(
+        @RequestBody @Valid request: CreateCrewRequest,
+        @AuthUser my: TokenDetail
+    ): ResponseEntity<CreateCrewResponse> {
+        val crew = crewProxy.create(request, my.id)
+        val response = crew.toCreateCrewResponse()
+        return ResponseEntity(response, CREATED)
     }
 
     @PutMapping("/{crewId}", produces = [MediaType.APPLICATION_JSON_VALUE])

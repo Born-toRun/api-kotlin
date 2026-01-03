@@ -11,6 +11,7 @@ data class BornToRunUser(
     val roleType: RoleType,
     val userName: String?,
     val crewId: Long?,
+    val managedCrewId: Long?,
     val crewName: String?,
     val instagramId: String? = null,
     val imageId: Long? = null,

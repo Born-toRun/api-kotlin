@@ -91,6 +91,7 @@ class OAuth2AuthenticationSuccessHandler(
             bornToRunUser.userId,
             bornToRunUser.userName,
             bornToRunUser.crewId,
+            bornToRunUser.managedCrewId,
             bornToRunUser.roleType.code,
             Date(now.time + accessTokenExpiry)
         )

@@ -63,6 +63,7 @@ class UserService(
             user.id,
             user.name,
             user.crewId,
+            user.managedCrewId,
             user.roleType.code,
             Date(now.time + appProperties.auth.tokenExpiry)
         )

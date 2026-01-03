@@ -4,5 +4,6 @@ data class CreateCrewCommand(
     val name: String,
     val contents: String,
     val sns: String?,
-    val region: String
+    val region: String,
+    val userId: Long
 )

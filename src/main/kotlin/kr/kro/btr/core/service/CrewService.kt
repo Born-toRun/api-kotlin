@@ -32,9 +32,10 @@ class CrewService(
     }
 
     @Transactional
-    override fun create(command: CreateCrewCommand) {
+    override fun create(command: CreateCrewCommand): CrewResult {
         val query = command.toCreateCrewQuery()
-        crewGateway.create(query)
+        val crewEntity = crewGateway.create(query)
+        return crewEntity.toCrew()
     }
 
     @Transactional

@@ -22,12 +22,13 @@ class AuthToken(
         key = key
     )
 
-    constructor(id: Long, userName: String?, crewId: Long?, role: String, expiry: Date, key: SecretKey) : this(
+    constructor(id: Long, userName: String?, crewId: Long?, managedCrewId: Long?, role: String, expiry: Date, key: SecretKey) : this(
         token = Jwts.builder()
             .subject(id.toString())
             .claim(AUTHORITIES_KEY, role)
             .claim(USER_NAME_KEY, userName)
             .claim(CREW_ID_KEY, crewId)
+            .claim(MANAGED_CREW_ID_KEY, managedCrewId)
             .signWith(key, Jwts.SIG.HS512)
             .expiration(expiry)
             .compact(),
@@ -126,12 +127,13 @@ class AuthToken(
             return AuthToken(token, key)
         }
 
-        fun create(id: Long, userName: String, crewId: Long?, role: String, expiry: Date, key: SecretKey): AuthToken {
+        fun create(id: Long, userName: String, crewId: Long?, managedCrewId: Long?, role: String, expiry: Date, key: SecretKey): AuthToken {
             val token = Jwts.builder()
                 .subject(id.toString())
                 .claim(AUTHORITIES_KEY, role)
                 .claim(USER_NAME_KEY, userName)
                 .claim(CREW_ID_KEY, crewId)
+                .claim(MANAGED_CREW_ID_KEY, managedCrewId)
                 .signWith(key, Jwts.SIG.HS512)
                 .expiration(expiry)
                 .compact()

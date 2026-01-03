@@ -690,12 +690,25 @@ fun CrewResult.toMyCrewDetailResponse(isManager: Boolean, isAdmin: Boolean): MyC
     )
 }
 
-fun CreateCrewRequest.toCreateCrewCommand(): CreateCrewCommand {
+fun CrewResult.toCreateCrewResponse(): CreateCrewResponse {
+    return CreateCrewResponse(
+        id = this.id,
+        crewName = this.name,
+        contents = this.contents,
+        region = this.region,
+        crewSnsUri = this.sns,
+        imageUri = this.imageUri,
+        logoUri = this.logoUri
+    )
+}
+
+fun CreateCrewRequest.toCreateCrewCommand(userId: Long): CreateCrewCommand {
     return CreateCrewCommand(
         name = this.name,
         contents = this.contents,
         sns = this.sns,
-        region = this.region
+        region = this.region,
+        userId = userId
     )
 }
 
@@ -720,7 +733,8 @@ fun CreateCrewCommand.toCreateCrewQuery(): CreateCrewQuery {
         name = this.name,
         contents = this.contents,
         sns = this.sns,
-        region = this.region
+        region = this.region,
+        userId = this.userId
     )
 }
 
@@ -1367,6 +1381,7 @@ fun UserEntity.toBornToRunUser(): BornToRunUser {
         roleType = this.roleType,
         userName = this.name,
         crewId = this.crewId,
+        managedCrewId = this.managedCrewId,
         crewName = this.crewEntity?.name,
         instagramId = this.instagramId,
         imageId = this.imageId,
