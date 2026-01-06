@@ -1,8 +1,5 @@
 server:
     servlet:
-        multipart:
-            max-file-size: 10MB
-            max-request-size: 15MB
         session:
             cookie:
                 same-site: none
@@ -10,6 +7,11 @@ server:
                 path: /
             timeout: 3600
 spring:
+    servlet:
+        multipart:
+            max-file-size: 10MB
+            max-request-size: 15MB
+            enabled: true
     cache:
         port: 8081
     profiles.active: local

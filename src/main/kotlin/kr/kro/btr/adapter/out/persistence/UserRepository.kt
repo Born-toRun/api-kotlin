@@ -57,13 +57,15 @@ interface UserRepository : JpaRepository<UserEntity, Long> {
             COALESCE(u.name, ''),
             COALESCE(img.fileUri, ''),
             COALESCE(u.instagramId, ''),
-            CAST(COUNT(ap.id) AS int)
+            CAST(COUNT(ap.id) AS int),
+            CASE WHEN u.roleType = kr.kro.btr.domain.constant.RoleType.ADMIN THEN true ELSE false END,
+            CASE WHEN u.managedCrewId IS NOT NULL THEN true ELSE false END
         )
         FROM UserEntity u
         LEFT JOIN ObjectStorageEntity img ON img.id = u.imageId
         LEFT JOIN ActivityParticipationEntity ap ON ap.userId = u.id
         WHERE u.crewId = :crewId
-        GROUP BY u.id, u.name, img.fileUri, u.instagramId
+        GROUP BY u.id, u.name, img.fileUri, u.instagramId, u.roleType, u.managedCrewId
         ORDER BY COUNT(ap.id) DESC
         """
     )

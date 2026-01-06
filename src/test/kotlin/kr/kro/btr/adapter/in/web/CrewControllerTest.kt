@@ -462,28 +462,36 @@ class CrewControllerTest (
                 userName = "김러너",
                 profileImageUri = "https://example.com/profile1.jpg",
                 instagramId = "@runner_kim",
-                participationCount = 15L
+                participationCount = 15L,
+                isAdmin = false,
+                isManager = true
             ),
             CrewMemberRankingResult(
                 userId = 2L,
                 userName = "이주자",
                 profileImageUri = "https://example.com/profile2.jpg",
                 instagramId = "@runner_lee",
-                participationCount = 12L
+                participationCount = 12L,
+                isAdmin = false,
+                isManager = false
             ),
             CrewMemberRankingResult(
                 userId = 3L,
                 userName = "박달리기",
                 profileImageUri = null,
                 instagramId = null,
-                participationCount = 8L
+                participationCount = 8L,
+                isAdmin = false,
+                isManager = false
             ),
             CrewMemberRankingResult(
                 userId = 4L,
                 userName = "최신입",
                 profileImageUri = null,
                 instagramId = "@newbie_choi",
-                participationCount = 0L
+                participationCount = 0L,
+                isAdmin = false,
+                isManager = false
             )
         )
 
@@ -566,7 +574,9 @@ class CrewControllerTest (
                 "userName" type STRING means "사용자 이름" isRequired true,
                 "profileImageUri" type STRING means "프로필 이미지 URI" isRequired false,
                 "instagramId" type STRING means "인스타그램 ID" isRequired false,
-                "participationCount" type NUMBER means "참여한 행사 수" isRequired true
+                "participationCount" type NUMBER means "참여한 행사 수" isRequired true,
+                "isManager" type BOOLEAN means "매니저 여부" isRequired true,
+                "isAdmin" type BOOLEAN means "관리자 여부" isRequired true
             )
         }
 

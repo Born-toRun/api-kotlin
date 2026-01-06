@@ -644,7 +644,9 @@ fun List<CrewMemberRankingResult>.toCrewMemberRankingResponse(): CrewMemberRanki
             userName = result.userName,
             profileImageUri = result.profileImageUri,
             instagramId = result.instagramId,
-            participationCount = result.participationCount
+            participationCount = result.participationCount,
+            isAdmin = result.isAdmin,
+            isManager = result.isManager
         )
     }
     return CrewMemberRankingResponse(memberRanks)

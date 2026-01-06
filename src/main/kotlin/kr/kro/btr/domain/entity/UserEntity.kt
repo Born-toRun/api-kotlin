@@ -83,7 +83,7 @@ class UserEntity(
 
     fun getIsAdmin(): Boolean = roleType == RoleType.ADMIN
 
-    fun getIsManager(): Boolean = roleType == RoleType.MANAGER
+    fun getIsManager(): Boolean = managedCrewId != null
 
     fun modify(instagramId: String?, profileImageId: Long?) {
         profileImageId?.let {

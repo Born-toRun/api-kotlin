@@ -9,6 +9,8 @@ data class CrewMemberRankingResponse(
         val userName: String,
         val profileImageUri: String?,
         val instagramId: String?,
-        val participationCount: Long
+        val participationCount: Long,
+        val isAdmin: Boolean,
+        val isManager: Boolean
     )
 }
