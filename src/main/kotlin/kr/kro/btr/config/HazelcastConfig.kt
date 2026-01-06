@@ -1,6 +1,8 @@
 package kr.kro.btr.config
 
 import com.hazelcast.config.*
+import com.hazelcast.core.Hazelcast
+import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.spi.properties.ClusterProperty
 import kr.kro.btr.config.hazelcast.HazelcastMapEventLogger
 import kr.kro.btr.config.hazelcast.Kryo5Serializer
@@ -11,6 +13,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient
 import org.springframework.cloud.client.serviceregistry.Registration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
 
 
 @Configuration
@@ -23,8 +26,8 @@ class HazelcastConfig(
     @Value("\${spring.cache.port}")
     private val port = 0
 
-    @Bean
-    fun config(): Config {
+    @Bean("hazelcastConfiguration")
+    fun hazelcastConfiguration(): Config {
         val config = Config()
         config.instanceName = "borntorun"
         configureNetwork(config.networkConfig)
@@ -38,6 +41,12 @@ class HazelcastConfig(
 
         configureSerialization(config.serializationConfig)
         return config
+    }
+
+    @Bean
+    @Primary
+    fun hazelcastInstance(hazelcastConfiguration: Config): HazelcastInstance {
+        return Hazelcast.newHazelcastInstance(hazelcastConfiguration)
     }
 
     private fun configureNetwork(networkConfig: NetworkConfig) {

@@ -13,6 +13,7 @@ import kr.kro.btr.domain.port.model.result.CrewMemberResult
 import kr.kro.btr.domain.port.model.result.CrewRankingResult
 import kr.kro.btr.domain.port.model.result.CrewResult
 import kr.kro.btr.infrastructure.CrewGateway
+import kr.kro.btr.infrastructure.UserGateway
 import kr.kro.btr.support.exception.ForBiddenException
 import kr.kro.btr.support.exception.InvalidException
 import org.springframework.stereotype.Service
@@ -20,7 +21,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CrewService(
-    private val crewGateway: CrewGateway
+    private val crewGateway: CrewGateway,
+    private val userGateway: UserGateway
 ) : CrewPort {
 
     @Transactional(readOnly = true)
@@ -50,7 +52,7 @@ class CrewService(
 
     @Transactional(readOnly = true)
     override fun searchMembers(crewId: Long): List<CrewMemberResult> {
-        val userEntities: List<UserEntity> = crewGateway.searchMembersByCrewId(crewId)
+        val userEntities: List<UserEntity> = userGateway.searchMembersByCrewId(crewId)
         return userEntities.toCrewMembers()
     }
 
@@ -61,7 +63,7 @@ class CrewService(
 
     @Transactional(readOnly = true)
     override fun searchMemberRankings(crewId: Long): List<CrewMemberRankingResult> {
-        return crewGateway.searchMemberRankings(crewId)
+        return userGateway.searchMemberRankings(crewId)
     }
 
     @Transactional
@@ -72,7 +74,7 @@ class CrewService(
 
         crewGateway.searchById(command.crewId)
 
-        val targetUser = crewGateway.searchUserById(command.targetUserId)
+        val targetUser = userGateway.searchById(command.targetUserId)
 
         if (targetUser.crewId != command.crewId) {
             throw InvalidException("해당 사용자는 이 크루의 멤버가 아닙니다.")
@@ -82,7 +84,7 @@ class CrewService(
             throw InvalidException("관리자는 강퇴할 수 없습니다.")
         }
 
-        val requester = crewGateway.searchUserById(command.requesterId)
+        val requester = userGateway.searchById(command.requesterId)
         val isManager = requester.managedCrewId == command.crewId
 
         if (!command.isRequesterAdmin && !isManager) {
@@ -92,6 +94,6 @@ class CrewService(
         val defaultCrewName = "무소속"
         val crew = crewGateway.searchByName(defaultCrewName);
 
-        crewGateway.moveUserToDefaultCrew(command.targetUserId, crew.id)
+        userGateway.moveCrewByUser(command.targetUserId, crew.id)
     }
 }

@@ -4,9 +4,7 @@ import kr.kro.btr.adapter.out.persistence.CrewRepository
 import kr.kro.btr.adapter.out.persistence.UserRepository
 import kr.kro.btr.base.extension.toCrewEntity
 import kr.kro.btr.domain.entity.CrewEntity
-import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.model.ModifyCrewQuery
-import kr.kro.btr.domain.port.model.result.CrewMemberRankingResult
 import kr.kro.btr.domain.port.model.result.CrewRankingResult
 import kr.kro.btr.infrastructure.model.CreateCrewQuery
 import kr.kro.btr.support.exception.NotFoundException
@@ -49,26 +47,7 @@ class CrewGateway(
         return crewRepository.findByName(crewName) ?: throw NotFoundException("크루를 찾을 수 없습니다.")
     }
 
-    fun searchMembersByCrewId(crewId: Long): List<UserEntity> {
-        return userRepository.findAllByCrewId(crewId)
-    }
-
     fun searchRankings(): List<CrewRankingResult> {
         return crewRepository.findCrewRankings()
-    }
-
-    fun searchMemberRankings(crewId: Long): List<CrewMemberRankingResult> {
-        return userRepository.findCrewMemberRankings(crewId)
-    }
-
-    fun searchUserById(userId: Long): UserEntity {
-        return userRepository.findById(userId)
-            .orElseThrow { throw NotFoundException("사용자를 찾을 수 없습니다.") }
-    }
-
-    fun moveUserToDefaultCrew(userId: Long, defaultCrewId: Long) {
-        val user = searchUserById(userId)
-        user.crewId = defaultCrewId
-        userRepository.save(user)
     }
 }

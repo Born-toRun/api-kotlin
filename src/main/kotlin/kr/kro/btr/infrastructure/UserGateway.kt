@@ -5,6 +5,7 @@ import kr.kro.btr.adapter.out.persistence.UserRepository
 import kr.kro.btr.base.extension.toUserEntity
 import kr.kro.btr.domain.entity.UserEntity
 import kr.kro.btr.domain.entity.UserPrivacyEntity
+import kr.kro.btr.domain.port.model.result.CrewMemberRankingResult
 import kr.kro.btr.infrastructure.model.CreateUserQuery
 import kr.kro.btr.infrastructure.model.ModifyUserQuery
 import kr.kro.btr.infrastructure.model.SignUpUserQuery
@@ -67,5 +68,20 @@ class UserGateway(
 
     fun exists(socialId: String): Boolean {
         return userRepository.existsBySocialId(socialId)
+    }
+
+    fun searchMembersByCrewId(crewId: Long): List<UserEntity> {
+        return userRepository.findAllByCrewId(crewId)
+    }
+
+    fun searchMemberRankings(crewId: Long): List<CrewMemberRankingResult> {
+        return userRepository.findCrewMemberRankings(crewId)
+    }
+
+    fun moveCrewByUser(userId: Long, crewId: Long) {
+        val user = userRepository.findById(userId)
+            .orElseThrow { throw NotFoundException("사용자를 찾을 수 없습니다.") }
+        user.crewId = crewId
+        userRepository.save(user)
     }
 }
