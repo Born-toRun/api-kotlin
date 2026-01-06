@@ -454,6 +454,31 @@ class CrewControllerTest (
         }
     }
 
+    describe("DELETE : $baseUrl/{crewId}/members/{userId}") {
+        val url = "$baseUrl/{crewId}/members/{userId}"
+        val crewId = 1L
+        val targetUserId = 2L
+
+        context("운영진이 크루원을 강퇴하면") {
+            every { proxy.kickMember(any()) } just runs
+
+            val request = request(HttpMethod.DELETE, url, crewId, targetUserId)
+                .contentType(APPLICATION_JSON)
+
+            it("200 OK") {
+                mockMvc.perform(request)
+                    .andExpect(status().isOk)
+                    .andDocument(
+                        "kick-crew-member",
+                        pathParameters(
+                            "crewId" isRequired true pathMeans "크루 식별자",
+                            "userId" isRequired true pathMeans "강퇴할 사용자 식별자"
+                        )
+                    )
+            }
+        }
+    }
+
     describe("GET : $baseUrl/member-rankings") {
         val url = "$baseUrl/member-rankings"
         val memberRankingResults = listOf(

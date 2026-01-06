@@ -5,6 +5,7 @@ import kr.kro.btr.adapter.`in`.web.payload.ModifyCrewRequest
 import kr.kro.btr.base.extension.toCreateCrewCommand
 import kr.kro.btr.base.extension.toModifyCrewCommand
 import kr.kro.btr.domain.port.CrewPort
+import kr.kro.btr.domain.port.model.KickCrewMemberCommand
 import kr.kro.btr.domain.port.model.result.CrewMemberRankingResult
 import kr.kro.btr.domain.port.model.result.CrewMemberResult
 import kr.kro.btr.domain.port.model.result.CrewRankingResult
@@ -61,5 +62,10 @@ class CrewProxy(
     @Cacheable(key = "'memberRankings: ' + #crewId")
     fun searchMemberRankings(crewId: Long): List<CrewMemberRankingResult> {
         return crewPort.searchMemberRankings(crewId)
+    }
+
+    @CacheEvict(allEntries = true)
+    fun kickMember(command: KickCrewMemberCommand) {
+        crewPort.kickMember(command)
     }
 }

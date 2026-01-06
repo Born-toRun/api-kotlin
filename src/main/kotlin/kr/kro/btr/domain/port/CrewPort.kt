@@ -1,6 +1,7 @@
 package kr.kro.btr.domain.port
 
 import kr.kro.btr.domain.port.model.CreateCrewCommand
+import kr.kro.btr.domain.port.model.KickCrewMemberCommand
 import kr.kro.btr.domain.port.model.ModifyCrewCommand
 import kr.kro.btr.domain.port.model.result.CrewMemberRankingResult
 import kr.kro.btr.domain.port.model.result.CrewMemberResult
@@ -15,4 +16,5 @@ interface CrewPort {
     fun searchMembers(crewId: Long): List<CrewMemberResult>
     fun searchRankings(): List<CrewRankingResult>
     fun searchMemberRankings(crewId: Long): List<CrewMemberRankingResult>
+    fun kickMember(command: KickCrewMemberCommand)
 }

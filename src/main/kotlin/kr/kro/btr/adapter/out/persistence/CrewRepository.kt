@@ -26,6 +26,8 @@ interface CrewRepository : JpaRepository<CrewEntity, Long> {
     )
     fun findByIdOrNull(id: Long): CrewEntity?
 
+    fun findByName(name: String): CrewEntity?
+
     @Query(
         """
         SELECT new kr.kro.btr.domain.port.model.result.CrewRankingResult(

@@ -4,6 +4,7 @@ import jakarta.validation.Valid
 import kr.kro.btr.adapter.`in`.web.payload.*
 import kr.kro.btr.adapter.`in`.web.proxy.CrewProxy
 import kr.kro.btr.base.extension.*
+import kr.kro.btr.domain.port.model.KickCrewMemberCommand
 import kr.kro.btr.domain.port.model.result.CrewMemberRankingResult
 import kr.kro.btr.domain.port.model.result.CrewMemberResult
 import kr.kro.btr.domain.port.model.result.CrewRankingResult
@@ -90,5 +91,21 @@ class CrewController(
         )
         val response = rankings.toCrewMemberRankingResponse()
         return ResponseEntity.ok(response)
+    }
+
+    @DeleteMapping("/{crewId}/members/{userId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun kickMember(
+        @PathVariable crewId: Long,
+        @PathVariable userId: Long,
+        @AuthUser my: TokenDetail
+    ): ResponseEntity<Void> {
+        val command = KickCrewMemberCommand(
+            crewId = crewId,
+            targetUserId = userId,
+            requesterId = my.id,
+            isRequesterAdmin = my.isAdmin
+        )
+        crewProxy.kickMember(command)
+        return ResponseEntity.ok().build()
     }
 }
